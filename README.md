@@ -45,7 +45,7 @@ VITE_OPENAI_API_KEY=
 
 For More Information About OpenAI Documentation, Emoji-Mart, Uuid, please visit
 
-###OpenAI Documentation:
+### OpenAI Documentation:
 
 > https://www.npmjs.com/package/openai
 
@@ -57,12 +57,12 @@ Then apply this API key in your project's `.env` file.
 
 > https://platform.openai.com/docs/api-reference/completions/create
 
-###Emoji-Mart:
+### Emoji-Mart:
 
 About @emoji-mart/data: https://www.npmjs.com/package/@emoji-mart/data
 
 About @emoji-mart/react: https://www.npmjs.com/package/@emoji-mart/react
 
-###UUID:
+### UUID:
 
 About Uuid (Unique ID Generator): https://www.npmjs.com/package/uuid
