@@ -39,7 +39,9 @@ you must create an .env file in your project folder and save your API key or oth
 
 Example: 
 
+```
 VITE_OPENAI_API_KEY=
+```
 
 ## For More Information About OpenAI, Emoji-Mart, Uuid
 
