@@ -3,13 +3,27 @@ import ChatBotStart from "./Components/ChatBotStart";
 import ChatBotApp from "./Components/ChatBotApp";
 import { v4 as uuidv4 } from "uuid";
 
+interface Message {
+  type: "prompt" | "response";
+  text: string;
+  timestamp: string;
+}
+
+interface Chat {
+  id: string;
+  displayId: string;
+  messages: Message[];
+}
+
 const App = () => {
-  const [isChatting, setIsChatting] = useState(false);
-  const [chats, setChats] = useState([]);
-  const [activeChat, setActiveChat] = useState(null);
+  const [isChatting, setIsChatting] = useState<boolean>(false);
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [activeChat, setActiveChat] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedChats = JSON.parse(localStorage.getItem("chats")) || [];
+    const storedChats: Chat[] = JSON.parse(
+      localStorage.getItem("chats") || "[]"
+    );
     setChats(storedChats);
 
     if (storedChats.length > 0) {
@@ -25,12 +39,8 @@ const App = () => {
     }
   };
 
-  const handleGoBack = () => {
-    setIsChatting(false);
-  };
-
-  const createNewChat = (initialMessage = "") => {
-    const newChat = {
+  const createNewChat = (initialMessage: string = "") => {
+    const newChat: Chat = {
       id: uuidv4(),
       displayId: `Chat ${new Date().toLocaleDateString(
         "en-GB"
@@ -38,7 +48,7 @@ const App = () => {
       messages: initialMessage
         ? [
             {
-              type: "prompt",
+              type: "prompt" as const,
               text: initialMessage,
               timestamp: new Date().toLocaleTimeString(),
             },
@@ -57,7 +67,6 @@ const App = () => {
     <div className="container">
       {isChatting ? (
         <ChatBotApp
-          onGoBack={handleGoBack}
           chats={chats}
           setChats={setChats}
           activeChat={activeChat}
@@ -72,3 +81,5 @@ const App = () => {
 };
 
 export default App;
+
+export type { Message, Chat };

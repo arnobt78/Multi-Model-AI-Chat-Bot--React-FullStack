@@ -1,0 +1,163 @@
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  z-index: auto;
+}
+
+.tooltip-wrapper-fixed {
+  position: static;
+}
+
+.tooltip-wrapper-fixed .tooltip {
+  position: fixed !important;
+  z-index: 9999;
+}
+
+.tooltip-wrapper-fixed .tooltip-top,
+.tooltip-wrapper-fixed .tooltip-bottom,
+.tooltip-wrapper-fixed .tooltip-left,
+.tooltip-wrapper-fixed .tooltip-right {
+  animation: tooltipFadeInFixed 0.2s ease-out forwards;
+}
+
+@keyframes tooltipFadeInFixed {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(20, 20, 30, 0.95);
+  color: #ffffff;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+/* Top position */
+.tooltip-top {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, calc(-100% - 8px));
+  animation: tooltipFadeInTop 0.2s ease-out forwards;
+}
+
+.tooltip-arrow-top {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: rgba(20, 20, 30, 0.95) transparent transparent transparent;
+  border-width: 6px 6px 0 6px;
+}
+
+/* Bottom position */
+.tooltip-bottom {
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 8px);
+  animation: tooltipFadeInBottom 0.2s ease-out forwards;
+}
+
+.tooltip-arrow-bottom {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: transparent transparent rgba(20, 20, 30, 0.95) transparent;
+  border-width: 0 6px 6px 6px;
+}
+
+/* Left position */
+.tooltip-left {
+  top: 50%;
+  left: 0;
+  transform: translate(calc(-100% - 8px), -50%);
+  animation: tooltipFadeInLeft 0.2s ease-out forwards;
+}
+
+.tooltip-arrow-left {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-color: transparent transparent transparent rgba(20, 20, 30, 0.95);
+  border-width: 6px 0 6px 6px;
+}
+
+/* Right position */
+.tooltip-right {
+  top: 50%;
+  left: 100%;
+  transform: translate(8px, -50%);
+  animation: tooltipFadeInRight 0.2s ease-out forwards;
+}
+
+.tooltip-arrow-right {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-color: transparent rgba(20, 20, 30, 0.95) transparent transparent;
+  border-width: 6px 6px 6px 0;
+}
+
+@keyframes tooltipFadeInTop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 12px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 8px));
+  }
+}
+
+@keyframes tooltipFadeInBottom {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 8px);
+  }
+}
+
+@keyframes tooltipFadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate(calc(-100% - 12px), -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(calc(-100% - 8px), -50%);
+  }
+}
+
+@keyframes tooltipFadeInRight {
+  from {
+    opacity: 0;
+    transform: translate(12px, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(8px, -50%);
+  }
+}
