@@ -1,8 +1,8 @@
-# AI Chat Hub - Universal Multi-Provider Assistant - React TypeScript FullStack Project
+# AI Chat Hub - Universal Multi-Provider Assistant - React, TypeScript, Vite FullStack Project (Multi-Model AI Chatbot)
 
 A modern, responsive AI chat bot application supporting multiple AI providers including Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI. Built with React, TypeScript, and Vite.
 
-- **Live-Demo:** [https://ai-chat-bot-arnob.vercel.app/](https://ai-chat-bot-arnob.vercel.app/)
+- **Live-Demo:** [https://multi-ai-chat-hub.vercel.app/](https://multi-ai-chat-hub.vercel.app/)
 
 ---
 
@@ -20,7 +20,6 @@ A modern, responsive AI chat bot application supporting multiple AI providers in
 - [API Integration](#api-integration)
 - [Reusing Components](#reusing-components)
 - [Deployment](#deployment)
-- [Author](#author)
 - [Conclusion](#conclusion)
 
 ---
@@ -569,15 +568,6 @@ This creates an optimized production build in the `dist/` folder.
    ```bash
    npm run deploy
    ```
-
----
-
-## Author
-
-**Arnob Mahmud**
-
-- Email: <arnob_t78@yahoo.com>
-- Portfolio: [https://arnob-mahmud.vercel.app/](https://arnob-mahmud.vercel.app/)
 
 ---
 
