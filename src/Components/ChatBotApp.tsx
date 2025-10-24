@@ -8,6 +8,7 @@ import { AIProvider, getAvailableProviders } from "../services/aiProviders";
 import TypingIndicator from "./TypingIndicator";
 import Tooltip from "./Tooltip";
 import { useTypewriter } from "../hooks/useTypewriter";
+import { BotMessageSquare } from "lucide-react";
 
 interface ChatBotAppProps {
   chats: Chat[];
@@ -368,17 +369,28 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                       setShowProviderDropdown(!showProviderDropdown)
                     }
                   >
-                    {selectedProvider
-                      ? `${
-                          getAvailableProviders().find(
-                            (p) => p.name === selectedProvider
-                          )?.icon || ""
-                        } ${
-                          getAvailableProviders().find(
-                            (p) => p.name === selectedProvider
-                          )?.displayName || selectedProvider
-                        }`
-                      : "⚡ Auto"}
+                    {selectedProvider ? (
+                      `${
+                        getAvailableProviders().find(
+                          (p) => p.name === selectedProvider
+                        )?.icon || ""
+                      } ${
+                        getAvailableProviders().find(
+                          (p) => p.name === selectedProvider
+                        )?.displayName || selectedProvider
+                      }`
+                    ) : (
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
+                        <BotMessageSquare size={20} />
+                        Auto
+                      </span>
+                    )}
                   </button>
                 </Tooltip>
                 {showProviderDropdown && (
@@ -392,7 +404,16 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                         setShowProviderDropdown(false);
                       }}
                     >
-                      ⚡ Auto (Fallback)
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
+                        <BotMessageSquare size={18} />
+                        Auto (Fallback)
+                      </span>
                     </button>
                     {getAvailableProviders().map((provider) => (
                       <button
