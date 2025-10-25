@@ -80,9 +80,13 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
   const [usageStats, setUsageStats] = useState<UsageStats | null>(null);
   const [insightsData, setInsightsData] = useState<InsightsData | null>(null);
   const [providerData, setProviderData] = useState<ProviderData[]>([]);
-  const [timeAndTrends, setTimeAndTrends] = useState<TimeAndTrendsData | null>(null);
-  const [userEngagement, setUserEngagement] = useState<UserEngagementData | null>(null);
-  const [errorMonitoring, setErrorMonitoring] = useState<ErrorMonitoringData | null>(null);
+  const [timeAndTrends, setTimeAndTrends] = useState<TimeAndTrendsData | null>(
+    null
+  );
+  const [userEngagement, setUserEngagement] =
+    useState<UserEngagementData | null>(null);
+  const [errorMonitoring, setErrorMonitoring] =
+    useState<ErrorMonitoringData | null>(null);
   const [performance, setPerformance] = useState<PerformanceData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -366,7 +370,9 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
               <h3>Peak Activity Hour</h3>
               <p className="trend-value">
                 {timeAndTrends?.peakHour
-                  ? `${timeAndTrends.peakHour}:00 - ${parseInt(timeAndTrends.peakHour) + 1}:00`
+                  ? `${timeAndTrends.peakHour}:00 - ${
+                      parseInt(timeAndTrends.peakHour) + 1
+                    }:00`
                   : "N/A"}
               </p>
             </div>
@@ -375,7 +381,11 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
               <TrendingUp className="trend-icon" />
               <h3>Today's Activity</h3>
               <p className="trend-value">
-                {Object.values(timeAndTrends?.hourlyActivity || {}).reduce((a, b) => a + b, 0) || 0} events
+                {Object.values(timeAndTrends?.hourlyActivity || {}).reduce(
+                  (a, b) => a + b,
+                  0
+                ) || 0}{" "}
+                events
               </p>
             </div>
 
@@ -388,8 +398,15 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
                     <div
                       className="hour-bar"
                       style={{
-                        height: `${((timeAndTrends?.hourlyActivity[i.toString()] || 0) / 
-                          (Math.max(...Object.values(timeAndTrends?.hourlyActivity || {})) || 1)) * 100}%`,
+                        height: `${
+                          ((timeAndTrends?.hourlyActivity[i.toString()] || 0) /
+                            (Math.max(
+                              ...Object.values(
+                                timeAndTrends?.hourlyActivity || {}
+                              )
+                            ) || 1)) *
+                          100
+                        }%`,
                       }}
                     ></div>
                     <span className="hour-label">
@@ -407,7 +424,9 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
             <div className="engagement-card">
               <Users className="engagement-icon" />
               <h3>Avg Events per Session</h3>
-              <p className="engagement-value">{userEngagement?.avgEventsPerSession || 0}</p>
+              <p className="engagement-value">
+                {userEngagement?.avgEventsPerSession || 0}
+              </p>
             </div>
 
             <div className="engagement-card">
@@ -444,13 +463,15 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
               </p>
             </div>
 
-            {Object.entries(errorMonitoring?.errorsByProvider || {}).map(([provider, count]) => (
-              <div key={provider} className="error-card">
-                <XCircle className="error-icon" />
-                <h3>{provider}</h3>
-                <p className="error-value">{count as number} errors</p>
-              </div>
-            ))}
+            {Object.entries(errorMonitoring?.errorsByProvider || {}).map(
+              ([provider, count]) => (
+                <div key={provider} className="error-card">
+                  <XCircle className="error-icon" />
+                  <h3>{provider}</h3>
+                  <p className="error-value">{count as number} errors</p>
+                </div>
+              )
+            )}
           </div>
         )}
 
@@ -459,19 +480,25 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
             <div className="performance-card">
               <Zap className="performance-icon fast-icon" />
               <h3>Fast Requests (&lt;1s)</h3>
-              <p className="performance-value">{performance?.fastRequests || 0}</p>
+              <p className="performance-value">
+                {performance?.fastRequests || 0}
+              </p>
             </div>
 
             <div className="performance-card">
               <Clock className="performance-icon normal-icon" />
               <h3>Normal Requests (1-3s)</h3>
-              <p className="performance-value">{performance?.normalRequests || 0}</p>
+              <p className="performance-value">
+                {performance?.normalRequests || 0}
+              </p>
             </div>
 
             <div className="performance-card">
               <AlertTriangle className="performance-icon slow-icon" />
               <h3>Slow Requests (&gt;3s)</h3>
-              <p className="performance-value">{performance?.slowRequests || 0}</p>
+              <p className="performance-value">
+                {performance?.slowRequests || 0}
+              </p>
             </div>
 
             <div className="performance-card">

@@ -171,7 +171,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Group events by hour for today
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
-    
+
     const todayEvents = await prisma.event.findMany({
       where: {
         timestamp: { gte: todayStart },
@@ -193,9 +193,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     const eventCounts = sessionsWithEvents.map((s) => s._count.sessionId);
-    const avgEventsPerSession = eventCounts.length > 0 
-      ? Math.round(eventCounts.reduce((a, b) => a + b, 0) / eventCounts.length)
-      : 0;
+    const avgEventsPerSession =
+      eventCounts.length > 0
+        ? Math.round(
+            eventCounts.reduce((a, b) => a + b, 0) / eventCounts.length
+          )
+        : 0;
 
     // Session duration (estimate based on first/last event per session)
     const sessionDurations: Record<string, any> = {};
@@ -220,19 +223,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     });
 
-    const durations = Object.values(sessionDurations).map((s: any) => 
-      (s.last - s.first) / 1000 / 60 // Convert to minutes
+    const durations = Object.values(sessionDurations).map(
+      (s: any) => (s.last - s.first) / 1000 / 60 // Convert to minutes
     );
-    const avgSessionDuration = durations.length > 0
-      ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)
-      : 0;
+    const avgSessionDuration =
+      durations.length > 0
+        ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)
+        : 0;
 
     // ===== ERROR MONITORING DATA =====
     const failedEvents = providerEvents.filter((e) => !e.success);
     const errorsByProvider: Record<string, number> = {};
     failedEvents.forEach((event) => {
       if (event.provider) {
-        errorsByProvider[event.provider] = (errorsByProvider[event.provider] || 0) + 1;
+        errorsByProvider[event.provider] =
+          (errorsByProvider[event.provider] || 0) + 1;
       }
     });
 
@@ -244,13 +249,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const performance = {
       fastRequests: durationsArray.filter((d) => d < 1000).length,
-      normalRequests: durationsArray.filter((d) => d >= 1000 && d < 3000).length,
+      normalRequests: durationsArray.filter((d) => d >= 1000 && d < 3000)
+        .length,
       slowRequests: durationsArray.filter((d) => d >= 3000).length,
       minDuration: durationsArray.length > 0 ? durationsArray[0] : 0,
-      maxDuration: durationsArray.length > 0 ? durationsArray[durationsArray.length - 1] : 0,
-      medianDuration: durationsArray.length > 0 
-        ? durationsArray[Math.floor(durationsArray.length / 2)] 
-        : 0,
+      maxDuration:
+        durationsArray.length > 0
+          ? durationsArray[durationsArray.length - 1]
+          : 0,
+      medianDuration:
+        durationsArray.length > 0
+          ? durationsArray[Math.floor(durationsArray.length / 2)]
+          : 0,
     };
 
     return res.status(200).json({
@@ -269,8 +279,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       timeAndTrends: {
         hourlyActivity,
         dailyEvents,
-        peakHour: Object.entries(hourlyActivity).reduce((a, b) => 
-          hourlyActivity[a[0]] > hourlyActivity[b[0]] ? a : b, ["0", 0])[0],
+        peakHour: Object.entries(hourlyActivity).reduce(
+          (a, b) => (hourlyActivity[a[0]] > hourlyActivity[b[0]] ? a : b),
+          ["0", 0]
+        )[0],
       },
       userEngagement: {
         avgEventsPerSession: avgEventsPerSession,
@@ -280,7 +292,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       errorMonitoring: {
         totalErrors: failedEvents.length,
         errorsByProvider,
-        successRate: totalEvents > 0 ? ((totalEvents - failedEvents.length) / totalEvents) * 100 : 0,
+        successRate:
+          totalEvents > 0
+            ? ((totalEvents - failedEvents.length) / totalEvents) * 100
+            : 0,
       },
       performance,
     });
