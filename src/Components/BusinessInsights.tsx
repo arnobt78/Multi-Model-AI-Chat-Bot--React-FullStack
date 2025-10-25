@@ -57,6 +57,16 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
 
   const fetchData = async () => {
     setLoading(true);
+
+    // In development, skip API call and show empty state
+    if (import.meta.env.DEV) {
+      console.log(
+        "📊 Business Insights: Running in dev mode - API not available"
+      );
+      setLoading(false);
+      return;
+    }
+
     try {
       // Use single dashboard endpoint for better performance
       const dashboardRes = await fetch("/api/dashboard");
@@ -73,12 +83,6 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
       setProviderData(dashboard.providers || []);
     } catch (error) {
       console.error("Error fetching data:", error);
-      // In dev mode, show empty state gracefully
-      if (import.meta.env.DEV) {
-        console.log(
-          "📊 Business Insights: Running in dev mode - API not available"
-        );
-      }
     } finally {
       setLoading(false);
     }
