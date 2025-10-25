@@ -431,6 +431,10 @@
   backdrop-filter: blur(10px);
 }
 
+.trend-card:has(.hourly-chart) {
+  grid-column: 1 / -1;
+}
+
 .trend-icon {
   width: 3rem;
   height: 3rem;
@@ -453,11 +457,11 @@
 /* Hourly Chart */
 .hourly-chart {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 0.5rem;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 0.3rem;
   margin-top: 1.5rem;
-  height: 200px;
-  align-items: end;
+  height: 250px;
+  align-items: flex-end;
 }
 
 .hour-bar-container {
@@ -465,18 +469,24 @@
   flex-direction: column;
   align-items: center;
   gap: 0.3rem;
+  position: relative;
 }
 
 .hour-bar {
-  width: 100%;
+  width: 80%;
+  min-height: 2px;
   background: linear-gradient(180deg, #f42f5f 0%, #fe8d5c 100%);
   border-radius: 0.3rem;
   transition: all 0.3s;
+  display: block;
 }
 
 .hour-label {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #888;
+  position: absolute;
+  bottom: -20px;
+  white-space: nowrap;
 }
 
 /* User Engagement Grid */
