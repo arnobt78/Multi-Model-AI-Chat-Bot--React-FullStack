@@ -165,6 +165,10 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
 
   return (
     <div className="business-insights-container">
+      <div className="start-page-bg">
+        <img src="/chatbot.svg" alt="Chatbot" className="bg-chatbot-icon" />
+      </div>
+
       <div className="insights-header">
         <div className="header-content">
           <button onClick={onBack} className="back-btn">
