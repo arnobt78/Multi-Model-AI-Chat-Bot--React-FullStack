@@ -394,13 +394,14 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
               <h3>Hourly Breakdown</h3>
               <div className="hourly-chart">
                 {Array.from({ length: 24 }, (_, i) => {
-                  const hourValue = timeAndTrends?.hourlyActivity[i.toString()] || 0;
+                  const hourValue =
+                    timeAndTrends?.hourlyActivity[i.toString()] || 0;
                   const maxValue = Math.max(
                     ...Object.values(timeAndTrends?.hourlyActivity || {}),
                     1
                   );
                   const barHeight = (hourValue / maxValue) * 200;
-                  
+
                   return (
                     <div key={i} className="hour-bar-container">
                       <div
