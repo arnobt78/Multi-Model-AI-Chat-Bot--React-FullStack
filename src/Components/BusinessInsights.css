@@ -416,6 +416,202 @@
   margin-top: 1rem;
 }
 
+/* Time & Trends Grid */
+.time-trends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.trend-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(244, 47, 95, 0.2);
+  border-radius: 1.2rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.trend-icon {
+  width: 3rem;
+  height: 3rem;
+  color: #f42f5f;
+  margin-bottom: 1rem;
+}
+
+.trend-card h3 {
+  font-size: 1.6rem;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+.trend-value {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Hourly Chart */
+.hourly-chart {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  height: 200px;
+  align-items: end;
+}
+
+.hour-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hour-bar {
+  width: 100%;
+  background: linear-gradient(180deg, #f42f5f 0%, #fe8d5c 100%);
+  border-radius: 0.3rem;
+  transition: all 0.3s;
+}
+
+.hour-label {
+  font-size: 1rem;
+  color: #888;
+}
+
+/* User Engagement Grid */
+.engagement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.engagement-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(244, 47, 95, 0.2);
+  border-radius: 1.2rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.engagement-icon {
+  width: 4rem;
+  height: 4rem;
+  color: #f42f5f;
+}
+
+.engagement-card h3 {
+  font-size: 1.4rem;
+  color: #888;
+  margin: 0;
+}
+
+.engagement-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Error Monitoring Grid */
+.errors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.error-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 1.2rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.error-icon {
+  width: 4rem;
+  height: 4rem;
+  color: #ef4444;
+}
+
+.success-icon {
+  color: #22c55e !important;
+}
+
+.error-card h3 {
+  font-size: 1.4rem;
+  color: #888;
+  margin: 0;
+}
+
+.error-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Performance Grid */
+.performance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.performance-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(244, 47, 95, 0.2);
+  border-radius: 1.2rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.performance-icon {
+  width: 4rem;
+  height: 4rem;
+  color: #f42f5f;
+}
+
+.fast-icon {
+  color: #22c55e !important;
+}
+
+.normal-icon {
+  color: #eab308 !important;
+}
+
+.slow-icon {
+  color: #ef4444 !important;
+}
+
+.performance-card h3 {
+  font-size: 1.4rem;
+  color: #888;
+  margin: 0;
+}
+
+.performance-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .business-insights-container {
@@ -452,7 +648,11 @@
 
   .providers-grid,
   .storage-grid,
-  .usage-grid {
+  .usage-grid,
+  .time-trends-grid,
+  .engagement-grid,
+  .errors-grid,
+  .performance-grid {
     grid-template-columns: 1fr;
   }
 }

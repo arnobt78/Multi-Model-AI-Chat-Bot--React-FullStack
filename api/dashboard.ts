@@ -167,6 +167,92 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
     );
 
+    // ===== TIME & TRENDS DATA =====
+    // Group events by hour for today
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    
+    const todayEvents = await prisma.event.findMany({
+      where: {
+        timestamp: { gte: todayStart },
+      },
+      select: { timestamp: true },
+    });
+
+    const hourlyActivity: Record<string, number> = {};
+    todayEvents.forEach((event) => {
+      const hour = event.timestamp.getHours();
+      hourlyActivity[hour] = (hourlyActivity[hour] || 0) + 1;
+    });
+
+    // ===== USER ENGAGEMENT DATA =====
+    // Calculate average conversation length (events per session)
+    const sessionsWithEvents = await prisma.event.groupBy({
+      by: ["sessionId"],
+      _count: { sessionId: true },
+    });
+
+    const eventCounts = sessionsWithEvents.map((s) => s._count.sessionId);
+    const avgEventsPerSession = eventCounts.length > 0 
+      ? Math.round(eventCounts.reduce((a, b) => a + b, 0) / eventCounts.length)
+      : 0;
+
+    // Session duration (estimate based on first/last event per session)
+    const sessionDurations: Record<string, any> = {};
+    const allEvents = await prisma.event.findMany({
+      orderBy: { timestamp: "asc" },
+      select: { sessionId: true, timestamp: true },
+    });
+
+    allEvents.forEach((event) => {
+      if (!sessionDurations[event.sessionId]) {
+        sessionDurations[event.sessionId] = {
+          first: event.timestamp,
+          last: event.timestamp,
+        };
+      } else {
+        if (event.timestamp < sessionDurations[event.sessionId].first) {
+          sessionDurations[event.sessionId].first = event.timestamp;
+        }
+        if (event.timestamp > sessionDurations[event.sessionId].last) {
+          sessionDurations[event.sessionId].last = event.timestamp;
+        }
+      }
+    });
+
+    const durations = Object.values(sessionDurations).map((s: any) => 
+      (s.last - s.first) / 1000 / 60 // Convert to minutes
+    );
+    const avgSessionDuration = durations.length > 0
+      ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)
+      : 0;
+
+    // ===== ERROR MONITORING DATA =====
+    const failedEvents = providerEvents.filter((e) => !e.success);
+    const errorsByProvider: Record<string, number> = {};
+    failedEvents.forEach((event) => {
+      if (event.provider) {
+        errorsByProvider[event.provider] = (errorsByProvider[event.provider] || 0) + 1;
+      }
+    });
+
+    // ===== PERFORMANCE DATA =====
+    const durationsArray = providerEvents
+      .filter((e) => e.duration !== null)
+      .map((e) => e.duration as number)
+      .sort((a, b) => a - b);
+
+    const performance = {
+      fastRequests: durationsArray.filter((d) => d < 1000).length,
+      normalRequests: durationsArray.filter((d) => d >= 1000 && d < 3000).length,
+      slowRequests: durationsArray.filter((d) => d >= 3000).length,
+      minDuration: durationsArray.length > 0 ? durationsArray[0] : 0,
+      maxDuration: durationsArray.length > 0 ? durationsArray[durationsArray.length - 1] : 0,
+      medianDuration: durationsArray.length > 0 
+        ? durationsArray[Math.floor(durationsArray.length / 2)] 
+        : 0,
+    };
+
     return res.status(200).json({
       usage: {
         totalEvents,
@@ -180,6 +266,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         dailyEvents,
       },
       providers: formattedProviderData,
+      timeAndTrends: {
+        hourlyActivity,
+        dailyEvents,
+        peakHour: Object.entries(hourlyActivity).reduce((a, b) => 
+          hourlyActivity[a[0]] > hourlyActivity[b[0]] ? a : b, ["0", 0])[0],
+      },
+      userEngagement: {
+        avgEventsPerSession: avgEventsPerSession,
+        avgSessionDuration: avgSessionDuration,
+        totalConversations: sessionsWithEvents.length,
+      },
+      errorMonitoring: {
+        totalErrors: failedEvents.length,
+        errorsByProvider,
+        successRate: totalEvents > 0 ? ((totalEvents - failedEvents.length) / totalEvents) * 100 : 0,
+      },
+      performance,
     });
   } catch (error) {
     console.error("Error fetching dashboard data:", error);

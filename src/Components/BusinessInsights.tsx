@@ -9,6 +9,10 @@ import {
   Zap,
   CheckCircle,
   XCircle,
+  BarChart3,
+  AlertTriangle,
+  Gauge,
+  Timer,
 } from "lucide-react";
 import "./BusinessInsights.css";
 
@@ -40,6 +44,33 @@ interface InsightsData {
   dailyEvents: Record<string, number>;
 }
 
+interface TimeAndTrendsData {
+  hourlyActivity: Record<string, number>;
+  dailyEvents: Record<string, number>;
+  peakHour: string;
+}
+
+interface UserEngagementData {
+  avgEventsPerSession: number;
+  avgSessionDuration: number;
+  totalConversations: number;
+}
+
+interface ErrorMonitoringData {
+  totalErrors: number;
+  errorsByProvider: Record<string, number>;
+  successRate: number;
+}
+
+interface PerformanceData {
+  fastRequests: number;
+  normalRequests: number;
+  slowRequests: number;
+  minDuration: number;
+  maxDuration: number;
+  medianDuration: number;
+}
+
 interface BusinessInsightsProps {
   onBack: () => void;
 }
@@ -49,6 +80,10 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
   const [usageStats, setUsageStats] = useState<UsageStats | null>(null);
   const [insightsData, setInsightsData] = useState<InsightsData | null>(null);
   const [providerData, setProviderData] = useState<ProviderData[]>([]);
+  const [timeAndTrends, setTimeAndTrends] = useState<TimeAndTrendsData | null>(null);
+  const [userEngagement, setUserEngagement] = useState<UserEngagementData | null>(null);
+  const [errorMonitoring, setErrorMonitoring] = useState<ErrorMonitoringData | null>(null);
+  const [performance, setPerformance] = useState<PerformanceData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -81,6 +116,10 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
       setUsageStats(dashboard.usage);
       setInsightsData(dashboard.insights);
       setProviderData(dashboard.providers || []);
+      setTimeAndTrends(dashboard.timeAndTrends);
+      setUserEngagement(dashboard.userEngagement);
+      setErrorMonitoring(dashboard.errorMonitoring);
+      setPerformance(dashboard.performance);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -103,6 +142,10 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
     { id: "providers", label: "Provider Analytics", icon: MessageSquare },
     { id: "storage", label: "Storage & Performance", icon: Database },
     { id: "usage", label: "Usage Patterns", icon: TrendingUp },
+    { id: "time-trends", label: "Time & Trends", icon: BarChart3 },
+    { id: "engagement", label: "User Engagement", icon: Users },
+    { id: "errors", label: "Error Monitoring", icon: AlertTriangle },
+    { id: "performance", label: "Performance", icon: Gauge },
   ];
 
   if (loading) {
@@ -313,6 +356,147 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {activeTab === "time-trends" && (
+          <div className="time-trends-grid">
+            <div className="trend-card">
+              <BarChart3 className="trend-icon" />
+              <h3>Peak Activity Hour</h3>
+              <p className="trend-value">
+                {timeAndTrends?.peakHour
+                  ? `${timeAndTrends.peakHour}:00 - ${parseInt(timeAndTrends.peakHour) + 1}:00`
+                  : "N/A"}
+              </p>
+            </div>
+
+            <div className="trend-card">
+              <TrendingUp className="trend-icon" />
+              <h3>Today's Activity</h3>
+              <p className="trend-value">
+                {Object.values(timeAndTrends?.hourlyActivity || {}).reduce((a, b) => a + b, 0) || 0} events
+              </p>
+            </div>
+
+            <div className="trend-card">
+              <Clock className="trend-icon" />
+              <h3>Hourly Breakdown</h3>
+              <div className="hourly-chart">
+                {Array.from({ length: 24 }, (_, i) => (
+                  <div key={i} className="hour-bar-container">
+                    <div
+                      className="hour-bar"
+                      style={{
+                        height: `${((timeAndTrends?.hourlyActivity[i.toString()] || 0) / 
+                          (Math.max(...Object.values(timeAndTrends?.hourlyActivity || {})) || 1)) * 100}%`,
+                      }}
+                    ></div>
+                    <span className="hour-label">
+                      {timeAndTrends?.hourlyActivity[i.toString()] || 0}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "engagement" && (
+          <div className="engagement-grid">
+            <div className="engagement-card">
+              <Users className="engagement-icon" />
+              <h3>Avg Events per Session</h3>
+              <p className="engagement-value">{userEngagement?.avgEventsPerSession || 0}</p>
+            </div>
+
+            <div className="engagement-card">
+              <Timer className="engagement-icon" />
+              <h3>Avg Session Duration</h3>
+              <p className="engagement-value">
+                {userEngagement?.avgSessionDuration || 0} minutes
+              </p>
+            </div>
+
+            <div className="engagement-card">
+              <MessageSquare className="engagement-icon" />
+              <h3>Total Conversations</h3>
+              <p className="engagement-value">
+                {userEngagement?.totalConversations || 0}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "errors" && (
+          <div className="errors-grid">
+            <div className="error-card">
+              <AlertTriangle className="error-icon" />
+              <h3>Total Errors</h3>
+              <p className="error-value">{errorMonitoring?.totalErrors || 0}</p>
+            </div>
+
+            <div className="error-card">
+              <CheckCircle className="error-icon success-icon" />
+              <h3>Overall Success Rate</h3>
+              <p className="error-value">
+                {errorMonitoring?.successRate.toFixed(1) || 0}%
+              </p>
+            </div>
+
+            {Object.entries(errorMonitoring?.errorsByProvider || {}).map(([provider, count]) => (
+              <div key={provider} className="error-card">
+                <XCircle className="error-icon" />
+                <h3>{provider}</h3>
+                <p className="error-value">{count as number} errors</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeTab === "performance" && (
+          <div className="performance-grid">
+            <div className="performance-card">
+              <Zap className="performance-icon fast-icon" />
+              <h3>Fast Requests (&lt;1s)</h3>
+              <p className="performance-value">{performance?.fastRequests || 0}</p>
+            </div>
+
+            <div className="performance-card">
+              <Clock className="performance-icon normal-icon" />
+              <h3>Normal Requests (1-3s)</h3>
+              <p className="performance-value">{performance?.normalRequests || 0}</p>
+            </div>
+
+            <div className="performance-card">
+              <AlertTriangle className="performance-icon slow-icon" />
+              <h3>Slow Requests (&gt;3s)</h3>
+              <p className="performance-value">{performance?.slowRequests || 0}</p>
+            </div>
+
+            <div className="performance-card">
+              <Gauge className="performance-icon" />
+              <h3>Min Duration</h3>
+              <p className="performance-value">
+                {performance?.minDuration || 0}ms
+              </p>
+            </div>
+
+            <div className="performance-card">
+              <Gauge className="performance-icon" />
+              <h3>Median Duration</h3>
+              <p className="performance-value">
+                {performance?.medianDuration || 0}ms
+              </p>
+            </div>
+
+            <div className="performance-card">
+              <Gauge className="performance-icon" />
+              <h3>Max Duration</h3>
+              <p className="performance-value">
+                {performance?.maxDuration || 0}ms
+              </p>
+            </div>
           </div>
         )}
       </div>
