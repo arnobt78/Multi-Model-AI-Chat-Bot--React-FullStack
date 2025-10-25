@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ChatBotStart from "./Components/ChatBotStart";
 import ChatBotApp from "./Components/ChatBotApp";
+import BusinessInsights from "./Components/BusinessInsights";
 import { v4 as uuidv4 } from "uuid";
 
 interface Message {
@@ -16,7 +17,9 @@ interface Chat {
 }
 
 const App = () => {
-  const [isChatting, setIsChatting] = useState<boolean>(false);
+  const [currentView, setCurrentView] = useState<"start" | "chat" | "insights">(
+    "start"
+  );
   const [chats, setChats] = useState<Chat[]>([]);
   const [activeChat, setActiveChat] = useState<string | null>(null);
 
@@ -32,7 +35,7 @@ const App = () => {
   }, []);
 
   const handleStartChat = () => {
-    setIsChatting(true);
+    setCurrentView("chat");
 
     if (chats.length === 0) {
       createNewChat();
@@ -65,16 +68,21 @@ const App = () => {
 
   return (
     <div className="container">
-      {isChatting ? (
+      {currentView === "start" && (
+        <ChatBotStart onStartChat={handleStartChat} />
+      )}
+      {currentView === "chat" && (
         <ChatBotApp
           chats={chats}
           setChats={setChats}
           activeChat={activeChat}
           setActiveChat={setActiveChat}
           onNewChat={createNewChat}
+          onNavigateToInsights={() => setCurrentView("insights")}
         />
-      ) : (
-        <ChatBotStart onStartChat={handleStartChat} />
+      )}
+      {currentView === "insights" && (
+        <BusinessInsights onBack={() => setCurrentView("chat")} />
       )}
     </div>
   );

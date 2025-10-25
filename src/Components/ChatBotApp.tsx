@@ -16,6 +16,7 @@ interface ChatBotAppProps {
   activeChat: string | null;
   setActiveChat: React.Dispatch<React.SetStateAction<string | null>>;
   onNewChat: (initialMessage?: string) => void;
+  onNavigateToInsights: () => void;
 }
 
 interface EmojiData {
@@ -28,6 +29,7 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
   activeChat,
   setActiveChat,
   onNewChat,
+  onNavigateToInsights,
 }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -115,6 +117,54 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
     setInputValue(e.target.value);
   };
 
+  // Analytics tracking function
+  const trackEvent = async (
+    eventType: string,
+    provider?: string,
+    success?: boolean,
+    duration?: number
+  ) => {
+    // In development, skip API calls - only works in production
+    if (import.meta.env.DEV) {
+      console.log("📊 Analytics tracking (dev mode):", {
+        eventType,
+        provider,
+        success,
+      });
+      return;
+    }
+
+    try {
+      const sessionId =
+        localStorage.getItem("sessionId") ||
+        (() => {
+          const newSessionId = `session_${Date.now()}_${Math.random()
+            .toString(36)
+            .substr(2, 9)}`;
+          localStorage.setItem("sessionId", newSessionId);
+          return newSessionId;
+        })();
+
+      await fetch("/api/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sessionId,
+          eventType,
+          provider: provider || null,
+          success: success !== undefined ? success : true,
+          duration: duration || null,
+          metadata: JSON.stringify({ timestamp: new Date().toISOString() }),
+        }),
+      });
+    } catch (error) {
+      // Silently fail - don't interrupt user experience
+      // console.error("Failed to track event:", error);
+    }
+  };
+
   const sendMessage = async () => {
     if (inputValue.trim() === "") return;
 
@@ -145,6 +195,8 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
       localStorage.setItem("chats", JSON.stringify(updatedChats));
       setIsTyping(true);
 
+      const startTime = Date.now();
+
       try {
         // Use the new AI service with automatic fallback
         const aiResponse = await aiService.getChatResponse({
@@ -152,7 +204,11 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           provider: selectedProvider,
         });
 
+        const duration = Date.now() - startTime;
+
         if (aiResponse.success) {
+          // Track successful API call
+          await trackEvent("api_call", aiResponse.provider, true, duration);
           const newResponse: Message = {
             type: "response",
             text: aiResponse.content,
@@ -181,6 +237,14 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           // Show which provider was used
           console.log(`✅ Response from ${aiResponse.provider}`);
         } else {
+          // Track failed API call
+          await trackEvent(
+            "api_call",
+            aiResponse.provider || "unknown",
+            false,
+            duration
+          );
+
           // Handle error
           setErrorMessage(
             `Error: ${
@@ -204,6 +268,9 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           );
         }
       } catch (error) {
+        const duration = Date.now() - startTime;
+        await trackEvent("api_call", "unknown", false, duration);
+
         console.error("AI Service Error:", error);
         setErrorMessage(
           error instanceof Error ? error.message : "Unknown error occurred"
@@ -432,6 +499,13 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                   </div>
                 )}
               </div>
+            </div>
+            <div className="insights-button-container">
+              <Tooltip text="View Analytics" position="bottom">
+                <button className="insights-btn" onClick={onNavigateToInsights}>
+                  📊 Insights
+                </button>
+              </Tooltip>
             </div>
           </div>
         </div>

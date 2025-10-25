@@ -1,0 +1,50 @@
+// Prisma schema for AI Chat Hub Analytics
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  sessionId String
+  eventType String   // "api_call", "chat_created", "provider_selected"
+  provider  String?  // "gemini", "groq", "huggingface", etc.
+  success   Boolean  @default(true)
+  duration  Int?     // Response time in milliseconds
+  timestamp DateTime @default(now())
+  metadata  String?  // Additional JSON data
+
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([provider])
+  @@index([timestamp])
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  sessionId String  @unique
+  userAgent String?
+  platform  String?
+  startedAt DateTime @default(now())
+  lastSeen  DateTime @default(now())
+
+  @@index([startedAt])
+  @@index([lastSeen])
+}
+
+model ProviderStats {
+  id          String   @id @default(uuid())
+  provider    String
+  totalCalls  Int      @default(0)
+  successRate Float    @default(0)
+  avgDuration Int      @default(0)
+  lastUpdated DateTime @default(now())
+
+  @@unique([provider])
+  @@index([provider])
+}
+
