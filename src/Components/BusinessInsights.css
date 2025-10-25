@@ -456,37 +456,44 @@
 
 /* Hourly Chart */
 .hourly-chart {
-  display: grid;
-  grid-template-columns: repeat(24, 1fr);
-  gap: 0.3rem;
-  margin-top: 1.5rem;
-  height: 250px;
+  display: flex;
+  justify-content: space-between;
   align-items: flex-end;
+  gap: 0.2rem;
+  margin-top: 1.5rem;
+  padding-bottom: 3rem;
+  min-height: 250px;
 }
 
 .hour-bar-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
-  position: relative;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex: 1;
+  max-width: 40px;
 }
 
 .hour-bar {
-  width: 80%;
-  min-height: 2px;
+  width: 100%;
+  min-height: 3px;
   background: linear-gradient(180deg, #f42f5f 0%, #fe8d5c 100%);
   border-radius: 0.3rem;
-  transition: all 0.3s;
-  display: block;
+  transition: all 0.3s ease-out;
+  box-shadow: 0 2px 8px rgba(244, 47, 95, 0.3);
+}
+
+.hour-bar:hover {
+  box-shadow: 0 4px 12px rgba(244, 47, 95, 0.5);
+  transform: translateY(-2px);
 }
 
 .hour-label {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   color: #888;
-  position: absolute;
-  bottom: -20px;
   white-space: nowrap;
+  text-align: center;
 }
 
 /* User Engagement Grid */

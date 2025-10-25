@@ -393,27 +393,26 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
               <Clock className="trend-icon" />
               <h3>Hourly Breakdown</h3>
               <div className="hourly-chart">
-                {Array.from({ length: 24 }, (_, i) => (
-                  <div key={i} className="hour-bar-container">
-                    <div
-                      className="hour-bar"
-                      style={{
-                        height: `${
-                          ((timeAndTrends?.hourlyActivity[i.toString()] || 0) /
-                            (Math.max(
-                              ...Object.values(
-                                timeAndTrends?.hourlyActivity || {}
-                              )
-                            ) || 1)) *
-                          100
-                        }%`,
-                      }}
-                    ></div>
-                    <span className="hour-label">
-                      {timeAndTrends?.hourlyActivity[i.toString()] || 0}
-                    </span>
-                  </div>
-                ))}
+                {Array.from({ length: 24 }, (_, i) => {
+                  const hourValue = timeAndTrends?.hourlyActivity[i.toString()] || 0;
+                  const maxValue = Math.max(
+                    ...Object.values(timeAndTrends?.hourlyActivity || {}),
+                    1
+                  );
+                  const barHeight = (hourValue / maxValue) * 200;
+                  
+                  return (
+                    <div key={i} className="hour-bar-container">
+                      <div
+                        className="hour-bar"
+                        style={{
+                          height: `${barHeight}px`,
+                        }}
+                      ></div>
+                      <span className="hour-label">{hourValue}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
