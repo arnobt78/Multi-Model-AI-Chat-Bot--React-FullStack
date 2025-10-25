@@ -1,4 +1,4 @@
-# AI Chat Hub - Universal Multi-Provider Assistant - React, TypeScript, Vite FullStack Project (Multi-Model AI Chatbot i
+# AI Chat Hub - Universal Multi-Provider Assistant - React, TypeScript, Vite FullStack Project (Multi-Model AI Chatbot including Business Insights Dashboard)
 
 A modern, responsive AI chat bot application supporting multiple AI providers including Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI and enable to store the chat history in a list way in browser local storage options with unique chat id. Built with React, TypeScript, and Vite including Lucide icons, typewriter effect, tooltip system, and animated icons for the best user experience.
 
@@ -241,11 +241,13 @@ The Business Insights feature requires a PostgreSQL database for storing analyti
 5. Paste it into your `.env` file as `DATABASE_URL`
 
 **Note**: The connection string format should be:
+
 ```
 DATABASE_URL=postgresql://username:password@hostname:port/database?sslmode=require
 ```
 
 6. **Set up the database schema**:
+
    ```bash
    npx prisma generate
    npx prisma db push
@@ -297,6 +299,7 @@ DATABASE_URL=postgresql://username:password@hostname:port/database?sslmode=requi
 The Business Insights page provides comprehensive analytics and performance metrics:
 
 #### Overview Tab
+
 - Total events and sessions
 - Recent activity (24h)
 - Active sessions
@@ -304,41 +307,48 @@ The Business Insights page provides comprehensive analytics and performance metr
 - Uptime indicator
 
 #### Provider Analytics Tab
+
 - API calls by provider
 - Success/failure rates
 - Average response times
 - Provider performance comparison
 
 #### Storage & Performance Tab
+
 - Local storage usage
 - Total messages and sessions
 - Performance metrics
 
 #### Usage Patterns Tab
+
 - Most-used providers
 - Success rates per provider
 - Average response times
 - Usage trends
 
 #### Time & Trends Tab
+
 - Hourly activity breakdown
 - Peak usage times
 - Daily event trends
 - Visual activity charts
 
 #### User Engagement Tab
+
 - Average events per session
 - Session duration
 - Total conversations
 - Engagement patterns
 
 #### Error Monitoring Tab
+
 - Total errors
 - Errors by provider
 - Overall success rate
 - Error patterns
 
 #### Performance Tab
+
 - Fast/Normal/Slow request distribution
 - Min/Median/Max duration
 - Performance metrics
@@ -480,6 +490,7 @@ interface ChatBotStartProps {
 **Purpose**: Analytics dashboard for monitoring user activity and performance
 
 **Key Features**:
+
 - Real-time analytics from PostgreSQL database
 - 8 different tabs for various metrics
 - Anonymous session tracking
@@ -488,6 +499,7 @@ interface ChatBotStartProps {
 - Error monitoring
 
 **Props**:
+
 ```typescript
 interface BusinessInsightsProps {
   onBack: () => void;
@@ -495,6 +507,7 @@ interface BusinessInsightsProps {
 ```
 
 **Tabs**:
+
 1. **Overview**: Total events, sessions, storage, uptime
 2. **Provider Analytics**: Per-provider statistics
 3. **Storage & Performance**: Local storage and performance metrics
@@ -539,19 +552,23 @@ The project includes serverless API endpoints for tracking and analytics:
 #### Available Endpoints
 
 1. **POST `/api/events`**: Track analytics events
+
    - Records: API calls, success/failure, duration, provider
    - Creates/updates session records
    - Used by frontend to log all user interactions
 
 2. **GET `/api/usage`**: Fetch usage statistics
+
    - Returns: Total events, sessions, recent activity
    - Aggregates session and event data
 
 3. **GET `/api/insights`**: Fetch provider insights
+
    - Returns: Provider stats, success rates, daily trends
    - Calculates provider performance metrics
 
 4. **GET `/api/providers`**: Fetch detailed provider data
+
    - Returns: Individual provider analytics
    - Includes: Total calls, success/failure counts, avg duration
 
@@ -730,6 +747,7 @@ This creates an optimized production build in the `dist/` folder.
    ```
 
 4. **Set Environment Variables in Vercel**
+
    - Go to your Vercel project settings
    - Navigate to Environment Variables
    - Add all your API keys from `.env` file
@@ -738,13 +756,14 @@ This creates an optimized production build in the `dist/` folder.
 5. **Run Database Migrations**
 
    After deployment, trigger a build that runs Prisma:
-   
+
    ```bash
    npx prisma generate
    npx prisma db push
    ```
 
    Or add to your `package.json`:
+
    ```json
    "scripts": {
      "vercel-build": "prisma generate && prisma db push && npm run build"
