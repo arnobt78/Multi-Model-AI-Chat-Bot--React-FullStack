@@ -15,6 +15,7 @@
   justify-content: center;
   opacity: 0.1;
   z-index: 0;
+  pointer-events: none; /* Allow clicks to pass through */
 }
 
 .bg-chatbot-icon {
