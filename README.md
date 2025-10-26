@@ -1,10 +1,12 @@
-# AI Chat Hub - Universal Multi-Provider Assistant - React, TypeScript, Vite FullStack Project (Multi-Model AI Chatbot including Business Insights Dashboard)
+# AI Chat Hub - Universal Multi-Provider Assistant - React, TypeScript, Vite FullStack Project (Multi-Model AI Chatbot including Business Insights & Performance Dashboard)
 
 A modern, responsive AI chat bot application supporting multiple AI providers including Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI and enable to store the chat history. Built with React, TypeScript, and Vite including business-insights analytics and performance dashboard, typewriter effect, and animated icons for the best user experience.
 
 - **Live-Demo:** [https://multi-ai-chat-hub.vercel.app/](https://multi-ai-chat-hub.vercel.app/)
 
 ---
+
+<img width="1904" height="916" alt="Screenshot 2025-10-26 at 12 23 05" src="https://github.com/user-attachments/assets/3455c420-1ef0-4386-8ee1-6af569c30a52" /> <img width="1916" height="909" alt="Screenshot 2025-10-26 at 12 23 53" src="https://github.com/user-attachments/assets/62de71c5-3c32-4a87-a82c-8e46baa817d8" /> <img width="1889" height="881" alt="Screenshot 2025-10-26 at 12 24 13" src="https://github.com/user-attachments/assets/cfc05f0f-2754-453c-be8b-83f502c3b9f2" /> <img width="1882" height="884" alt="Screenshot 2025-10-26 at 12 24 33" src="https://github.com/user-attachments/assets/6be72f08-b00b-412e-a15a-983bcc5bfc23" /> <img width="1884" height="497" alt="Screenshot 2025-10-26 at 12 24 50" src="https://github.com/user-attachments/assets/4b3a429c-0666-40b1-b69e-b075d13835d5" /> <img width="1891" height="452" alt="Screenshot 2025-10-26 at 12 24 57" src="https://github.com/user-attachments/assets/ccc4a310-ac52-4fcd-a648-186088c968a0" /> <img width="1883" height="757" alt="Screenshot 2025-10-26 at 12 25 09" src="https://github.com/user-attachments/assets/5d95c8fc-bff5-4af9-8c37-eab9422542a7" /> <img width="1891" height="396" alt="Screenshot 2025-10-26 at 12 25 20" src="https://github.com/user-attachments/assets/ef3b9bc0-60cf-457e-94f9-30cbc4ff7d2f" /> <img width="1896" height="450" alt="Screenshot 2025-10-26 at 12 25 33" src="https://github.com/user-attachments/assets/c6be8309-63aa-44eb-ba12-c72dc7438885" /> <img width="1894" height="471" alt="Screenshot 2025-10-26 at 12 25 36" src="https://github.com/user-attachments/assets/d91bef44-463d-4b9d-868f-277ef3eb81e2" />
 
 ## Table of Contents
 
