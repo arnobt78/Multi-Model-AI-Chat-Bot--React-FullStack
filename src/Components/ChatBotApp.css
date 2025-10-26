@@ -184,6 +184,36 @@
   color: #fff;
 }
 
+/* Insights Toggle Button */
+.insights-toggle-btn {
+  position: fixed;
+  top: calc(50% + 6rem);
+  left: 0;
+  transform: translateY(-50%);
+  width: 5rem;
+  height: 5rem;
+  background: linear-gradient(135deg, #fe8d5c, #f42f5f);
+  border: none;
+  border-radius: 0 1rem 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 0.5rem 1.5rem rgba(254, 141, 92, 0.4);
+  transition: all 0.3s ease;
+}
+
+.insights-toggle-btn:hover {
+  transform: translateY(-50%) translateX(5px);
+  box-shadow: 0 0.8rem 2rem rgba(254, 141, 92, 0.6);
+}
+
+.insights-toggle-btn i {
+  font-size: 2.5rem;
+  color: #fff;
+}
+
 .chat-window {
   width: 80%;
   height: 100%;
@@ -676,6 +706,11 @@
   }
 
   .chat-list-toggle-btn {
+    display: flex;
+    left: 0;
+  }
+
+  .insights-toggle-btn {
     display: flex;
     left: 0;
   }

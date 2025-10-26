@@ -414,6 +414,13 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
         </button>
       </Tooltip>
 
+      {/* Insights Button */}
+      <Tooltip text="View Analytics" position="right">
+        <button className="insights-toggle-btn" onClick={onNavigateToInsights}>
+          <i className="bx bx-bar-chart-alt-2"></i>
+        </button>
+      </Tooltip>
+
       {/* Chat Window */}
       <div className="chat-window">
         <div className="chat-title">
@@ -499,13 +506,6 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                   </div>
                 )}
               </div>
-            </div>
-            <div className="insights-button-container">
-              <Tooltip text="View Analytics" position="bottom">
-                <button className="insights-btn" onClick={onNavigateToInsights}>
-                  📊 Insights
-                </button>
-              </Tooltip>
             </div>
           </div>
         </div>
