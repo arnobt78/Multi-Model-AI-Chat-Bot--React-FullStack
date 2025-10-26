@@ -8,7 +8,15 @@ import { AIProvider, getAvailableProviders } from "../services/aiProviders";
 import TypingIndicator from "./TypingIndicator";
 import Tooltip from "./Tooltip";
 import { useTypewriter } from "../hooks/useTypewriter";
-import { BotMessageSquare } from "lucide-react";
+import {
+  BotMessageSquare,
+  MessageCircleMore,
+  MessageCirclePlus,
+  XCircle,
+  Menu,
+  X,
+  BarChart3,
+} from "lucide-react";
 
 interface ChatBotAppProps {
   chats: Chat[];
@@ -369,12 +377,16 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
       {/* Chat List */}
       <div className={`chat-list ${isChatListCollapsed ? "collapsed" : ""}`}>
         <div className="chat-list-header">
-          <h2>Chat List</h2>
+          <h2>
+            <MessageCircleMore size={28} />
+            Chat List
+          </h2>
           <Tooltip text="New Chat" position="bottom">
-            <i
-              className="bx bx-edit-alt new-chat"
+            <MessageCirclePlus
+              size={24}
+              className="new-chat"
               onClick={() => onNewChat()}
-            ></i>
+            />
           </Tooltip>
         </div>
         {chats.map((chat) => (
@@ -387,13 +399,13 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           >
             <h4>{chat.displayId}</h4>
             <Tooltip text="Delete Chat" position="left">
-              <i
-                className="bx bx-x-circle"
-                onClick={(e: React.MouseEvent<HTMLElement>) => {
+              <XCircle
+                size={20}
+                onClick={(e: React.MouseEvent) => {
                   e.stopPropagation();
                   handleDeleteChat(chat.id);
                 }}
-              ></i>
+              />
             </Tooltip>
           </div>
         ))}
@@ -410,14 +422,14 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           }`}
           onClick={() => setIsChatListCollapsed(!isChatListCollapsed)}
         >
-          <i className={isChatListCollapsed ? "bx bx-menu" : "bx bx-x"}></i>
+          {isChatListCollapsed ? <Menu size={28} /> : <X size={28} />}
         </button>
       </Tooltip>
 
       {/* Insights Button */}
       <Tooltip text="View Analytics" position="right">
         <button className="insights-toggle-btn" onClick={onNavigateToInsights}>
-          <i className="bx bx-bar-chart-alt-2"></i>
+          <BarChart3 size={28} />
         </button>
       </Tooltip>
 

@@ -93,15 +93,25 @@
   gap: 1rem;
 }
 
-.chat-list-header h2::before {
-  content: "💬";
-  font-size: 2.5rem;
+.chat-list-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.chat-list-header i {
-  font-size: 2.5rem;
+.chat-list-header h2 svg {
+  color: #f42f5f;
+}
+
+.new-chat {
   cursor: pointer;
   transition: all 0.3s ease;
+  color: #7b8ebc;
+}
+
+.new-chat:hover {
+  color: #f42f5f;
+  transform: scale(1.1);
 }
 
 .chat-list-item {
@@ -148,10 +158,17 @@
   color: #fff;
 }
 
-.chat-list-item i {
+.chat-list-item i,
+.chat-list-item svg {
   font-size: 2.5rem;
   color: #f42f5f;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chat-list-item svg:hover {
+  color: #ef4444;
+  transform: scale(1.1);
 }
 
 /* Chat List Toggle Button */
@@ -179,8 +196,7 @@
   box-shadow: 0 0.8rem 2rem rgba(244, 47, 95, 0.6);
 }
 
-.chat-list-toggle-btn i {
-  font-size: 2.5rem;
+.chat-list-toggle-btn svg {
   color: #fff;
 }
 
@@ -209,8 +225,7 @@
   box-shadow: 0 0.8rem 2rem rgba(254, 141, 92, 0.6);
 }
 
-.insights-toggle-btn i {
-  font-size: 2.5rem;
+.insights-toggle-btn svg {
   color: #fff;
 }
 
