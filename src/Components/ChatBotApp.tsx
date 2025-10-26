@@ -389,26 +389,28 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             />
           </Tooltip>
         </div>
-        {chats.map((chat) => (
-          <div
-            key={chat.id}
-            className={`chat-list-item ${
-              chat.id === activeChat ? "active" : ""
-            }`}
-            onClick={() => handleSelectChat(chat.id)}
-          >
-            <h4>{chat.displayId}</h4>
-            <Tooltip text="Delete Chat" position="left">
-              <XCircle
-                size={20}
-                onClick={(e: React.MouseEvent) => {
-                  e.stopPropagation();
-                  handleDeleteChat(chat.id);
-                }}
-              />
-            </Tooltip>
-          </div>
-        ))}
+        <div className="chat-list-items-wrapper">
+          {chats.map((chat) => (
+            <div
+              key={chat.id}
+              className={`chat-list-item ${
+                chat.id === activeChat ? "active" : ""
+              }`}
+              onClick={() => handleSelectChat(chat.id)}
+            >
+              <h4>{chat.displayId}</h4>
+              <Tooltip text="Delete Chat" position="left">
+                <XCircle
+                  size={20}
+                  onClick={(e: React.MouseEvent) => {
+                    e.stopPropagation();
+                    handleDeleteChat(chat.id);
+                  }}
+                />
+              </Tooltip>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Toggle Button - Always visible on mobile */}
