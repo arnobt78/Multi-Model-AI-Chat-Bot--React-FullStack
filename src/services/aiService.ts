@@ -71,9 +71,7 @@ class AIService {
       if (response.status === 429) {
         this.markRateLimited("gemini");
         throw new Error(
-          `Gemini API rate limit exceeded. The service will automatically skip Gemini for the next few minutes. Error: ${JSON.stringify(
-            errorData
-          )}`
+          `Google Gemini API rate limit exceeded. You've reached your current usage limit. Please select another AI provider (Groq, OpenRouter, or Hugging Face) from the dropdown menu, or try again later. The service will automatically skip Gemini for the next few minutes.`
         );
       }
 
@@ -314,6 +312,22 @@ class AIService {
           provider: providerConfig.name,
           success: false,
           error: `${providerConfig.displayName} is not available`,
+        };
+      }
+
+      // Check if provider is rate-limited before making API call
+      if (this.isRateLimited(provider)) {
+        const timeRemaining = Math.ceil(
+          (this.RATE_LIMIT_COOLDOWN -
+            (Date.now() - (this.rateLimitedProviders.get(provider) || 0))) /
+            1000 /
+            60
+        );
+        return {
+          content: "",
+          provider: providerConfig.displayName,
+          success: false,
+          error: `${providerConfig.displayName} is currently rate-limited. Please try again in ${timeRemaining} minute(s), or select another provider (Groq, OpenRouter, etc.) from the dropdown.`,
         };
       }
 

@@ -253,18 +253,22 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             duration
           );
 
-          // Handle error
-          setErrorMessage(
-            `Error: ${
-              aiResponse.error || "Failed to get response from AI providers"
-            }`
-          );
+          // Handle error - check if it's a rate limit error
+          const isRateLimitError = aiResponse.error?.includes("rate limit") || 
+                                  aiResponse.error?.includes("rate limit exceeded");
+          
+          let errorDisplayText = aiResponse.error || "Failed to get response from AI providers";
+          
+          // Format rate limit errors more user-friendly
+          if (isRateLimitError) {
+            errorDisplayText = `Sorry, ${aiResponse.provider} is currently rate-limited. Please select another AI provider (Groq, OpenRouter, or Hugging Face) from the dropdown menu, or try again later.`;
+          }
+
+          setErrorMessage(`Error: ${errorDisplayText}`);
 
           const errorResponse: Message = {
             type: "response",
-            text: `Sorry, I couldn't process your request. Error: ${
-              aiResponse.error || "Unknown error"
-            }`,
+            text: errorDisplayText,
             timestamp: new Date().toLocaleTimeString(),
           };
 
