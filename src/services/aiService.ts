@@ -17,6 +17,32 @@ export interface AIChatResponse {
  * Tries providers in order: Gemini -> Groq -> OpenRouter -> HuggingFace
  */
 class AIService {
+  // Track rate-limited providers to skip them temporarily
+  private rateLimitedProviders: Map<string, number> = new Map();
+  private readonly RATE_LIMIT_COOLDOWN = 5 * 60 * 1000; // 5 minutes cooldown
+
+  private isRateLimited(provider: string): boolean {
+    const lastRateLimit = this.rateLimitedProviders.get(provider);
+    if (!lastRateLimit) return false;
+
+    const timeSinceLimit = Date.now() - lastRateLimit;
+    if (timeSinceLimit > this.RATE_LIMIT_COOLDOWN) {
+      // Cooldown expired, remove from blacklist
+      this.rateLimitedProviders.delete(provider);
+      return false;
+    }
+
+    return true;
+  }
+
+  private markRateLimited(provider: string): void {
+    this.rateLimitedProviders.set(provider, Date.now());
+    console.warn(
+      `⚠️ ${provider} is rate-limited. Skipping for ${
+        this.RATE_LIMIT_COOLDOWN / 1000 / 60
+      } minutes.`
+    );
+  }
   private async callGeminiAPI(
     message: string,
     apiKey: string
@@ -40,6 +66,17 @@ class AIService {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+
+      // Detect rate limit errors (429) and mark provider as rate-limited
+      if (response.status === 429) {
+        this.markRateLimited("gemini");
+        throw new Error(
+          `Gemini API rate limit exceeded. The service will automatically skip Gemini for the next few minutes. Error: ${JSON.stringify(
+            errorData
+          )}`
+        );
+      }
+
       throw new Error(
         `Gemini API error: ${response.status} ${
           response.statusText
@@ -324,9 +361,11 @@ class AIService {
     }
 
     // Auto-fallback: Try providers in order of reliability
+    // Skip rate-limited providers to avoid wasting quota
+    // Note: Groq is first because it has better free tier limits (30 requests/minute)
     const providers: Array<AIProvider> = [
-      "gemini",
-      "groq",
+      "groq", // Better free tier: 30 req/min, unlimited daily
+      "gemini", // 15 req/min, 1500/day - more restrictive
       "openrouter",
       "huggingface",
       "openai", // Last resort
@@ -336,6 +375,12 @@ class AIService {
       const providerConfig = AI_PROVIDERS[providerName];
 
       if (!providerConfig.available || !providerConfig.apiKey) {
+        continue;
+      }
+
+      // Skip rate-limited providers in auto-fallback mode
+      if (this.isRateLimited(providerName)) {
+        console.log(`⏭️ Skipping ${providerConfig.displayName} (rate-limited)`);
         continue;
       }
 
@@ -371,6 +416,15 @@ class AIService {
           success: true,
         };
       } catch (error) {
+        // Check if it's a rate limit error
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        if (
+          errorMessage.includes("rate limit") ||
+          errorMessage.includes("429")
+        ) {
+          this.markRateLimited(providerName);
+        }
         console.warn(`${providerConfig.displayName} failed:`, error);
         continue; // Try next provider
       }
