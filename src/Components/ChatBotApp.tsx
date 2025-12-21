@@ -54,6 +54,7 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
   const chatEndRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const providerDropdownRef = useRef<HTMLDivElement>(null);
+  const errorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { displayText: chatTitleText } = useTypewriter({
     text: "Chat with AI",
@@ -74,6 +75,36 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
       setMessages(storedMessages);
     }
   }, [activeChat]);
+
+  // Auto-dismiss error message after 7 seconds
+  useEffect(() => {
+    if (errorMessage) {
+      // Clear any existing timeout
+      if (errorTimeoutRef.current) {
+        clearTimeout(errorTimeoutRef.current);
+      }
+      
+      // Set new timeout to dismiss error after 7 seconds
+      errorTimeoutRef.current = setTimeout(() => {
+        setErrorMessage("");
+      }, 7000);
+
+      // Cleanup timeout on unmount or when errorMessage changes
+      return () => {
+        if (errorTimeoutRef.current) {
+          clearTimeout(errorTimeoutRef.current);
+        }
+      };
+    }
+  }, [errorMessage]);
+
+  // Function to manually dismiss error message
+  const dismissError = () => {
+    if (errorTimeoutRef.current) {
+      clearTimeout(errorTimeoutRef.current);
+    }
+    setErrorMessage("");
+  };
 
   // Close emoji picker when clicking outside
   useEffect(() => {
@@ -527,7 +558,18 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             </div>
           </div>
         </div>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="error-message">
+            <span>{errorMessage}</span>
+            <button
+              onClick={dismissError}
+              className="error-close-button"
+              aria-label="Close error message"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        )}
         <div className="chat">
           {messages.map((msg, index) => (
             <div

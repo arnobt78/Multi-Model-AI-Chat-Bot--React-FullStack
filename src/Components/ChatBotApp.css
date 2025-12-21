@@ -687,14 +687,45 @@
   border-bottom: 1px solid rgba(255, 77, 77, 0.3);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 1rem;
+  position: relative;
 }
 
 .error-message::before {
   content: "⚠️";
   font-size: 2rem;
+  flex-shrink: 0;
 }
+
+.error-message span {
+  flex: 1;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.error-close-button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.error-close-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.error-close-button:active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
 
 @keyframes slideDown {
   from {
