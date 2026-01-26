@@ -1,29 +1,30 @@
 # AI Chat Hub - Universal Multi-Provider Assistant - React, TypeScript, Vite FullStack Project (Multi-Model AI Chatbot including Business Insights & Performance Dashboard)
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-18.3.1-blue)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.1.12-blue)](https://vitejs.dev/)
+[![Prisma ORM](https://img.shields.io/badge/Prisma_ORM-6.1.1-blue)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16.3-blue)](https://www.postgresql.org/)
+[![Vercel Serverless Functions](https://img.shields.io/badge/Vercel_Serverless_Functions-5.1.12-blue)](https://vercel.com/)
+
 A modern, responsive AI chat bot application supporting multiple AI providers including Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI and enable to store the chat history. Built with React, TypeScript, and Vite including business-insights analytics and performance dashboard, typewriter effect, and animated icons for the best user experience.
 
 - **Live-Demo:** [https://multi-ai-chat-hub.vercel.app/](https://multi-ai-chat-hub.vercel.app/)
 
----
+**Author:** [Arnob Mahmud](https://www.arnobmahmud.com/) | **License:** [MIT](./LICENSE)
+
+> 🌟 **Open Source Project** - This is an open-source project. Feel free to use, enhance, and extend this project to the next level! Contributions, improvements, forks, and stars are always welcome. Together, we can make this portfolio template even better!
 
 ![Screenshot 2025-10-26 at 12 23 05](https://github.com/user-attachments/assets/3455c420-1ef0-4386-8ee1-6af569c30a52)
-
 ![Screenshot 2025-10-26 at 12 23 53](https://github.com/user-attachments/assets/62de71c5-3c32-4a87-a82c-8e46baa817d8)
-
 ![Screenshot 2025-10-26 at 12 24 13](https://github.com/user-attachments/assets/cfc05f0f-2754-453c-be8b-83f502c3b9f2)
-
 ![Screenshot 2025-10-26 at 12 24 33](https://github.com/user-attachments/assets/6be72f08-b00b-412e-a15a-983bcc5bfc23)
-
 ![Screenshot 2025-10-26 at 12 24 50](https://github.com/user-attachments/assets/4b3a429c-0666-40b1-b69e-b075d13835d5)
-
 ![Screenshot 2025-10-26 at 12 24 57](https://github.com/user-attachments/assets/ccc4a310-ac52-4fcd-a648-186088c968a0)
-
 ![Screenshot 2025-10-26 at 12 25 09](https://github.com/user-attachments/assets/5d95c8fc-bff5-4af9-8c37-eab9422542a7)
-
 ![Screenshot 2025-10-26 at 12 25 20](https://github.com/user-attachments/assets/ef3b9bc0-60cf-457e-94f9-30cbc4ff7d2f)
-
 ![Screenshot 2025-10-26 at 12 25 33](https://github.com/user-attachments/assets/c6be8309-63aa-44eb-ba12-c72dc7438885)
-
 ![Screenshot 2025-10-26 at 12 25 36](https://github.com/user-attachments/assets/d91bef44-463d-4b9d-868f-277ef3eb81e2)
 
 ## Table of Contents
@@ -266,7 +267,7 @@ The Business Insights feature requires a PostgreSQL database for storing analyti
 DATABASE_URL=postgresql://username:password@hostname:port/database?sslmode=require
 ```
 
-6. **Set up the database schema**:
+1. **Set up the database schema**:
 
    ```bash
    npx prisma generate
@@ -572,23 +573,19 @@ The project includes serverless API endpoints for tracking and analytics:
 #### Available Endpoints
 
 1. **POST `/api/events`**: Track analytics events
-
    - Records: API calls, success/failure, duration, provider
    - Creates/updates session records
    - Used by frontend to log all user interactions
 
 2. **GET `/api/usage`**: Fetch usage statistics
-
    - Returns: Total events, sessions, recent activity
    - Aggregates session and event data
 
 3. **GET `/api/insights`**: Fetch provider insights
-
    - Returns: Provider stats, success rates, daily trends
    - Calculates provider performance metrics
 
 4. **GET `/api/providers`**: Fetch detailed provider data
-
    - Returns: Individual provider analytics
    - Includes: Total calls, success/failure counts, avg duration
 
@@ -636,23 +633,19 @@ model Session {
 **Supported Providers**:
 
 1. **Google Gemini** (`gemini-2.5-flash`)
-
    - Endpoint: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`
    - Model: `gemini-2.5-flash`
    - **Note**: Updated from Gemini 2.0 (discontinued March 31, 2026) to Gemini 2.5
 
 2. **Groq** (`llama-3.1-8b-instant`)
-
    - Endpoint: `https://api.groq.com/openai/v1/chat/completions`
    - Model: `llama-3.1-8b-instant`
 
 3. **OpenRouter** (`meta-llama/llama-3.2-3b-instruct:free`)
-
    - Endpoint: `https://openrouter.ai/api/v1/chat/completions`
    - Model: `meta-llama/llama-3.2-3b-instruct:free`
 
 4. **Hugging Face** (16 models with fallback - New Inference Providers API)
-
    - Endpoint: `https://router.huggingface.co/v1/chat/completions` (OpenAI-compatible)
    - Primary Models: `meta-llama/Llama-3.1-8B-Instruct`, `mistralai/Mistral-7B-Instruct-v0.3`, `HuggingFaceH4/zephyr-7b-beta`, `tiiuae/falcon-7b-instruct`, `google/gemma-2b-it`, `NousResearch/Hermes-2-Pro-Mistral-7B`
    - Fallback Models: `mistralai/Mistral-7B-Instruct-v0.2`, `google/gemma-2b`, `google/gemma-7b`, `mistralai/Mixtral-8x7B-Instruct-v0.1`, `tiiuae/falcon-7b`, `microsoft/phi-1_5`, `bigscience/bloomz-560m`, `HuggingFaceH4/zephyr-7b-alpha`, `tiiuae/falcon-40b-instruct`, `facebook/bart-large-cnn`
@@ -756,7 +749,6 @@ This creates an optimized production build in the `dist/` folder.
    ```
 
 2. **Set up Database**
-
    - Create a Neon PostgreSQL database
    - Copy your connection string
    - Update your `DATABASE_URL` in `.env`
@@ -768,7 +760,6 @@ This creates an optimized production build in the `dist/` folder.
    ```
 
 4. **Set Environment Variables in Vercel**
-
    - Go to your Vercel project settings
    - Navigate to Environment Variables
    - Add all your API keys from `.env` file
