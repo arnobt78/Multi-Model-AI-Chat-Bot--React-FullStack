@@ -635,10 +635,11 @@ model Session {
 
 **Supported Providers**:
 
-1. **Google Gemini** (`gemini-2.0-flash`)
+1. **Google Gemini** (`gemini-2.5-flash`)
 
-   - Endpoint: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`
-   - Model: `gemini-2.0-flash`
+   - Endpoint: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`
+   - Model: `gemini-2.5-flash`
+   - **Note**: Updated from Gemini 2.0 (discontinued March 31, 2026) to Gemini 2.5
 
 2. **Groq** (`llama-3.1-8b-instant`)
 

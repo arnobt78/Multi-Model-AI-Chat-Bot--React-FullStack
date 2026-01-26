@@ -17,14 +17,15 @@ export interface ProviderConfig {
 
 export const AI_PROVIDERS: Record<AIProvider, ProviderConfig> = {
   // Google Gemini AI - 1.5M free tokens/month
+  // Updated to Gemini 2.5 (2.0 models discontinued March 31, 2026)
   gemini: {
     name: "gemini",
     displayName: "Google Gemini",
     available: true,
     apiKey: import.meta.env.VITE_GEMINI_API_KEY || "",
     baseUrl:
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
-    model: "gemini-2.0-flash",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    model: "gemini-2.5-flash",
     icon: "🤖",
   },
 
