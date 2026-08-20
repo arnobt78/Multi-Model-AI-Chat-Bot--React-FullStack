@@ -10,7 +10,7 @@ export const PROVIDER_META: Record<AIProvider, ProviderMeta> = {
     name: "gemini",
     displayName: "Google Gemini",
     models: ["gemini-2.5-flash", "gemini-2.5-flash-lite"],
-    icon: "🤖",
+    icon: "sparkles",
     envKey: "GEMINI_API_KEY",
   },
   // Groq — llama-3.1-8b-instant shut down 2026-08-16; use gpt-oss / qwen chain
@@ -22,7 +22,7 @@ export const PROVIDER_META: Record<AIProvider, ProviderMeta> = {
       "openai/gpt-oss-120b",
       "qwen/qwen3.6-27b",
     ],
-    icon: "⚡",
+    icon: "zap",
     envKey: "GROQ_API_KEY",
   },
   // OpenRouter — free tier requires `:free` model ID suffix
@@ -30,7 +30,7 @@ export const PROVIDER_META: Record<AIProvider, ProviderMeta> = {
     name: "openrouter",
     displayName: "OpenRouter",
     models: ["openai/gpt-oss-20b:free", "openai/gpt-oss-120b:free"],
-    icon: "💬",
+    icon: "waypoints",
     envKey: "OPENROUTER_API_KEY",
   },
   // Hugging Face Inference Providers — router.huggingface.co (free ≈ $0.10/mo credits).
@@ -45,7 +45,7 @@ export const PROVIDER_META: Record<AIProvider, ProviderMeta> = {
       "openai/gpt-oss-20b:fastest",
       "meta-llama/Llama-3.2-3B-Instruct:fastest",
     ],
-    icon: "🔍",
+    icon: "boxes",
     envKey: "HUGGINGFACE_API_KEY",
   },
   // OpenAI — paid last-resort rung
@@ -53,7 +53,7 @@ export const PROVIDER_META: Record<AIProvider, ProviderMeta> = {
     name: "openai",
     displayName: "OpenAI GPT",
     models: ["gpt-4o-mini"],
-    icon: "🧠",
+    icon: "brain-circuit",
     envKey: "OPENAI_API_KEY",
   },
 };

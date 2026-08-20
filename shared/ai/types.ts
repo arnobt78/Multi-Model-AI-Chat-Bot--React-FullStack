@@ -15,6 +15,7 @@ export interface ProviderMeta {
   displayName: string;
   /** Ordered within-provider free-tier model chain (try next on retriable failure). */
   models: string[];
+  /** Lucide icon id for clients (UI maps key → component; not an emoji). */
   icon: string;
   /** Server env var name that holds the secret (never VITE_*). */
   envKey: string;

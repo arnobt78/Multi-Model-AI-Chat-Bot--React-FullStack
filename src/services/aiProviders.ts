@@ -9,10 +9,11 @@ import type {
 
 export type { AIProvider, ProviderAvailability };
 
-/** Static UI metadata (icons / labels) — safe to ship in the browser bundle. */
+/** Static UI metadata (labels + lucide key; render via getProviderIcon). */
 export interface ProviderConfig {
   name: AIProvider;
   displayName: string;
+  /** Lucide icon id from PROVIDER_META (UI uses getProviderIcon(name)). */
   icon: string;
   available: boolean;
 }

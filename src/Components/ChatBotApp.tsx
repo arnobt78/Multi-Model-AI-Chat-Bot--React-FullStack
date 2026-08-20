@@ -13,7 +13,6 @@ import TypingIndicator from "./TypingIndicator";
 import Tooltip from "./Tooltip";
 import { useTypewriter } from "../hooks/useTypewriter";
 import {
-  BotMessageSquare,
   MessageCircleMore,
   MessageCirclePlus,
   XCircle,
@@ -24,6 +23,10 @@ import {
   Check,
 } from "lucide-react";
 import { formatUserFacingError } from "../../shared/ai/formatError";
+import {
+  AUTO_PROVIDER_ICON,
+  getProviderIcon,
+} from "../lib/providerIcons";
 
 interface ChatBotAppProps {
   chats: Chat[];
@@ -547,27 +550,23 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                       setShowProviderDropdown(!showProviderDropdown)
                     }
                   >
-                    {selectedProvider ? (
-                      <>
-                        <span className="provider-btn-icon">
-                          {availableProviders.find(
+                    <span className="provider-btn-icon">
+                      {selectedProvider ? (
+                        (() => {
+                          const Icon = getProviderIcon(selectedProvider);
+                          return <Icon size={18} strokeWidth={2} />;
+                        })()
+                      ) : (
+                        <AUTO_PROVIDER_ICON size={18} strokeWidth={2} />
+                      )}
+                    </span>
+                    <span className="provider-btn-label">
+                      {selectedProvider
+                        ? availableProviders.find(
                             (p) => p.name === selectedProvider
-                          )?.icon || ""}
-                        </span>
-                        <span className="provider-btn-label">
-                          {availableProviders.find(
-                            (p) => p.name === selectedProvider
-                          )?.displayName || selectedProvider}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="provider-btn-icon">
-                          <BotMessageSquare size={18} />
-                        </span>
-                        <span className="provider-btn-label">Auto</span>
-                      </>
-                    )}
+                          )?.displayName || selectedProvider
+                        : "Auto"}
+                    </span>
                   </button>
                 </Tooltip>
                 {showProviderDropdown && (
@@ -582,31 +581,34 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                       }}
                     >
                       <span className="provider-option-icon">
-                        <BotMessageSquare size={18} />
+                        <AUTO_PROVIDER_ICON size={18} strokeWidth={2} />
                       </span>
                       <span className="provider-option-label">
                         Auto (Fallback)
                       </span>
                     </button>
-                    {availableProviders.map((provider) => (
-                      <button
-                        key={provider.name}
-                        className={`provider-option ${
-                          selectedProvider === provider.name ? "active" : ""
-                        }`}
-                        onClick={() => {
-                          setSelectedProvider(provider.name as AIProvider);
-                          setShowProviderDropdown(false);
-                        }}
-                      >
-                        <span className="provider-option-icon">
-                          {provider.icon}
-                        </span>
-                        <span className="provider-option-label">
-                          {provider.displayName}
-                        </span>
-                      </button>
-                    ))}
+                    {availableProviders.map((provider) => {
+                      const Icon = getProviderIcon(provider.name);
+                      return (
+                        <button
+                          key={provider.name}
+                          className={`provider-option ${
+                            selectedProvider === provider.name ? "active" : ""
+                          }`}
+                          onClick={() => {
+                            setSelectedProvider(provider.name as AIProvider);
+                            setShowProviderDropdown(false);
+                          }}
+                        >
+                          <span className="provider-option-icon">
+                            <Icon size={18} strokeWidth={2} />
+                          </span>
+                          <span className="provider-option-label">
+                            {provider.displayName}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
               </div>

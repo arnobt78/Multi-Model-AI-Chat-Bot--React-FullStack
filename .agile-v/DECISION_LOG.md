@@ -60,3 +60,10 @@ Append-only. Never rewrite prior entries.
 - **Decision:** Show pulsing Thinking + cycling dots until first SSE delta (no empty bubble); remove stream caret; icon/label spans for provider btn/rows; `.send-btn` click ripple.
 - **Rationale:** Screenshots showed missing wait feedback, caret noise, emoji baseline misalignment, and no send press feedback.
 - **Linked REQs:** REQ-0009 (UX)
+
+## DEC-0010 — Lucide icons for Select AI Model
+- **Timestamp:** 2026-08-20T16:45:00Z
+- **Agent:** Build
+- **Decision:** Client map `src/lib/providerIcons.ts` (Sparkles/Zap/Waypoints/Boxes/BrainCircuit + Auto BotMessageSquare). `PROVIDER_META.icon` = lucide key strings (no emoji). UI renders via `getProviderIcon(name)`.
+- **Rationale:** Professional consistent Lucide look; shared stays React-free.
+- **Linked REQs:** REQ-0009 (UX)

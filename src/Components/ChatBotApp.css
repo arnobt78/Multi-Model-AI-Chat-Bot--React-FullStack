@@ -771,6 +771,12 @@
   font-size: 1.5rem;
 }
 
+.provider-option-icon svg,
+.provider-btn-icon svg {
+  display: block;
+  flex-shrink: 0;
+}
+
 .provider-option-label,
 .provider-btn-label {
   display: inline-flex;

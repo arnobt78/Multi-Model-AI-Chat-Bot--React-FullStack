@@ -93,3 +93,11 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | Provider UI | PASS | icon/label spans vertically centered |
 | Send ripple | PASS | `.send-btn` click ripple |
 | lint/build | PASS | |
+
+## VAL-0011 — Lucide Select AI Model icons (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| Icons | PASS | Sparkles/Zap/Waypoints/Boxes/BrainCircuit + Auto BotMessageSquare |
+| No emoji | PASS | PROVIDER_META.icon = lucide keys; UI via `getProviderIcon` |
+| lint/build | PASS | |

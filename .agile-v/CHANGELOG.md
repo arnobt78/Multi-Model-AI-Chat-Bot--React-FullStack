@@ -1,5 +1,8 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — Lucide Select AI Model icons
+- `providerIcons.ts` + PROVIDER_META lucide keys (DEC-0010); VAL-0011 PASS
+
 ## 2026-08-20 — Chat UX microfixes
 - Thinking pulse + dots until first delta; no stream caret (DEC-0009)
 - Provider icon/label centered; send ripple; VAL-0010 PASS
