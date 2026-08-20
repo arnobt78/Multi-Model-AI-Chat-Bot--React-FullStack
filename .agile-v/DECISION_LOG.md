@@ -74,3 +74,10 @@ Append-only. Never rewrite prior entries.
 - **Decision:** Custom `ConfirmDialog` before sidebar delete; title/message/confirm button include chat `displayId`. Delete remains localStorage-only (Insights Coolify VPS Postgres untouched). Docs: Neon → Coolify VPS Postgres.
 - **Rationale:** Accidental deletes; correct DB hosting for agents.
 - **Linked REQs:** REQ-0009 (UX), REQ-0014 (doc truth)
+
+## DEC-0012 — Delete UX polish (spinner + toast)
+- **Timestamp:** 2026-08-20T17:35:00Z
+- **Agent:** Build
+- **Decision:** Confirm buttons use Trash2 / MessageCircle; busy shows Loader2 + Deleting…; `AppToast` success/error with dynamic title/subtitle after localStorage update.
+- **Rationale:** Smooth delete without flash; clearer feedback.
+- **Linked REQs:** REQ-0009 (UX)

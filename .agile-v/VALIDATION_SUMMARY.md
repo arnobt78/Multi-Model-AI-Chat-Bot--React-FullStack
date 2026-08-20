@@ -110,3 +110,12 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | Delete scope | PASS | localStorage only; Insights DB untouched |
 | Docs | PASS | Coolify VPS Postgres (not Neon) in CLAUDE/README/.env.example |
 | lint/build | PASS | |
+
+## VAL-0013 — Delete UX polish (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| Icons | PASS | Trash2 Delete · MessageCircle Keep Chat |
+| Busy | PASS | Loader2 + Deleting… until list updates |
+| Toast | PASS | AppToast success/error with dynamic subtitle |
+| lint/build | PASS | |

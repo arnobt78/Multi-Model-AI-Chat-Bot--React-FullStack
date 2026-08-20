@@ -19,7 +19,8 @@ Sentry → POST /api/monitoring (tunnel)
 ## Key paths
 | Path | Role |
 |------|------|
-| `src/Components/ConfirmDialog.*` | Delete confirm modal (dynamic item text) |
+| `src/Components/ConfirmDialog.*` | Delete confirm (icons, Deleting… spinner) |
+| `src/Components/AppToast.*` | Success/error toast (title + subtitle) |
 | `src/Components/ChatBotApp.*` | Chat UI; Lucide providers; Thinking; send ripple |
 | `src/services/aiService.ts` | JSON + SSE client |
 | `shared/ai/` | providers, callers, orchestrate, stream, formatError, Zod |

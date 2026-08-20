@@ -1,5 +1,8 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — Delete UX polish
+- Confirm icons + Deleting… spinner + AppToast (DEC-0012); VAL-0013 PASS
+
 ## 2026-08-20 — Delete confirm + Coolify docs
 - ConfirmDialog with dynamic chat `displayId` (DEC-0011); VAL-0012 PASS
 - Docs: Insights DB = Coolify VPS Postgres (not Neon)

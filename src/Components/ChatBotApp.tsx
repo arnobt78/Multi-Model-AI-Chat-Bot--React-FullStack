@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./ChatBotApp.css";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
@@ -12,6 +12,7 @@ import {
 import TypingIndicator from "./TypingIndicator";
 import Tooltip from "./Tooltip";
 import ConfirmDialog from "./ConfirmDialog";
+import AppToast, { type AppToastVariant } from "./AppToast";
 import { useTypewriter } from "../hooks/useTypewriter";
 import {
   MessageCircleMore,
@@ -75,6 +76,13 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
   const [chatPendingDelete, setChatPendingDelete] = useState<string | null>(
     null
   );
+  const [isDeletingChat, setIsDeletingChat] = useState(false);
+  const [toast, setToast] = useState<{
+    open: boolean;
+    variant: AppToastVariant;
+    title: string;
+    subtitle: string;
+  }>({ open: false, variant: "success", title: "", subtitle: "" });
   const chatEndRef = useRef<HTMLDivElement>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
@@ -435,23 +443,59 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
   };
 
   const requestDeleteChat = (id: string) => {
+    if (isDeletingChat) return;
     setChatPendingDelete(id);
   };
 
-  const confirmDeleteChat = () => {
-    if (chatPendingDelete) {
-      handleDeleteChat(chatPendingDelete);
+  /** Paint Deleting… spinner, then mutate localStorage/UI, then toast. */
+  const confirmDeleteChat = async () => {
+    if (!chatPendingDelete || isDeletingChat) return;
+
+    const id = chatPendingDelete;
+    const label =
+      chats.find((c) => c.id === id)?.displayId || "This chat";
+
+    setIsDeletingChat(true);
+    // Let the spinner paint before sync localStorage work
+    await new Promise<void>((resolve) => {
+      window.requestAnimationFrame(() => {
+        window.setTimeout(resolve, 250);
+      });
+    });
+
+    try {
+      handleDeleteChat(id);
+      setToast({
+        open: true,
+        variant: "success",
+        title: "Chat deleted",
+        subtitle: `“${label}” was removed from this browser’s localStorage.`,
+      });
       setChatPendingDelete(null);
+    } catch {
+      setToast({
+        open: true,
+        variant: "error",
+        title: "Could not delete chat",
+        subtitle: `“${label}” is still in your list. Try again.`,
+      });
+    } finally {
+      setIsDeletingChat(false);
     }
   };
 
   const cancelDeleteChat = () => {
+    if (isDeletingChat) return;
     setChatPendingDelete(null);
   };
 
   const pendingDeleteChat = chatPendingDelete
     ? chats.find((c) => c.id === chatPendingDelete)
     : undefined;
+
+  const dismissToast = useCallback(() => {
+    setToast((prev) => ({ ...prev, open: false }));
+  }, []);
 
   // Scroll only the chat pane (avoids jumpy window-level smooth scroll)
   useEffect(() => {
@@ -774,15 +818,23 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             ? `“${pendingDeleteChat.displayId}” will be removed from this browser’s chat list and localStorage only. Insights analytics on your Coolify Postgres stay unchanged. This cannot be undone.`
             : "This chat will be removed from localStorage on this device only."
         }
-        confirmLabel={
-          pendingDeleteChat
-            ? `Delete “${pendingDeleteChat.displayId}”`
-            : "Delete chat"
-        }
-        cancelLabel="Keep chat"
+        confirmLabel="Delete"
+        cancelLabel="Keep Chat"
         danger
-        onConfirm={confirmDeleteChat}
+        busy={isDeletingChat}
+        busyLabel="Deleting…"
+        onConfirm={() => {
+          void confirmDeleteChat();
+        }}
         onCancel={cancelDeleteChat}
+      />
+
+      <AppToast
+        open={toast.open}
+        variant={toast.variant}
+        title={toast.title}
+        subtitle={toast.subtitle}
+        onClose={dismissToast}
       />
     </div>
   );

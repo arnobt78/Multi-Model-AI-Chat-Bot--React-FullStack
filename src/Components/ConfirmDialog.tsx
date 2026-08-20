@@ -1,9 +1,9 @@
 /**
  * Reusable confirm modal — dark/pink theme matching ChatBotApp.
- * Callers pass dynamic title/message (e.g. include the chat display name being deleted).
+ * Supports busy/Deleting… spinner so the list can update without a flash under the dialog.
  */
 import React, { useEffect, useRef } from "react";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Loader2, MessageCircle, Trash2 } from "lucide-react";
 import "./ConfirmDialog.css";
 
 export interface ConfirmDialogProps {
@@ -14,6 +14,9 @@ export interface ConfirmDialogProps {
   cancelLabel?: string;
   /** Emphasize destructive confirm (delete). */
   danger?: boolean;
+  /** True while the confirm action is in progress (spinner + Deleting…). */
+  busy?: boolean;
+  busyLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -23,15 +26,17 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   title,
   message,
   confirmLabel = "Delete",
-  cancelLabel = "Cancel",
+  cancelLabel = "Keep Chat",
   danger = true,
+  busy = false,
+  busyLabel = "Deleting…",
   onConfirm,
   onCancel,
 }) => {
   const cancelRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || busy) return;
     cancelRef.current?.focus();
 
     const onKeyDown = (e: KeyboardEvent) => {
@@ -42,7 +47,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open, onCancel]);
+  }, [open, busy, onCancel]);
 
   if (!open) return null;
 
@@ -50,12 +55,15 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     <div
       className="confirm-dialog-overlay"
       role="presentation"
-      onClick={onCancel}
+      onClick={() => {
+        if (!busy) onCancel();
+      }}
     >
       <div
         className="confirm-dialog"
         role="alertdialog"
         aria-modal="true"
+        aria-busy={busy}
         aria-labelledby="confirm-dialog-title"
         aria-describedby="confirm-dialog-message"
         onClick={(e) => e.stopPropagation()}
@@ -77,8 +85,10 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             ref={cancelRef}
             className="confirm-dialog-btn confirm-dialog-btn-cancel"
             onClick={onCancel}
+            disabled={busy}
           >
-            {cancelLabel}
+            <MessageCircle size={16} strokeWidth={2} aria-hidden />
+            <span>{cancelLabel}</span>
           </button>
           <button
             type="button"
@@ -86,8 +96,24 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               danger ? " danger" : ""
             }`}
             onClick={onConfirm}
+            disabled={busy}
           >
-            {confirmLabel}
+            {busy ? (
+              <>
+                <Loader2
+                  className="confirm-dialog-spinner"
+                  size={16}
+                  strokeWidth={2}
+                  aria-hidden
+                />
+                <span>{busyLabel}</span>
+              </>
+            ) : (
+              <>
+                <Trash2 size={16} strokeWidth={2} aria-hidden />
+                <span>{confirmLabel}</span>
+              </>
+            )}
           </button>
         </div>
       </div>
