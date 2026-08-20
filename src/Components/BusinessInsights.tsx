@@ -497,7 +497,10 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
                   <div key={provider} className="error-card">
                     <XCircle className="error-icon" />
                     <h3>{provider}</h3>
-                    <p className="error-value">{count as number} errors</p>
+                    <p className="error-value">
+                      {count as number}{" "}
+                      {(count as number) === 1 ? "error" : "errors"}
+                    </p>
                   </div>
                 ),
               )}

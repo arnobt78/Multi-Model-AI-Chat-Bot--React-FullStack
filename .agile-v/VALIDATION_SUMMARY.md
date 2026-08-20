@@ -139,3 +139,13 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | Chat | PASS | `.chat-app` height 100%; `.chat` sole Y; overflow-x hidden |
 | Insights | PASS | container height 100%; overflow-x hidden |
 | lint/build | PASS | |
+
+## VAL-0016 — Stable thin Y-scrollbar gutter (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| Gutter | PASS | `scrollbar-gutter: stable` on `.chat` + Insights; no extra padding-right |
+| Style | PASS | 6px thin thumb; transparent track; pink hover |
+| Chat | PASS | removed `::-webkit-scrollbar { display: none }` |
+| Insights | PASS | `position: relative`; min-width 0; error pluralize |
+| lint/build | PASS | |

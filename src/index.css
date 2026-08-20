@@ -28,6 +28,37 @@ body,
   background-color: #131927;
 }
 
+/* Shared thin Y tracker + stable gutter (no width jump; no extra padding-right) */
+.chat,
+.business-insights-container {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(123, 142, 188, 0.35) transparent;
+  overscroll-behavior: contain;
+}
+
+.chat::-webkit-scrollbar,
+.business-insights-container::-webkit-scrollbar {
+  width: 6px; /* thin Y only */
+  height: 0; /* kill X tracker appearance */
+}
+
+.chat::-webkit-scrollbar-track,
+.business-insights-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat::-webkit-scrollbar-thumb,
+.business-insights-container::-webkit-scrollbar-thumb {
+  background: rgba(123, 142, 188, 0.35);
+  border-radius: 999px;
+}
+
+.chat::-webkit-scrollbar-thumb:hover,
+.business-insights-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(244, 47, 95, 0.45);
+}
+
 @media (max-width: 500px) {
   html {
     font-size: 55%;

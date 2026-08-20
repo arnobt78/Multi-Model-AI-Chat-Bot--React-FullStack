@@ -439,10 +439,6 @@
   z-index: 1;
 }
 
-.chat::-webkit-scrollbar {
-  display: none;
-}
-
 /* Bubble width is capped by .message-row (85%); keep fit-content so short replies stay tight */
 .prompt,
 .response {

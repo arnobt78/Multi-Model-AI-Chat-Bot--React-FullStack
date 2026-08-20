@@ -1,5 +1,8 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — Stable thin Y-scrollbar gutter
+- Shared 6px thin Y + `scrollbar-gutter: stable` on `.chat` / Insights; VAL-0016 PASS
+
 ## 2026-08-20 — Toast BR + scroll lock
 - AppToast bottom-right; html/body/#root/.container overflow hidden; chat/insights height 100%; VAL-0015 PASS
 
