@@ -1,67 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Primary Meta Tags -->
-    <title>AI Chat Hub - Universal Multi-Provider Assistant</title>
+    <!-- Primary Meta Tags — production demo: https://multi-ai-chat-hub.vercel.app/ -->
+    <title>
+      AI Chat Hub - Multi-Model AI Chat Assistant (Gemini, Groq, OpenRouter &amp;
+      More)
+    </title>
     <meta
       name="title"
-      content="AI Chat Hub - Universal Multi-Provider Assistant | Arnob Mahmud"
+      content="AI Chat Hub - Multi-Model AI Chat Assistant | Arnob Mahmud"
     />
     <meta
       name="description"
-      content="Advanced AI chat bot supporting multiple AI providers including Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI. Engage in intelligent conversations with an intuitive interface and chat history management."
+      content="Multi-Model AI Chat Hub — chat with Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI in one React + Vite app. Auto provider fallback, local chat history, and Business Insights analytics. Demo by Arnob Mahmud."
     />
     <meta
       name="keywords"
-      content="AI chat bot, artificial intelligence, chatbot, AI assistant, Gemini AI, Groq, OpenRouter, Hugging Face, OpenAI, GPT, conversation AI, TypeScript, React, Arnob Mahmud"
+      content="AI Chat Hub, Multi-Model AI Chat Hub, multi-provider chatbot, Google Gemini, Groq, OpenRouter, Hugging Face, OpenAI, GPT, React, Vite, TypeScript, Prisma, PostgreSQL, Business Insights, Arnob Mahmud"
     />
     <meta name="author" content="Arnob Mahmud" />
+    <meta name="creator" content="Arnob Mahmud" />
+    <meta name="publisher" content="Arnob Mahmud" />
+    <meta name="contact" content="contact@arnobmahmud.com" />
+    <link rel="author" href="https://www.arnobmahmud.com/" />
+    <link rel="me" href="https://www.arnobmahmud.com/" />
+    <link rel="me" href="mailto:contact@arnobmahmud.com" />
     <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
     <meta name="language" content="English" />
     <meta name="revisit-after" content="7 days" />
+    <meta name="application-name" content="AI Chat Hub" />
+    <meta name="category" content="Artificial Intelligence" />
+    <link rel="canonical" href="https://multi-ai-chat-hub.vercel.app/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://arnob-mahmud.vercel.app/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://multi-ai-chat-hub.vercel.app/" />
     <meta
       property="og:title"
-      content="AI Chat Hub - Universal Multi-Provider Assistant"
+      content="AI Chat Hub - Multi-Model AI Chat Assistant"
     />
     <meta
       property="og:description"
-      content="Advanced AI chat bot supporting multiple AI providers including Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI. Engage in intelligent conversations with an intuitive interface and chat history management."
+      content="Chat with Gemini, Groq, OpenRouter, Hugging Face, and OpenAI in one app — auto fallback, chat history, and insights dashboard. Built by Arnob Mahmud."
     />
     <meta
       property="og:image"
-      content="https://arnob-mahmud.vercel.app/chatbot.svg"
+      content="https://multi-ai-chat-hub.vercel.app/chatbot.svg"
     />
+    <meta property="og:image:alt" content="AI Chat Hub app icon" />
     <meta property="og:site_name" content="AI Chat Hub" />
+    <meta
+      property="article:author"
+      content="https://www.arnobmahmud.com/"
+    />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://arnob-mahmud.vercel.app/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://multi-ai-chat-hub.vercel.app/" />
     <meta
-      property="twitter:title"
-      content="AI Chat Hub - Universal Multi-Provider Assistant"
+      name="twitter:title"
+      content="AI Chat Hub - Multi-Model AI Chat Assistant"
     />
     <meta
-      property="twitter:description"
-      content="Advanced AI chat bot supporting multiple AI providers including Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI. Engage in intelligent conversations with an intuitive interface and chat history management."
+      name="twitter:description"
+      content="Multi-provider AI chat (Gemini, Groq, OpenRouter, Hugging Face, OpenAI) with fallback, history, and analytics. By Arnob Mahmud."
     />
     <meta
-      property="twitter:image"
-      content="https://arnob-mahmud.vercel.app/chatbot.svg"
+      name="twitter:image"
+      content="https://multi-ai-chat-hub.vercel.app/chatbot.svg"
     />
+    <meta name="twitter:image:alt" content="AI Chat Hub app icon" />
+    <meta name="twitter:creator" content="@arnobt78" />
 
-    <!-- Favicon -->
+    <!-- Favicon & icons (public/) -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/chatbot.svg" />
     <link rel="apple-touch-icon" href="/chatbot.svg" />
+    <link rel="mask-icon" href="/chatbot.svg" color="#8e25bf" />
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#8e25bf" />
+    <meta name="msapplication-TileColor" content="#8e25bf" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- Structured data (WebApplication + Person) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "AI Chat Hub",
+            "alternateName": "Multi-Model AI Chat Hub",
+            "url": "https://multi-ai-chat-hub.vercel.app/",
+            "description": "Multi-provider AI chat assistant with Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI, auto fallback, local chat history, and Business Insights analytics.",
+            "applicationCategory": "MultimediaApplication",
+            "operatingSystem": "Web",
+            "browserRequirements": "Requires JavaScript",
+            "image": "https://multi-ai-chat-hub.vercel.app/chatbot.svg",
+            "author": {
+              "@type": "Person",
+              "name": "Arnob Mahmud",
+              "url": "https://www.arnobmahmud.com/",
+              "email": "contact@arnobmahmud.com"
+            },
+            "creator": {
+              "@type": "Person",
+              "name": "Arnob Mahmud",
+              "url": "https://www.arnobmahmud.com/",
+              "email": "contact@arnobmahmud.com"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "Person",
+            "name": "Arnob Mahmud",
+            "url": "https://www.arnobmahmud.com/",
+            "email": "contact@arnobmahmud.com",
+            "sameAs": [
+              "https://www.arnobmahmud.com/",
+              "https://github.com/arnobt78",
+              "https://www.linkedin.com/in/arnob-mahmud-05839655/"
+            ]
+          }
+        ]
+      }
+    </script>
 
     <!-- External Stylesheets -->
     <link

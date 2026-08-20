@@ -1,11 +1,14 @@
 /// <reference types="vite/client" />
 
+/** Client env — AI secrets intentionally omitted (server-only via /api/chat). */
 interface ImportMetaEnv {
-  readonly VITE_OPENAI_API_KEY: string;
-  readonly VITE_GEMINI_API_KEY: string;
-  readonly VITE_GROQ_API_KEY: string;
-  readonly VITE_OPENROUTER_API_KEY: string;
-  readonly VITE_HUGGINGFACE_API_KEY: string;
+  readonly DEV: boolean;
+  readonly PROD: boolean;
+  readonly MODE: string;
+  /** Public Sentry DSN (optional). Prefer over NEXT_PUBLIC_* — this is a Vite app. */
+  readonly VITE_SENTRY_DSN?: string;
+  /** Deprecated alias — prefer VITE_SENTRY_DSN */
+  readonly VITE_PUBLIC_SENTRY_DSN?: string;
 }
 
 interface ImportMeta {

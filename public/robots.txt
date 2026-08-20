@@ -1,0 +1,4 @@
+# Crawl scope for this Vite CSR demo — disallow serverless APIs from bots.
+User-agent: *
+Allow: /
+Disallow: /api/

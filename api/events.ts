@@ -1,52 +1,57 @@
+/**
+ * POST /api/events — anonymous analytics write (Zod + soft IP rate limit).
+ */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { eventBodySchema } from "../shared/ai/schemas";
+import { captureApiException } from "../shared/sentry/server";
+import { prisma } from "./_lib/prisma";
+import { allowRequest, clientIp } from "./_lib/rateLimit";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  const ip = clientIp(req);
+  if (!allowRequest(`events:${ip}`, 60, 60_000)) {
+    return res.status(429).json({ error: "Too many requests" });
+  }
+
+  const parsed = eventBodySchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Missing or invalid fields" });
+  }
+
+  const { sessionId, eventType, provider, success, duration, metadata } =
+    parsed.data;
+
   try {
-    const { sessionId, eventType, provider, success, duration, metadata } =
-      req.body;
-
-    // Validate required fields
-    if (!sessionId || !eventType) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    // Create or update session record
     await prisma.session.upsert({
       where: { sessionId },
-      update: {
-        lastSeen: new Date(),
-      },
+      update: { lastSeen: new Date() },
       create: {
         sessionId,
-        userAgent: req.headers["user-agent"] || null,
+        userAgent: (req.headers["user-agent"] as string) || null,
         platform: "web",
         startedAt: new Date(),
         lastSeen: new Date(),
       },
     });
 
-    // Create event record
     const event = await prisma.event.create({
       data: {
         sessionId,
         eventType,
         provider: provider || null,
         success: success !== undefined ? success : true,
-        duration: duration || null,
-        metadata: metadata ? JSON.stringify(metadata) : null,
+        duration: duration ?? null,
+        metadata: metadata ? String(metadata) : null,
       },
     });
 
     return res.status(200).json({ success: true, id: event.id });
   } catch (error) {
-    console.error("Error creating event:", error);
+    captureApiException(error, { api_route: "/api/events" });
     return res.status(500).json({ error: "Internal server error" });
   }
 }

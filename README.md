@@ -1,20 +1,22 @@
-# AI Chat Hub - Universal Multi-Provider Assistant - React, TypeScript, Vite FullStack Project (Multi-Model AI Chatbot including Business Insights & Performance Dashboard)
+# Multi-Model AI Chat Hub - React, Vite, TypeScript, Prisma, PostgreSQL Full-Stack Project (including Insights & Performance Dashboard)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-18.3.1-blue)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-7.1.12-blue)](https://vitejs.dev/)
-[![Prisma ORM](https://img.shields.io/badge/Prisma_ORM-6.1.1-blue)](https://www.prisma.io/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16.3-blue)](https://www.postgresql.org/)
-[![Vercel Serverless Functions](https://img.shields.io/badge/Vercel_Serverless_Functions-5.1.12-blue)](https://vercel.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.3.6-blue)](https://vitejs.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-24.x-green)](https://nodejs.org/)
+[![Prisma ORM](https://img.shields.io/badge/Prisma_ORM-6.19-blue)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-blue)](https://www.postgresql.org/)
+[![Vercel](https://img.shields.io/badge/Vercel_Serverless-Functions-black)](https://vercel.com/)
+[![Zod](https://img.shields.io/badge/Zod-4.x-blue)](https://zod.dev/)
+[![Sentry](https://img.shields.io/badge/Sentry-optional-purple)](https://sentry.io/)
+[![launch with diploi badge](https://diploi.com/launch.svg)](https://diploi.com/launch/arnobt78/OpenAI-ChatBot--ReactVite)
 
 A modern, responsive AI chat bot application supporting multiple AI providers including Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI and enable to store the chat history. Built with React, TypeScript, and Vite including business-insights analytics and performance dashboard, typewriter effect, and animated icons for the best user experience.
 
 - **Live-Demo:** [https://multi-ai-chat-hub.vercel.app/](https://multi-ai-chat-hub.vercel.app/)
-
-**Author:** [Arnob Mahmud](https://www.arnobmahmud.com/) | **License:** [MIT](./LICENSE)
-
-> 🌟 **Open Source Project** - This is an open-source project. Feel free to use, enhance, and extend this project to the next level! Contributions, improvements, forks, and stars are always welcome. Together, we can make this portfolio template even better!
+- **Security:** Private reports → [SECURITY.md](./SECURITY.md) · [contact@arnobmahmud.com](mailto:contact@arnobmahmud.com)
+- **Author:** [Arnob Mahmud](https://www.arnobmahmud.com/) | **LinkedIn:** [https://www.linkedin.com/in/arnob-mahmud-05839655/](https://www.linkedin.com/in/arnob-mahmud-05839655/) | **GitHub:** [https://github.com/arnobt78](https://github.com/arnobt78)
 
 ![Screenshot 2025-10-26 at 12 23 05](https://github.com/user-attachments/assets/3455c420-1ef0-4386-8ee1-6af569c30a52)
 ![Screenshot 2025-10-26 at 12 23 53](https://github.com/user-attachments/assets/62de71c5-3c32-4a87-a82c-8e46baa817d8)
@@ -27,120 +29,189 @@ A modern, responsive AI chat bot application supporting multiple AI providers in
 ![Screenshot 2025-10-26 at 12 25 33](https://github.com/user-attachments/assets/c6be8309-63aa-44eb-ba12-c72dc7438885)
 ![Screenshot 2025-10-26 at 12 25 36](https://github.com/user-attachments/assets/d91bef44-463d-4b9d-868f-277ef3eb81e2)
 
+---
+
 ## Table of Contents
 
 - [Overview](#overview)
+- [Keywords](#keywords)
 - [Features](#features)
-- [Technologies Used](#technologies-used)
+- [How the App Works (Beginner Walkthrough)](#how-the-app-works-beginner-walkthrough)
+- [Technologies & Libraries](#technologies--libraries)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Project Walkthrough](#project-walkthrough)
-- [Component Details](#component-details)
-- [API Integration](#api-integration)
-- [Reusing Components](#reusing-components)
-- [Deployment](#deployment)
+- [Environment Variables (`.env`)](#environment-variables-env)
+- [How to Run](#how-to-run)
+- [Usage Guide](#usage-guide)
+- [Frontend Components & Hooks](#frontend-components--hooks)
+- [Shared AI Layer](#shared-ai-layer)
+- [Backend API Endpoints](#backend-api-endpoints)
+- [Database (Prisma + PostgreSQL)](#database-prisma--postgresql)
+- [Sentry (Optional Observability)](#sentry-optional-observability)
+- [Reusing Code in Other Projects](#reusing-code-in-other-projects)
+- [Deployment (Vercel)](#deployment-vercel)
+- [Scripts Reference](#scripts-reference)
+- [Further Reading](#further-reading)
 - [Conclusion](#conclusion)
+- [License](#license)
+- [Happy Coding!](#happy-coding-)
 
 ---
 
 ## Overview
 
-AI Chat Hub is a comprehensive, production-ready chat application that integrates with multiple AI providers, offering users the flexibility to choose their preferred AI model or let the system automatically select the best available option. The application features a modern UI with dark theme, responsive design, chat history management, and real-time AI interactions.
+**AI Chat Hub** (package name `ai-chat-hub`) is a **Vite client-rendered SPA** (not Next.js) with **Vercel Serverless Functions** under `api/`.
+
+You can:
+
+1. Chat with several AI providers from one UI.
+2. Let the server **auto-fallback** across providers and models when one fails or rate-limits.
+3. Keep **chat history in the browser** (`localStorage`) — no login required for chatting.
+4. Open a **Business Insights** dashboard backed by **Prisma + PostgreSQL** (anonymous analytics).
+
+**Important architecture idea for learners:** AI API keys stay on the **server** (`GEMINI_API_KEY`, etc.). The browser only calls `POST /api/chat`. That way secrets never appear in the Vite JavaScript bundle.
+
+---
+
+## Keywords
+
+`AI Chat Hub` · `multi-provider chatbot` · `Gemini` · `Groq` · `OpenRouter` · `Hugging Face` · `OpenAI` · `React 18` · `Vite` · `TypeScript` · `Prisma` · `PostgreSQL` · `Neon` · `Vercel Serverless` · `Zod` · `Sentry tunnel` · `localStorage` · `auto fallback` · `Business Insights` · `OpenAI-compatible API`
 
 ---
 
 ## Features
 
-### Core Functionalities
+### Core chat
 
-- **Multi-Provider AI Support**: Seamlessly switch between Google Gemini, Groq, OpenRouter, Hugging Face, and OpenAI
-- **Auto Fallback System**: Automatic provider switching when one fails
-- **Chat History Management**: Save and manage multiple conversation threads with local storage persistence
-- **Real-time Typing Indicator**: Visual feedback when AI is processing
-- **Emoji Picker**: Add emojis to messages with an intuitive picker interface
-- **Business Insights Dashboard**: Real-time analytics and performance metrics for admin monitoring
-- **Anonymous Session Tracking**: Track usage patterns, API calls, and user engagement without authentication
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Dark Theme**: Modern dark UI with gradient accents
-- **Typewriter Effect**: Elegant text animation for enhanced user experience
-- **Collapsible Sidebar**: Efficient space management on all screen sizes
-- **Tooltip System**: Informative tooltips for better UX
+- **Multi-provider support** — Gemini, Groq, OpenRouter, Hugging Face, OpenAI
+- **Auto fallback** — provider order: Groq → Gemini → OpenRouter → Hugging Face → OpenAI
+- **Within-provider model chains** — try the next free-tier model on retriable errors; skip remaining models on HTTP 429
+- **Provider dropdown** — availability comes from `GET /api/chat-providers` (no secrets)
+- **Chat history** — multiple threads stored in `localStorage`
+- **Typing indicator** — visual feedback while waiting for the AI
+- **Emoji picker** — `@emoji-mart/react`
+- **Typewriter titles** — `useTypewriter` hook
+- **Collapsible sidebar** + **tooltips**
+- **Dark theme** UI with gradient accents
+
+### Analytics & ops
+
+- **Business Insights dashboard** — usage charts (Recharts), provider stats
+- **Anonymous session tracking** — no user accounts
+- **Soft IP rate limits** on chat / events / Sentry tunnel
+- **Optional Sentry** with same-origin tunnel `POST /api/monitoring` (ad-blocker friendly)
+- **Security headers + robots.txt** via `vercel.json` / `public/robots.txt`
 
 ---
 
-## Technologies Used
+## How the App Works (Beginner Walkthrough)
 
-### Frontend Framework & Libraries
+Think of three layers:
 
-- **React 18.3.1**: Modern UI library with hooks
-- **TypeScript 5.6.3**: Type-safe JavaScript
-- **Vite 7.1.12**: Fast build tool and dev server
-- **Lucide React**: Modern icon library
+```text
+Browser (React + Vite)
+   │  POST /api/chat  { message, provider? }
+   ▼
+Vercel Function (api/chat.ts)
+   │  reads server env keys → shared/ai/orchestrate.ts
+   ▼
+Upstream AI APIs (Groq / Gemini / OpenRouter / HF / OpenAI)
+```
 
-### Backend & Database
+1. **`App.tsx`** is a tiny **view state machine**: `"start"` | `"chat"` | `"insights"` (no React Router).
+2. **`ChatBotStart`** is the landing screen; “Get Started” switches to chat.
+3. **`ChatBotApp`** manages messages, sidebar chats, provider selection, and calls `aiService.getChatResponse()`.
+4. **`aiService.ts`** only talks to **`/api/chat`** — it never holds API keys.
+5. **`shared/ai/orchestrate.ts`** tries providers/models, returns `{ content, provider, success }`.
+6. Analytics POSTs go to **`/api/events`**; the Insights UI reads **`/api/dashboard`** (and related routes).
 
-- **Prisma ORM**: Type-safe database access
-- **PostgreSQL (Neon)**: Serverless PostgreSQL database
-- **Vercel Serverless Functions**: API endpoints for analytics
+**Local tip:** Plain `npm run dev` (Vite alone) does **not** serve `/api/*`. Prefer **`vercel dev`** so chat and analytics work like production.
 
-### UI Components & Assets
+---
 
-- **Emoji Mart**: Professional emoji picker component
-- **Boxicons**: Modern icon library
-- **Font Awesome**: Additional icon set
+## Technologies & Libraries
 
-### Developer Tools
+| Technology | Version (approx.) | What it is / why we use it |
+|------------|-------------------|----------------------------|
+| **React** | 18.3 | UI components and hooks |
+| **TypeScript** | 5.9 | Static types — fewer runtime surprises |
+| **Vite** | 7.3 | Fast dev server + production bundler for SPAs |
+| **Node.js** | 24.x | Runtime pinned in `package.json` `engines` + `.nvmrc` |
+| **Prisma** | 6.19 | Type-safe ORM for PostgreSQL analytics |
+| **PostgreSQL (Neon)** | — | Serverless DB for Insights |
+| **Zod** | 4.x | Runtime validation of API request bodies |
+| **Vercel Functions** | `api/*.ts` | Backend without a separate Express server |
+| **Recharts** | 2.x | Charts on the Insights dashboard |
+| **Lucide React** | — | Icons |
+| **Emoji Mart** | — | Emoji picker |
+| **uuid** | 11 | Chat / session IDs |
+| **Sentry** | optional | Error monitoring + tunnel |
+| **ESLint 9** | flat config | `npm run lint` |
 
-- **ESLint**: Code quality and linting
-- **TypeScript ESLint**: TypeScript-specific linting rules
+**Example — thin client chat call:**
+
+```typescript
+// src/services/aiService.ts (concept)
+const response = await fetch("/api/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message, provider }),
+});
+```
+
+**Example — reusable typewriter hook:**
+
+```typescript
+const { displayText } = useTypewriter({
+  text: "Welcome to AI Chat Hub",
+  speed: 50,
+  delay: 300,
+});
+```
 
 ---
 
 ## Project Structure
 
-```bash
-ai-chat-bot/
-├── api/                        # Vercel serverless functions
-│   ├── events.ts              # POST /api/events - Track analytics events
-│   ├── usage.ts               # GET /api/usage - Usage statistics
-│   ├── insights.ts            # GET /api/insights - Provider analytics
-│   ├── providers.ts           # GET /api/providers - Provider details
-│   └── dashboard.ts           # GET /api/dashboard - All analytics data
+```text
+multi-ai-chatbot/
+├── api/                         # Vercel serverless functions (backend)
+│   ├── _lib/
+│   │   ├── prisma.ts            # Prisma client singleton
+│   │   └── rateLimit.ts         # Soft in-memory IP rate limit
+│   ├── chat.ts                  # POST /api/chat — AI proxy
+│   ├── chat-providers.ts        # GET /api/chat-providers — availability
+│   ├── events.ts                # POST /api/events — analytics write
+│   ├── usage.ts                 # GET /api/usage
+│   ├── insights.ts              # GET /api/insights
+│   ├── providers.ts             # GET /api/providers
+│   ├── dashboard.ts             # GET /api/dashboard
+│   └── monitoring.ts            # POST /api/monitoring — Sentry tunnel
+├── shared/
+│   ├── ai/                      # Types, registry, callers, orchestrate, Zod
+│   └── sentry/                  # Env helpers, filters, server capture
 ├── prisma/
-│   └── schema.prisma          # Database schema (PostgreSQL)
+│   └── schema.prisma            # Event, Session, ProviderStats
 ├── public/
-│   ├── ai.svg                 # Background SVG
-│   ├── chatbot.svg           # App icon
-│   └── favicon.ico           # Browser favicon
+│   ├── ai.svg
+│   ├── chatbot.svg
+│   ├── favicon.ico
+│   └── robots.txt
 ├── src/
-│   ├── Components/
-│   │   ├── ChatBotApp.tsx    # Main chat interface
-│   │   ├── ChatBotApp.css    # Chat styles
-│   │   ├── ChatBotStart.tsx  # Welcome screen
-│   │   ├── ChatBotStart.css # Welcome styles
-│   │   ├── BusinessInsights.tsx  # Analytics dashboard
-│   │   ├── BusinessInsights.css # Dashboard styles
-│   │   ├── Tooltip.tsx       # Tooltip component
-│   │   ├── Tooltip.css       # Tooltip styles
-│   │   ├── TypingIndicator.tsx
-│   │   └── TypingIndicator.css
-│   ├── hooks/
-│   │   └── useTypewriter.ts  # Typewriter animation hook
-│   ├── services/
-│   │   ├── aiService.ts       # AI API integration
-│   │   └── aiProviders.ts    # Provider configurations
-│   ├── App.tsx                # Root component
-│   ├── main.tsx              # Entry point
-│   ├── index.css             # Global styles
-│   └── vite-env.d.ts         # TypeScript environment types
-├── .env                       # Environment variables
-├── index.html                # HTML template
-├── package.json              # Dependencies & scripts
-├── tsconfig.json             # TypeScript config
-├── vite.config.ts            # Vite configuration
-└── README.md                 # This file
+│   ├── App.tsx                  # start | chat | insights
+│   ├── main.tsx                 # React root + Sentry ErrorBoundary
+│   ├── sentry.ts                # Client Sentry.init (tunnel)
+│   ├── Components/              # UI + CSS
+│   ├── hooks/useTypewriter.ts
+│   └── services/                # Thin client wrappers
+├── docs/                        # Portable guides (LLM, Sentry, Vercel, Agile V)
+├── .env.example                 # Env template (copy → .env)
+├── vercel.json                  # Security + cache headers
+├── vite.config.ts
+├── eslint.config.js
+├── package.json
+├── SECURITY.md
+└── README.md
 ```
 
 ---
@@ -149,720 +220,291 @@ ai-chat-bot/
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- npm or yarn package manager
-- Git (for cloning)
+- **Node.js 24.x** (see `.nvmrc`)
+- **npm** (comes with Node)
+- Optional: **Vercel CLI** (`npm i -g vercel`) for `vercel dev`
+- Optional: free accounts for AI providers + Neon (Insights) + Sentry
 
-### Setup Steps
+```bash
+# Clone
+git clone https://github.com/arnobt78/OpenAI-ChatBot--ReactVite.git
+cd OpenAI-ChatBot--ReactVite
 
-1. **Clone the repository**
+# Use Node 24 if you use nvm
+nvm use
 
-   ```bash
-   git clone https://github.com/yourusername/ai-chat-bot.git
-   cd ai-chat-bot
-   ```
+# Install dependencies
+npm install
 
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment variables** (See Configuration section below)
-
-4. **Start the development server**
-
-   ```bash
-   npm run dev
-   ```
-
-5. **Open your browser**
-   Navigate to `http://localhost:5173` (or the port shown in terminal)
+# Copy env template
+cp .env.example .env
+# Then edit .env — see next section
+```
 
 ---
 
-## Configuration
+## Environment Variables (`.env`)
 
-### Environment Variables Setup
+Copy [`.env.example`](./.env.example) to `.env`. **Never commit `.env`** (it is gitignored).
 
-Create a `.env` file in the root directory with your AI provider API keys and database connection:
+### Do you need a `.env` to run anything?
+
+| Goal | Need `.env`? |
+|------|----------------|
+| UI only (`npm run dev`) — landing / layout | **No** — app boots without keys |
+| Real AI chat locally | **Yes** — at least one AI key + use `vercel dev` |
+| Business Insights charts | **Yes** — `DATABASE_URL` + Prisma push |
+| Sentry errors | **Optional** — leave DSN empty to disable |
+
+You can start with an empty `.env` for UI exploration; add keys as you enable features.
+
+### Required for chat (server-only — **no `VITE_` prefix**)
+
+| Variable | Purpose | Where to get it |
+|----------|---------|-----------------|
+| `GEMINI_API_KEY` | Google Gemini | [Google AI Studio](https://aistudio.google.com/apikey) |
+| `GROQ_API_KEY` | Groq | [Groq Console](https://console.groq.com/) |
+| `OPENROUTER_API_KEY` | OpenRouter free models | [OpenRouter Keys](https://openrouter.ai/keys) |
+| `HUGGINGFACE_API_KEY` | HF Inference Providers | [HF Tokens](https://huggingface.co/settings/tokens) — allow Inference Providers |
+| `OPENAI_API_KEY` | OpenAI (paid last resort) | [OpenAI API Keys](https://platform.openai.com/api-keys) |
+
+You need **at least one** of the above for chat. More keys = better fallback coverage.
 
 ```env
-# Google Gemini AI API (1.5M free tokens/month)
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
-
-# Groq API (Fast Llama 3 - Always-free daily quota)
-VITE_GROQ_API_KEY=your_groq_api_key_here
-
-# OpenRouter API (Multi-model aggregator)
-VITE_OPENROUTER_API_KEY=your_openrouter_api_key_here
-
-# Hugging Face Inference API
-VITE_HUGGINGFACE_API_KEY=your_huggingface_api_key_here
-
-# OpenAI API
-VITE_OPENAI_API_KEY=your_openai_api_key_here
-
-# PostgreSQL Database Connection (for Analytics)
-DATABASE_URL=postgresql://username:password@hostname:port/database?sslmode=require
+GEMINI_API_KEY=
+GROQ_API_KEY=
+OPENROUTER_API_KEY=
+HUGGINGFACE_API_KEY=
+OPENAI_API_KEY=
+APP_URL=https://multi-ai-chat-hub.vercel.app
 ```
 
-**Note**: For local development, the analytics API endpoints will not work (they require Vercel deployment). The frontend will gracefully handle this with dev-mode guards.
+> **Security lesson:** Never put AI secrets in `VITE_*` variables. Vite embeds `VITE_*` into the public JS bundle — anyone could steal them.
 
-### How to Get API Keys
+### Required for Business Insights
 
-#### Google Gemini API
-
-1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Sign in with your Google account
-3. Click "Create API Key"
-4. Copy and paste into `.env` file
-
-#### Groq API
-
-1. Visit [Groq Console](https://console.groq.com/)
-2. Sign up or log in
-3. Navigate to API Keys section
-4. Create and copy your API key
-
-#### OpenRouter API
-
-1. Visit [OpenRouter.ai](https://openrouter.ai/)
-2. Sign up for an account
-3. Go to Keys section
-4. Create a new key
-
-#### Hugging Face API (Inference Providers)
-
-**Important**: Hugging Face has migrated to a new Inference Providers API. The old endpoint is deprecated.
-
-1. Visit [Hugging Face](https://huggingface.co/)
-2. Create an account
-3. Go to Settings > Access Tokens (or [hf.co/settings/tokens](https://hf.co/settings/tokens))
-4. Create a **fine-grained token** with **"Make calls to Inference Providers"** permission
-5. Copy and paste into `.env` file
-
-**Note**: The app now uses the new OpenAI-compatible endpoint at `https://router.huggingface.co/v1/chat/completions` for better reliability and access to multiple models. The old `api-inference.huggingface.co` endpoint was deprecated in January 2025 and returns 404 errors. The app automatically tries 16 different free-tier models in order until one responds successfully (6 primary models + 10 fallback models).
-
-#### OpenAI API
-
-1. Visit [OpenAI Platform](https://platform.openai.com/)
-2. Sign up or log in
-3. Go to API Keys section
-4. Create a new secret key
-
-#### PostgreSQL Database (Neon)
-
-The Business Insights feature requires a PostgreSQL database for storing analytics data.
-
-1. Visit [Neon Console](https://neon.tech/)
-2. Sign up for a free account (generous free tier)
-3. Create a new project
-4. Copy the connection string from your dashboard
-5. Paste it into your `.env` file as `DATABASE_URL`
-
-**Note**: The connection string format should be:
-
-```
-DATABASE_URL=postgresql://username:password@hostname:port/database?sslmode=require
-```
-
-1. **Set up the database schema**:
-
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   ```
-
-### Important Notes
-
-- ⚠️ **Never commit your `.env` file to version control**
-- The `.env` file is already in `.gitignore`
-- You can use any combination of providers (at least one is required)
-- The app will automatically fallback to available providers if one fails
-- The database is **only needed** for the Business Insights analytics feature
-- Analytics tracking is **anonymous** and uses session-based tracking (no user accounts required)
-
----
-
-## Usage
-
-### Basic Usage
-
-1. **Start the application**
-
-   ```bash
-   npm run dev
-   ```
-
-2. **Click "Get Started"** on the welcome screen
-
-3. **Select AI Provider** from the dropdown menu in the header
-
-4. **Type your message** in the input field
-
-5. **Send message** by:
-   - Pressing Enter key
-   - Clicking the send button
-   - Using the emoji picker to add emojis
-
-### Advanced Features
-
-- **Create New Chat**: Click the "+" button in the sidebar
-- **Switch Between Chats**: Click on any chat in the sidebar
-- **Delete Chat**: Click the "X" icon on any chat item
-- **Toggle Sidebar**: Click the hamburger menu button
-- **Auto Provider Selection**: Leave "Auto" selected for automatic fallback
-- **Business Insights Dashboard**: Click the "📊 Insights" button in the header to view analytics
-
-### Business Insights Dashboard
-
-The Business Insights page provides comprehensive analytics and performance metrics:
-
-#### Overview Tab
-
-- Total events and sessions
-- Recent activity (24h)
-- Active sessions
-- Storage usage
-- Uptime indicator
-
-#### Provider Analytics Tab
-
-- API calls by provider
-- Success/failure rates
-- Average response times
-- Provider performance comparison
-
-#### Storage & Performance Tab
-
-- Local storage usage
-- Total messages and sessions
-- Performance metrics
-
-#### Usage Patterns Tab
-
-- Most-used providers
-- Success rates per provider
-- Average response times
-- Usage trends
-
-#### Time & Trends Tab
-
-- Hourly activity breakdown
-- Peak usage times
-- Daily event trends
-- Visual activity charts
-
-#### User Engagement Tab
-
-- Average events per session
-- Session duration
-- Total conversations
-- Engagement patterns
-
-#### Error Monitoring Tab
-
-- Total errors
-- Errors by provider
-- Overall success rate
-- Error patterns
-
-#### Performance Tab
-
-- Fast/Normal/Slow request distribution
-- Min/Median/Max duration
-- Performance metrics
-
-**Note**: The Business Insights feature requires Vercel deployment with a configured PostgreSQL database. It tracks anonymous session data and does not require user authentication.
-
----
-
-## Project Walkthrough
-
-### Architecture Flow
+| Variable | Purpose | Where to get it |
+|----------|---------|-----------------|
+| `DATABASE_URL` | PostgreSQL connection string | [Neon Console](https://console.neon.tech/) → project → connection string |
 
 ```bash
-User Input → ChatBotApp Component → AI Service → Provider API → Response → Display
+npx prisma generate
+npx prisma db push
 ```
 
-### State Management
+### Optional — Sentry (Vite names)
 
-The application uses React hooks for state management:
+| Variable | Purpose | Where to get it |
+|----------|---------|-----------------|
+| `VITE_SENTRY_DSN` | Client SDK (build-time) | Sentry → Project → Client Keys (DSN) |
+| `SENTRY_DSN` | Server + tunnel allowlist | Same DSN (optional) |
+| `SENTRY_ORG` | Source map upload | Organization **slug** |
+| `SENTRY_PROJECT` | Source map upload | Project **slug** (not org name) |
+| `SENTRY_AUTH_TOKEN` | CI upload | Auth Tokens (`project:releases`, `org:read`) |
 
-- **App.tsx**: Manages global chat state, active chat, and chat list
-- **ChatBotApp.tsx**: Manages message state, input value, typing indicators
-- **Local Storage**: Persists chat history and messages
+Use **`VITE_SENTRY_DSN`**, not `NEXT_PUBLIC_SENTRY_DSN` (that is Next.js-only). On Vercel, set `VITE_SENTRY_DSN` for Production **build**.
 
-### Data Flow
+Full comments live in [`.env.example`](./.env.example). Deeper Sentry steps: [docs/Redis_Sentry_PostHog_INTEGRATION_GUIDE.md](./docs/Redis_Sentry_PostHog_INTEGRATION_GUIDE.md) (§2B Vite).
 
-1. **Message Creation**: User types message → stored in state
-2. **API Call**: Message sent to AI service → provider selected
-3. **Response Handling**: AI response received → displayed to user
-4. **Persistence**: All messages saved to localStorage
-5. **Chat Management**: Multiple chats managed with unique IDs
+---
 
-### Component Hierarchy
+## How to Run
+
+### Option A — UI only (no API)
 
 ```bash
-App
-├── ChatBotStart (Initial Screen)
-└── ChatBotApp (Main Application)
-    ├── Chat List Sidebar
-    │   ├── Chat List Header
-    │   └── Chat List Items
-    └── Chat Window
-        ├── Chat Header
-        ├── Messages Area
-        └── Input Area
-            ├── Emoji Picker
-            ├── Input Field
-            └── Send Button
+npm run dev
 ```
 
----
+Opens the Vite app. Chat/API calls will fail until serverless routes are available.
 
-## Component Details
-
-### ChatBotApp Component
-
-**Location**: `src/Components/ChatBotApp.tsx`
-
-**Purpose**: Main chat interface component
-
-**Key Features**:
-
-- Manages chat messages and input
-- Handles AI provider selection
-- Manages emoji picker visibility
-- Controls sidebar collapse/expand
-- Implements message sending and receiving
-
-**Props**:
-
-```typescript
-interface ChatBotAppProps {
-  chats: Chat[];
-  setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
-  activeChat: string | null;
-  setActiveChat: React.Dispatch<React.SetStateAction<string | null>>;
-  onNewChat: (initialMessage?: string) => void;
-}
-```
-
-**Key Methods**:
-
-- `sendMessage()`: Sends message to AI and handles response
-- `handleKeyDown()`: Handles Enter key press
-- `handleEmojiSelect()`: Adds emoji to input
-- `handleClickOutside()`: Closes dropdowns/pickers
-
-### ChatBotStart Component
-
-**Location**: `src/Components/ChatBotStart.tsx`
-
-**Purpose**: Welcome screen with typewriter animation
-
-**Key Features**:
-
-- Animated typewriter effect
-- "Get Started" button
-- Gradient background with SVG
-
-**Props**:
-
-```typescript
-interface ChatBotStartProps {
-  onStartChat: () => void;
-}
-```
-
-### Tooltip Component
-
-**Location**: `src/Components/Tooltip.tsx`
-
-**Purpose**: Reusable tooltip component
-
-**Usage**:
-
-```tsx
-<Tooltip text="Tooltip text" position="top">
-  <button>Hover me</button>
-</Tooltip>
-```
-
-**Features**:
-
-- Dynamic positioning
-- Auto-adjustment for fixed elements
-- Smooth animations
-- Multiple positions (top, bottom, left, right)
-
-### TypingIndicator Component
-
-**Location**: `src/Components/TypingIndicator.tsx`
-
-**Purpose**: Shows animated dots when AI is typing
-
-### BusinessInsights Component
-
-**Location**: `src/Components/BusinessInsights.tsx`
-
-**Purpose**: Analytics dashboard for monitoring user activity and performance
-
-**Key Features**:
-
-- Real-time analytics from PostgreSQL database
-- 8 different tabs for various metrics
-- Anonymous session tracking
-- Provider performance analytics
-- Hourly activity charts
-- Error monitoring
-
-**Props**:
-
-```typescript
-interface BusinessInsightsProps {
-  onBack: () => void;
-}
-```
-
-**Tabs**:
-
-1. **Overview**: Total events, sessions, storage, uptime
-2. **Provider Analytics**: Per-provider statistics
-3. **Storage & Performance**: Local storage and performance metrics
-4. **Usage Patterns**: Provider usage trends
-5. **Time & Trends**: Hourly/daily activity charts
-6. **User Engagement**: Session metrics
-7. **Error Monitoring**: Error tracking by provider
-8. **Performance**: Request speed distribution
-
-### useTypewriter Hook
-
-**Location**: `src/hooks/useTypewriter.ts`
-
-**Purpose**: Creates typewriter animation effect
-
-**Usage**:
-
-```typescript
-const { displayText, isComplete } = useTypewriter({
-  text: "Your text here",
-  speed: 50,
-  delay: 500,
-});
-```
-
-**Features**:
-
-- Configurable typing speed
-- Optional delay before starting
-- Returns completion status
-
----
-
-## API Integration
-
-### Analytics API Endpoints
-
-The project includes serverless API endpoints for tracking and analytics:
-
-**Location**: `api/` directory (Vercel serverless functions)
-
-#### Available Endpoints
-
-1. **POST `/api/events`**: Track analytics events
-   - Records: API calls, success/failure, duration, provider
-   - Creates/updates session records
-   - Used by frontend to log all user interactions
-
-2. **GET `/api/usage`**: Fetch usage statistics
-   - Returns: Total events, sessions, recent activity
-   - Aggregates session and event data
-
-3. **GET `/api/insights`**: Fetch provider insights
-   - Returns: Provider stats, success rates, daily trends
-   - Calculates provider performance metrics
-
-4. **GET `/api/providers`**: Fetch detailed provider data
-   - Returns: Individual provider analytics
-   - Includes: Total calls, success/failure counts, avg duration
-
-5. **GET `/api/dashboard`**: Fetch all dashboard data
-   - Returns: Combined data from all analytics endpoints
-   - Single request for complete dashboard view
-
-#### Database Schema
-
-The analytics system uses PostgreSQL with the following schema:
-
-```prisma
-model Event {
-  id        String    @id @default(uuid())
-  sessionId String
-  eventType String
-  provider  String?
-  success   Boolean   @default(true)
-  duration  Int?      // Duration in milliseconds
-  metadata  String?   // JSON string for additional data
-  timestamp DateTime  @default(now())
-}
-
-model Session {
-  sessionId String   @id @unique
-  userAgent String?
-  platform  String?
-  startedAt DateTime @default(now())
-  lastSeen  DateTime @updatedAt
-}
-```
-
-### AI Service Architecture
-
-**Location**: `src/services/aiService.ts`
-
-**Purpose**: Centralized AI API integration with fallback mechanism
-
-### Provider Configuration
-
-**Location**: `src/services/aiProviders.ts`
-
-**Purpose**: Defines all AI provider configurations
-
-**Supported Providers**:
-
-1. **Google Gemini** (`gemini-2.5-flash`)
-   - Endpoint: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`
-   - Model: `gemini-2.5-flash`
-   - **Note**: Updated from Gemini 2.0 (discontinued March 31, 2026) to Gemini 2.5
-
-2. **Groq** (`llama-3.1-8b-instant`)
-   - Endpoint: `https://api.groq.com/openai/v1/chat/completions`
-   - Model: `llama-3.1-8b-instant`
-
-3. **OpenRouter** (`meta-llama/llama-3.2-3b-instruct:free`)
-   - Endpoint: `https://openrouter.ai/api/v1/chat/completions`
-   - Model: `meta-llama/llama-3.2-3b-instruct:free`
-
-4. **Hugging Face** (16 models with fallback - New Inference Providers API)
-   - Endpoint: `https://router.huggingface.co/v1/chat/completions` (OpenAI-compatible)
-   - Primary Models: `meta-llama/Llama-3.1-8B-Instruct`, `mistralai/Mistral-7B-Instruct-v0.3`, `HuggingFaceH4/zephyr-7b-beta`, `tiiuae/falcon-7b-instruct`, `google/gemma-2b-it`, `NousResearch/Hermes-2-Pro-Mistral-7B`
-   - Fallback Models: `mistralai/Mistral-7B-Instruct-v0.2`, `google/gemma-2b`, `google/gemma-7b`, `mistralai/Mixtral-8x7B-Instruct-v0.1`, `tiiuae/falcon-7b`, `microsoft/phi-1_5`, `bigscience/bloomz-560m`, `HuggingFaceH4/zephyr-7b-alpha`, `tiiuae/falcon-40b-instruct`, `facebook/bart-large-cnn`
-
-5. **OpenAI** (`gpt-4o-mini`)
-   - Endpoint: `https://api.openai.com/v1/responses`
-   - Model: `gpt-4o-mini`
-
-### Fallback Mechanism
-
-The AI service automatically tries providers in this order:
-
-1. Gemini
-2. Groq
-3. OpenRouter
-4. Hugging Face
-5. OpenAI
-
-If one provider fails, it automatically tries the next available provider.
-
----
-
-## Reusing Components
-
-This project is designed with reusable components that can be easily integrated into other projects.
-
-### Using the Tooltip Component
-
-```tsx
-import Tooltip from "./Components/Tooltip";
-
-function MyComponent() {
-  return (
-    <Tooltip text="This is a tooltip" position="top">
-      <button>Hover me</button>
-    </Tooltip>
-  );
-}
-```
-
-### Using the Typewriter Hook
-
-```tsx
-import { useTypewriter } from "./hooks/useTypewriter";
-
-function MyComponent() {
-  const { displayText, isComplete } = useTypewriter({
-    text: "Loading...",
-    speed: 50,
-    delay: 0,
-  });
-
-  return <div>{displayText}</div>;
-}
-```
-
-### Using the AI Service
-
-```tsx
-import { aiService } from "./services/aiService";
-import { AIProvider } from "./services/aiProviders";
-
-async function sendMessage(message: string) {
-  try {
-    const response = await aiService.getChatResponse(message, "gemini");
-    console.log(response.content);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-```
-
-### Integration Example
-
-Here's how to integrate this chat system into your own project:
-
-1. **Copy the Components folder** to your project
-2. **Copy the services folder** for AI integration
-3. **Copy the hooks folder** for reusable hooks
-4. **Update API keys** in your `.env` file
-5. **Import and use** components as needed
-
----
-
-## Deployment
-
-### Build for Production
+### Option B — Full local stack (recommended)
 
 ```bash
+# Terminal: serves Vite + /api/* together
+vercel dev
+```
+
+Then open the URL Vercel prints (often `http://localhost:3000`).
+
+### Lint & production build
+
+```bash
+npm run lint
 npm run build
+npm run preview   # preview the dist/ folder only (still no /api unless proxied)
 ```
 
-This creates an optimized production build in the `dist/` folder.
+---
 
-### Deploy to Vercel
+## Usage Guide
 
-1. **Install Vercel CLI**
+1. Open the app → **Start** screen with typewriter title.
+2. Click **Get Started** → chat view.
+3. Type a message (optional emoji) → send.
+4. Pick a provider from the dropdown, or leave auto/fallback behavior.
+5. Create / switch / delete chats in the sidebar (persisted in `localStorage`).
+6. Open **Business Insights** for anonymous analytics (needs `DATABASE_URL`).
 
-   ```bash
-   npm install -g vercel
-   ```
+---
 
-2. **Set up Database**
-   - Create a Neon PostgreSQL database
-   - Copy your connection string
-   - Update your `DATABASE_URL` in `.env`
+## Frontend Components & Hooks
 
-3. **Deploy**
+| File | Role | Reuse tip |
+|------|------|-----------|
+| `ChatBotStart.tsx` | Welcome / CTA | Drop into any landing; wire `onStart` |
+| `ChatBotApp.tsx` | Main chat shell | Expects chat list props or lift state like `App.tsx` |
+| `BusinessInsights.tsx` | Analytics dashboard | Point `fetch` URLs at your `/api/dashboard` |
+| `TypingIndicator.tsx` | Animated “AI is typing” | Pure UI — no API |
+| `Tooltip.tsx` | Hover help | Wrap any trigger element |
+| `useTypewriter.ts` | Character-by-character text | Any headline / onboarding copy |
 
-   ```bash
-   vercel
-   ```
+Each component has a matching `.css` file — keep them together when copying.
 
-4. **Set Environment Variables in Vercel**
-   - Go to your Vercel project settings
-   - Navigate to Environment Variables
-   - Add all your API keys from `.env` file
-   - **Important**: Add `DATABASE_URL` from your Neon database
+**View switching (`App.tsx` concept):**
 
-5. **Run Database Migrations**
+```tsx
+const [currentView, setCurrentView] = useState<"start" | "chat" | "insights">("start");
+// render ChatBotStart | ChatBotApp | BusinessInsights
+```
 
-   After deployment, trigger a build that runs Prisma:
+---
 
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   ```
+## Shared AI Layer
 
-   Or add to your `package.json`:
+Located in `shared/ai/` so **browser types** and **server orchestration** share one contract.
 
-   ```json
-   "scripts": {
-     "vercel-build": "prisma generate && prisma db push && npm run build"
-   }
-   ```
+| Module | Purpose |
+|--------|---------|
+| `types.ts` | `AIProvider`, `ChatRequest`, `ChatResponse`, `ProviderMeta` |
+| `providers.ts` | `PROVIDER_META` model chains + `FALLBACK_ORDER` |
+| `callers.ts` | HTTP calls to each upstream API |
+| `orchestrate.ts` | Outer provider loop + inner model loop + 429 skip |
+| `schemas.ts` | Zod schemas for request validation |
 
-### Deploy to Netlify
+**Current free-tier model chains** (see `shared/ai/providers.ts`):
 
-1. **Connect GitHub repository** to Netlify
-2. **Build command**: `npm run build`
-3. **Publish directory**: `dist`
-4. **Add environment variables** in site settings
+1. **Groq** — `openai/gpt-oss-20b` → `openai/gpt-oss-120b` → `qwen/qwen3.6-27b`
+2. **Gemini** — `gemini-2.5-flash` → `gemini-2.5-flash-lite`
+3. **OpenRouter** — `openai/gpt-oss-20b:free` → `openai/gpt-oss-120b:free`
+4. **Hugging Face** — short rotating router list
+5. **OpenAI** — `gpt-4o-mini` (last resort)
 
-### Deploy to GitHub Pages
+Portable free-tier reference: [docs/LLM_MODEL_SELECTION.md](./docs/LLM_MODEL_SELECTION.md).
 
-1. **Install gh-pages**
+---
 
-   ```bash
-   npm install --save-dev gh-pages
-   ```
+## Backend API Endpoints
 
-2. **Add deploy script** to `package.json`
+All handlers live in `api/` and use `@vercel/node` request/response shapes.
 
-   ```json
-   "deploy": "vite build && gh-pages -d dist"
-   ```
+| Method | Path | Purpose |
+|--------|------|---------|
+| `POST` | `/api/chat` | Chat proxy (Zod + rate limit + orchestrate) |
+| `GET` | `/api/chat-providers` | Which providers have keys configured |
+| `POST` | `/api/events` | Write anonymous analytics events |
+| `GET` | `/api/usage` | Usage aggregates |
+| `GET` | `/api/insights` | Provider insight data |
+| `GET` | `/api/providers` | Provider detail stats |
+| `GET` | `/api/dashboard` | Combined dashboard payload |
+| `POST` | `/api/monitoring` | Sentry envelope tunnel (ad-blocker bypass) |
 
-3. **Run deploy**
+**Example chat body:**
 
-   ```bash
-   npm run deploy
-   ```
+```json
+{ "message": "Explain React hooks in one paragraph", "provider": "groq" }
+```
+
+Omit `provider` (or use auto) to walk the fallback order.
+
+There is **no React Router** — “routes” are view states in `App.tsx`, plus these HTTP APIs.
+
+---
+
+## Database (Prisma + PostgreSQL)
+
+Schema: `prisma/schema.prisma`
+
+- **`Session`** — anonymous browser session
+- **`Event`** — `api_call`, `chat_created`, `provider_selected`, etc.
+- **`ProviderStats`** — aggregated provider metrics
+
+Chats themselves are **not** stored in Postgres by default — only analytics. Chat threads use **`localStorage`**.
+
+---
+
+## Sentry (Optional Observability)
+
+- Client: `src/sentry.ts` → `tunnel: "/api/monitoring"`
+- Server: `captureApiException` in `api/chat.ts` / `api/events.ts`
+- Quiet builds: `@sentry/vite-plugin` with `silent: true` when org/project/token are set
+
+Disabled automatically when DSN is empty.
+
+---
+
+## Reusing Code in Other Projects
+
+1. **Copy `shared/ai/`** into another Node/Vite/Next backend and call `orchestrateChat` from your route.
+2. **Copy `useTypewriter` + `TypingIndicator` / `Tooltip`** as standalone UI pieces.
+3. **Copy `api/_lib/rateLimit.ts`** for soft serverless rate limiting.
+4. **Copy Sentry §2B** from the integration guide for another Vite app.
+5. Keep **AI keys server-side**; expose only a thin `/api/chat`-style proxy.
+
+When teaching others: stress the **registry (`providers.ts`) + callers + orchestrator** pattern so model deprecations become a one-line registry edit.
+
+---
+
+## Deployment (Vercel)
+
+1. Import the GitHub repo into [Vercel](https://vercel.com/).
+2. Set env vars (same names as `.env.example`) — especially **non-`VITE_` AI keys** and `DATABASE_URL`.
+3. For Sentry client events, set **`VITE_SENTRY_DSN`** on Production (build-time).
+4. Deploy. Live demo pattern: [https://multi-ai-chat-hub.vercel.app/](https://multi-ai-chat-hub.vercel.app/)
+5. Dashboard Human-Action (recommended): Bot Protection = Challenge, AI Bots = Deny.
+
+Production guardrails playbook: [docs/VERCEL_PRODUCTION_GUARDRAILS.md](./docs/VERCEL_PRODUCTION_GUARDRAILS.md).
+
+---
+
+## Scripts Reference
+
+| Script | Command | Purpose |
+|--------|---------|---------|
+| Dev (UI) | `npm run dev` | Vite only |
+| Lint | `npm run lint` | ESLint (max warnings = 0) |
+| Build | `npm run build` | `prisma generate` + `tsc` + `vite build` |
+| Preview | `npm run preview` | Serve `dist/` |
+| Prisma | `npm run prisma:generate` / `prisma:push` / `prisma:studio` | DB tooling |
+
+---
+
+## Further Reading
+
+- [docs/LLM_MODEL_SELECTION.md](./docs/LLM_MODEL_SELECTION.md) — free-tier models & fallback strategy
+- [docs/Redis_Sentry_PostHog_INTEGRATION_GUIDE.md](./docs/Redis_Sentry_PostHog_INTEGRATION_GUIDE.md) — Next **and** Vite Sentry
+- [docs/VERCEL_PRODUCTION_GUARDRAILS.md](./docs/VERCEL_PRODUCTION_GUARDRAILS.md) — headers, AI proxy, Node 24
+- [docs/AGILE_V_PROTOCOL.md](./docs/AGILE_V_PROTOCOL.md) — agent workflow used on this repo
+- [SECURITY.md](./SECURITY.md) — private vulnerability reporting
 
 ---
 
 ## Conclusion
 
-### Learning Outcomes
+This project is a practical classroom for **multi-provider AI apps on Vite + Vercel**: keep secrets on the server, validate with Zod, fall back across models, store chat locally, and optionally measure usage with Prisma. Clone it, add one free API key, run `vercel dev`, and you will see the full loop from UI → `/api/chat` → upstream model → response.
 
-This project demonstrates:
+Extend it by adding providers to `shared/ai/providers.ts`, reusing UI components, or plugging the shared orchestrator into another backend.
 
-- React component architecture and state management
-- TypeScript type safety and interfaces
-- API integration with multiple providers
-- Responsive design principles
-- Modern UI/UX patterns
-- Local storage management
-- Custom React hooks
-- Error handling and fallback mechanisms
-- Serverless API development (Vercel Functions)
-- PostgreSQL database integration (Prisma ORM)
-- Analytics and performance monitoring
-- Anonymous session tracking
+---
 
-### Key Takeaways
+## License
 
-- **Modular Architecture**: Well-organized component structure
-- **Type Safety**: Leveraging TypeScript for better code quality
-- **User Experience**: Smooth animations and responsive design
-- **Scalability**: Easy to add new AI providers or features
-- **Analytics**: Real-time performance monitoring with anonymous tracking
-- **Full-Stack**: Complete solution with frontend, backend, and database
-- **Best Practices**: Following React and TypeScript conventions
-
-### Future Enhancements
-
-- [x] Add analytics dashboard (Business Insights)
-- [x] Implement anonymous session tracking
-- [x] Add PostgreSQL database integration
-- [ ] Add authentication system
-- [ ] Implement user accounts
-- [ ] Add message search functionality
-- [ ] Create chat export feature
-- [ ] Add voice input/output
-- [ ] Implement markdown support
-- [ ] Add code syntax highlighting
-- [ ] Create mobile app version
-- [ ] Add real-time charts and visualizations
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute the code as per the terms of the license.
 
 ---
 
 ## Happy Coding! 🎉
 
-Feel free to use this project repository and extend this project further!
+This is an **open-source project** - feel free to use, enhance, and extend this project further!
 
-If you have any questions or want to share your work, reach out via GitHub or my portfolio at [https://arnob-mahmud.vercel.app/](https://arnob-mahmud.vercel.app/).
-
-**Enjoy building and learning!** 🚀
-
-Thank you! 😊
+If you have any questions or want to share your work, reach out via GitHub or my portfolio at [https://www.arnobmahmud.com/](https://www.arnobmahmud.com/).

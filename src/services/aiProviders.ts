@@ -1,85 +1,78 @@
-export type AIProvider =
-  | "openai"
-  | "gemini"
-  | "groq"
-  | "huggingface"
-  | "openrouter";
+/**
+ * Client provider metadata + availability from GET /api/chat-providers (no API keys).
+ */
+import { PROVIDER_META, FALLBACK_ORDER } from "../../shared/ai/providers";
+import type {
+  AIProvider,
+  ProviderAvailability,
+} from "../../shared/ai/types";
 
+export type { AIProvider, ProviderAvailability };
+
+/** Static UI metadata (icons / labels) — safe to ship in the browser bundle. */
 export interface ProviderConfig {
-  name: string;
+  name: AIProvider;
   displayName: string;
-  available: boolean;
-  apiKey: string;
-  baseUrl: string;
-  model: string;
   icon: string;
+  available: boolean;
 }
 
 export const AI_PROVIDERS: Record<AIProvider, ProviderConfig> = {
-  // Google Gemini AI - 1.5M free tokens/month
-  // Updated to Gemini 2.5 (2.0 models discontinued March 31, 2026)
   gemini: {
     name: "gemini",
-    displayName: "Google Gemini",
-    available: true,
-    apiKey: import.meta.env.VITE_GEMINI_API_KEY || "",
-    baseUrl:
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
-    model: "gemini-2.5-flash",
-    icon: "🤖",
+    displayName: PROVIDER_META.gemini.displayName,
+    icon: PROVIDER_META.gemini.icon,
+    available: false,
   },
-
-  // Groq API - Fast Llama 3 Turbo (Always-free daily quota)
   groq: {
     name: "groq",
-    displayName: "Groq (Llama 3)",
-    available: true,
-    apiKey: import.meta.env.VITE_GROQ_API_KEY || "",
-    baseUrl: "https://api.groq.com/openai/v1/chat/completions",
-    model: "llama-3.1-8b-instant",
-    icon: "⚡",
+    displayName: PROVIDER_META.groq.displayName,
+    icon: PROVIDER_META.groq.icon,
+    available: false,
   },
-
-  // OpenRouter - Multi-model aggregator (Free quotas from partner models)
   openrouter: {
     name: "openrouter",
-    displayName: "OpenRouter",
-    available: true,
-    apiKey: import.meta.env.VITE_OPENROUTER_API_KEY || "",
-    baseUrl: "https://openrouter.ai/api/v1/chat/completions",
-    model: "meta-llama/llama-3.2-3b-instruct:free",
-    icon: "💬",
+    displayName: PROVIDER_META.openrouter.displayName,
+    icon: PROVIDER_META.openrouter.icon,
+    available: false,
   },
-
-  // Hugging Face Inference Providers API (New OpenAI-compatible endpoint)
   huggingface: {
     name: "huggingface",
-    displayName: "Hugging Face",
-    available: true, // Try multiple models until one works
-    apiKey: import.meta.env.VITE_HUGGINGFACE_API_KEY || "",
-    baseUrl: "https://router.huggingface.co/v1/chat/completions",
-    model: "meta-llama/Llama-3.1-8B-Instruct",
-    icon: "🔍",
+    displayName: PROVIDER_META.huggingface.displayName,
+    icon: PROVIDER_META.huggingface.icon,
+    available: false,
   },
-
-  // OpenAI - Last resort fallback (using new Responses API)
   openai: {
     name: "openai",
-    displayName: "OpenAI GPT",
-    available: true, // Enabled - use with valid API key
-    apiKey: import.meta.env.VITE_OPENAI_API_KEY || "",
-    baseUrl: "https://api.openai.com/v1/responses",
-    model: "gpt-4o-mini",
-    icon: "🧠",
+    displayName: PROVIDER_META.openai.displayName,
+    icon: PROVIDER_META.openai.icon,
+    available: false,
   },
 };
 
-export const getAvailableProviders = (): ProviderConfig[] => {
-  return Object.values(AI_PROVIDERS).filter(
-    (provider) => provider.available && provider.apiKey
-  );
-};
+/** Fetch which providers have server-side keys configured. */
+export async function fetchAvailableProviders(): Promise<ProviderConfig[]> {
+  try {
+    const res = await fetch("/api/chat-providers");
+    if (!res.ok) return [];
+    const data = (await res.json()) as { providers?: ProviderAvailability[] };
+    const list = data.providers || [];
+    return list
+      .filter((p) => p.available)
+      .map((p) => ({
+        name: p.name,
+        displayName: p.displayName,
+        icon: p.icon,
+        available: true,
+      }));
+  } catch {
+    return [];
+  }
+}
 
-export const getProvider = (name: AIProvider): ProviderConfig => {
-  return AI_PROVIDERS[name];
-};
+/** Sync helper for initial empty state; prefer fetchAvailableProviders for live data. */
+export const getAvailableProviders = (): ProviderConfig[] =>
+  FALLBACK_ORDER.map((name) => AI_PROVIDERS[name]).filter((p) => p.available);
+
+export const getProvider = (name: AIProvider): ProviderConfig =>
+  AI_PROVIDERS[name];

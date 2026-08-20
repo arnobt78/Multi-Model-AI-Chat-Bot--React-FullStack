@@ -4,7 +4,11 @@ import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
 import type { Message, Chat } from "../App";
 import { aiService } from "../services/aiService";
-import { AIProvider, getAvailableProviders } from "../services/aiProviders";
+import {
+  AIProvider,
+  fetchAvailableProviders,
+  type ProviderConfig,
+} from "../services/aiProviders";
 import TypingIndicator from "./TypingIndicator";
 import Tooltip from "./Tooltip";
 import { useTypewriter } from "../hooks/useTypewriter";
@@ -48,19 +52,33 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
   const [selectedProvider, setSelectedProvider] = useState<
     AIProvider | undefined
   >(undefined);
+  const [availableProviders, setAvailableProviders] = useState<
+    ProviderConfig[]
+  >([]);
   const [showProviderDropdown, setShowProviderDropdown] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const chatEndRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const providerDropdownRef = useRef<HTMLDivElement>(null);
-  const errorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const errorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { displayText: chatTitleText } = useTypewriter({
     text: "Chat with AI",
     speed: 100,
     delay: 500,
   });
+
+  // Load server-configured providers (no client API keys)
+  useEffect(() => {
+    let cancelled = false;
+    fetchAvailableProviders().then((list) => {
+      if (!cancelled) setAvailableProviders(list);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const activeChatObj = chats.find((chat) => chat.id === activeChat);
@@ -198,9 +216,8 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           metadata: JSON.stringify({ timestamp: new Date().toISOString() }),
         }),
       });
-    } catch (error) {
-      // Silently fail - don't interrupt user experience
-      // console.error("Failed to track event:", error);
+    } catch {
+      // Silently fail - don't interrupt user experience if analytics is unavailable
     }
   };
 
@@ -272,9 +289,6 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             "chats",
             JSON.stringify(updatedChatsWithResponse)
           );
-
-          // Show which provider was used
-          console.log(`✅ Response from ${aiResponse.provider}`);
         } else {
           // Track failed API call
           await trackEvent(
@@ -334,49 +348,6 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
       } finally {
         setIsTyping(false);
       }
-
-      // Original OpenAI API code (commented out for future use)
-      // const response = await fetch(
-      //   "https://api.openai.com/v1/chat/completions",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-      //     },
-      //     body: JSON.stringify({
-      //       model: "gpt-3.5-turbo",
-      //       messages: [{ role: "user", content: inputValue }],
-      //       max_tokens: 500,
-      //     }),
-      //   }
-      // );
-
-      // const data = await response.json();
-      // const chatResponse = data.choices[0].message.content.trim();
-
-      // const newResponse: Message = {
-      //   type: "response",
-      //   text: chatResponse,
-      //   timestamp: new Date().toLocaleTimeString(),
-      // };
-
-      // const updatedMessagesWithResponse = [...updatedMessages, newResponse];
-      // setMessages(updatedMessagesWithResponse);
-      // localStorage.setItem(
-      //   activeChat,
-      //   JSON.stringify(updatedMessagesWithResponse)
-      // );
-      // setIsTyping(false);
-
-      // const updatedChatsWithResponse = chats.map((chat) => {
-      //   if (chat.id === activeChat) {
-      //     return { ...chat, messages: updatedMessagesWithResponse };
-      //   }
-      //   return chat;
-      // });
-      // setChats(updatedChatsWithResponse);
-      // localStorage.setItem("chats", JSON.stringify(updatedChatsWithResponse));
     }
   };
 
@@ -494,11 +465,11 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                   >
                     {selectedProvider ? (
                       `${
-                        getAvailableProviders().find(
+                        availableProviders.find(
                           (p) => p.name === selectedProvider
                         )?.icon || ""
                       } ${
-                        getAvailableProviders().find(
+                        availableProviders.find(
                           (p) => p.name === selectedProvider
                         )?.displayName || selectedProvider
                       }`
@@ -538,7 +509,7 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                         Auto (Fallback)
                       </span>
                     </button>
-                    {getAvailableProviders().map((provider) => (
+                    {availableProviders.map((provider) => (
                       <button
                         key={provider.name}
                         className={`provider-option ${

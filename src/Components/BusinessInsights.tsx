@@ -134,7 +134,8 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
   const getStorageUsage = () => {
     let totalSize = 0;
     for (let key in localStorage) {
-      if (localStorage.hasOwnProperty(key)) {
+      // Prefer Object.prototype.hasOwnProperty.call (eslint no-prototype-builtins)
+      if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
         totalSize += localStorage[key].length;
       }
     }
@@ -383,7 +384,7 @@ const BusinessInsights: React.FC<BusinessInsightsProps> = ({ onBack }) => {
 
             <div className="trend-card">
               <TrendingUp className="trend-icon" />
-              <h3>Today's Activity</h3>
+              <h3>{"Today's Activity"}</h3>
               <p className="trend-value">
                 {Object.values(timeAndTrends?.hourlyActivity || {}).reduce(
                   (a, b) => a + b,

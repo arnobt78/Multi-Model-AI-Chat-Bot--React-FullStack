@@ -1,11 +1,15 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "./_lib/prisma";
+import { allowRequest, clientIp } from "./_lib/rateLimit";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  // Soft scrape protection — Insights stay public for the demo
+  if (!allowRequest(`dashboard:${clientIp(req)}`, 40, 60_000)) {
+    return res.status(429).json({ error: "Too many requests" });
   }
 
   try {
