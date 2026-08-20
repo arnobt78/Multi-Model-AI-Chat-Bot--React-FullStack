@@ -46,3 +46,10 @@ Append-only. Never rewrite prior entries.
 - **Decision:** Replace legacy HF IDs (Mistral/Zephyr-style) with documented Hub chat models + `:fastest` (`gemma-2-2b-it`, `Qwen2.5-7B-Instruct`, `gpt-oss-20b`, `Llama-3.2-3B-Instruct`). Keep HF late in `FALLBACK_ORDER`. Treat forced-HF empty credit / host miss as expected UX (friendly error), not a security defect.
 - **Rationale:** Inference Providers free pool is tiny (~$0.10/mo); hosts rotate; `:fastest` picks a live upstream. Prefer Groq/Gemini/OpenRouter for daily use.
 - **Linked REQs:** REQ-0012
+
+## DEC-0008 — SSE live chat tokens (ChatGPT-style)
+- **Timestamp:** 2026-08-20T16:10:00Z
+- **Agent:** Build
+- **Decision:** Add optional `stream: true` on `/api/chat` returning SSE (`start`/`delta`/`done`/`error`); keep JSON path. Client opens empty assistant bubble + caret and appends deltas. Nested bubble `max-width` fixed via row-only 85% cap.
+- **Rationale:** Full-response-then-dump felt dead; true upstream streaming improves TTFT UX without densify/React Query.
+- **Linked REQs:** REQ-0009, REQ-0012 (UX)

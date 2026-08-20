@@ -6,7 +6,8 @@ Vite CSR + Vercel Functions (not Next.js). Live: https://multi-ai-chat-hub.verce
 
 ## Flow
 ```text
-UI → POST /api/chat → shared/ai/orchestrate → upstream
+UI → POST /api/chat {stream:true} → SSE deltas → live bubble
+UI → POST /api/chat (JSON) → full reply (compat)
 UI → GET /api/chat-providers → availability
 UI → POST /api/events → Prisma
 UI → GET /api/dashboard
@@ -18,8 +19,9 @@ Sentry → POST /api/monitoring (tunnel)
 ## Key paths
 | Path | Role |
 |------|------|
-| `src/Components/ChatBotApp.*` | Chat + message-meta (time/copy) |
-| `shared/ai/` | providers, callers, orchestrate, formatError, Zod |
+| `src/Components/ChatBotApp.*` | Chat UI; 85% bubbles; live stream caret |
+| `src/services/aiService.ts` | JSON + SSE client |
+| `shared/ai/` | providers, callers, orchestrate, stream, formatError, Zod |
 | `shared/sentry/` | client/server Sentry helpers |
 | `api/` | chat, chat-providers, events, monitoring, analytics |
 
@@ -36,18 +38,16 @@ Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights
 | Groq | gpt-oss-20b → gpt-oss-120b → qwen3.6-27b |
 | Gemini | 2.5-flash → 2.5-flash-lite |
 | OpenRouter | `:free` IDs only |
-| HF | gemma-2-2b-it / Qwen2.5-7B / gpt-oss-20b / Llama-3.2-3B — all `:fastest` |
+| HF | gemma / Qwen2.5 / gpt-oss / Llama-3.2 — all `:fastest` |
 | OpenAI | gpt-4o-mini last |
-
-Forced HF may still return friendly “could not serve…” (HTTP 200). Prefer Auto/Groq/Gemini/OpenRouter.
 
 ---
 
 ## Done
-A+B proxy · C model chains · Sentry tunnel · ESM `.js` · UX polish · HF `:fastest` · README/SECURITY
+A+B proxy · C models · Sentry · ESM · UX · HF `:fastest` · SSE live tokens · bubble 85% · chat-list align
 
 ## Open
-Firewall Human-Action · Track D tests · HF free credits tiny/flaky
+Firewall Human-Action · Track D tests · HF free credits flaky
 
 ## N/A
-densify · Redis · auth · SHA · Python · SSR
+densify · Redis · auth · SHA · Python · SSR · React Query

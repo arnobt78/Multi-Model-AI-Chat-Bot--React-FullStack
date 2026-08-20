@@ -1,4 +1,4 @@
-# Multi-Model AI Chat Hub - React, Vite, TypeScript, Prisma, PostgreSQL Full-Stack Project (including Insights & Performance Dashboard)
+# Multi-Model AI Chatbot - React, Vite, TypeScript, Prisma, PostgreSQL Full-Stack Project (including Insights & Performance Dashboard)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![React](https://img.shields.io/badge/React-18.3.1-blue)](https://react.dev/)
@@ -28,8 +28,6 @@ A modern, responsive AI chat bot application supporting multiple AI providers in
 ![Screenshot 2025-10-26 at 12 25 20](https://github.com/user-attachments/assets/ef3b9bc0-60cf-457e-94f9-30cbc4ff7d2f)
 ![Screenshot 2025-10-26 at 12 25 33](https://github.com/user-attachments/assets/c6be8309-63aa-44eb-ba12-c72dc7438885)
 ![Screenshot 2025-10-26 at 12 25 36](https://github.com/user-attachments/assets/d91bef44-463d-4b9d-868f-277ef3eb81e2)
-
----
 
 ## Table of Contents
 
@@ -131,22 +129,22 @@ Upstream AI APIs (Groq / Gemini / OpenRouter / HF / OpenAI)
 
 ## Technologies & Libraries
 
-| Technology | Version (approx.) | What it is / why we use it |
-|------------|-------------------|----------------------------|
-| **React** | 18.3 | UI components and hooks |
-| **TypeScript** | 5.9 | Static types — fewer runtime surprises |
-| **Vite** | 7.3 | Fast dev server + production bundler for SPAs |
-| **Node.js** | 24.x | Runtime pinned in `package.json` `engines` + `.nvmrc` |
-| **Prisma** | 6.19 | Type-safe ORM for PostgreSQL analytics |
-| **PostgreSQL (Neon)** | — | Serverless DB for Insights |
-| **Zod** | 4.x | Runtime validation of API request bodies |
-| **Vercel Functions** | `api/*.ts` | Backend without a separate Express server |
-| **Recharts** | 2.x | Charts on the Insights dashboard |
-| **Lucide React** | — | Icons |
-| **Emoji Mart** | — | Emoji picker |
-| **uuid** | 11 | Chat / session IDs |
-| **Sentry** | optional | Error monitoring + tunnel |
-| **ESLint 9** | flat config | `npm run lint` |
+| Technology            | Version (approx.) | What it is / why we use it                            |
+| --------------------- | ----------------- | ----------------------------------------------------- |
+| **React**             | 18.3              | UI components and hooks                               |
+| **TypeScript**        | 5.9               | Static types — fewer runtime surprises                |
+| **Vite**              | 7.3               | Fast dev server + production bundler for SPAs         |
+| **Node.js**           | 24.x              | Runtime pinned in `package.json` `engines` + `.nvmrc` |
+| **Prisma**            | 6.19              | Type-safe ORM for PostgreSQL analytics                |
+| **PostgreSQL (Neon)** | —                 | Serverless DB for Insights                            |
+| **Zod**               | 4.x               | Runtime validation of API request bodies              |
+| **Vercel Functions**  | `api/*.ts`        | Backend without a separate Express server             |
+| **Recharts**          | 2.x               | Charts on the Insights dashboard                      |
+| **Lucide React**      | —                 | Icons                                                 |
+| **Emoji Mart**        | —                 | Emoji picker                                          |
+| **uuid**              | 11                | Chat / session IDs                                    |
+| **Sentry**            | optional          | Error monitoring + tunnel                             |
+| **ESLint 9**          | flat config       | `npm run lint`                                        |
 
 **Example — thin client chat call:**
 
@@ -249,24 +247,24 @@ Copy [`.env.example`](./.env.example) to `.env`. **Never commit `.env`** (it is 
 
 ### Do you need a `.env` to run anything?
 
-| Goal | Need `.env`? |
-|------|----------------|
-| UI only (`npm run dev`) — landing / layout | **No** — app boots without keys |
-| Real AI chat locally | **Yes** — at least one AI key + use `vercel dev` |
-| Business Insights charts | **Yes** — `DATABASE_URL` + Prisma push |
-| Sentry errors | **Optional** — leave DSN empty to disable |
+| Goal                                       | Need `.env`?                                     |
+| ------------------------------------------ | ------------------------------------------------ |
+| UI only (`npm run dev`) — landing / layout | **No** — app boots without keys                  |
+| Real AI chat locally                       | **Yes** — at least one AI key + use `vercel dev` |
+| Business Insights charts                   | **Yes** — `DATABASE_URL` + Prisma push           |
+| Sentry errors                              | **Optional** — leave DSN empty to disable        |
 
 You can start with an empty `.env` for UI exploration; add keys as you enable features.
 
 ### Required for chat (server-only — **no `VITE_` prefix**)
 
-| Variable | Purpose | Where to get it |
-|----------|---------|-----------------|
-| `GEMINI_API_KEY` | Google Gemini | [Google AI Studio](https://aistudio.google.com/apikey) |
-| `GROQ_API_KEY` | Groq | [Groq Console](https://console.groq.com/) |
-| `OPENROUTER_API_KEY` | OpenRouter free models | [OpenRouter Keys](https://openrouter.ai/keys) |
-| `HUGGINGFACE_API_KEY` | HF Inference Providers | [HF Tokens](https://huggingface.co/settings/tokens) — allow Inference Providers |
-| `OPENAI_API_KEY` | OpenAI (paid last resort) | [OpenAI API Keys](https://platform.openai.com/api-keys) |
+| Variable              | Purpose                   | Where to get it                                                                 |
+| --------------------- | ------------------------- | ------------------------------------------------------------------------------- |
+| `GEMINI_API_KEY`      | Google Gemini             | [Google AI Studio](https://aistudio.google.com/apikey)                          |
+| `GROQ_API_KEY`        | Groq                      | [Groq Console](https://console.groq.com/)                                       |
+| `OPENROUTER_API_KEY`  | OpenRouter free models    | [OpenRouter Keys](https://openrouter.ai/keys)                                   |
+| `HUGGINGFACE_API_KEY` | HF Inference Providers    | [HF Tokens](https://huggingface.co/settings/tokens) — allow Inference Providers |
+| `OPENAI_API_KEY`      | OpenAI (paid last resort) | [OpenAI API Keys](https://platform.openai.com/api-keys)                         |
 
 You need **at least one** of the above for chat. More keys = better fallback coverage.
 
@@ -283,8 +281,8 @@ APP_URL=https://multi-ai-chat-hub.vercel.app
 
 ### Required for Business Insights
 
-| Variable | Purpose | Where to get it |
-|----------|---------|-----------------|
+| Variable       | Purpose                      | Where to get it                                                          |
+| -------------- | ---------------------------- | ------------------------------------------------------------------------ |
 | `DATABASE_URL` | PostgreSQL connection string | [Neon Console](https://console.neon.tech/) → project → connection string |
 
 ```bash
@@ -294,13 +292,13 @@ npx prisma db push
 
 ### Optional — Sentry (Vite names)
 
-| Variable | Purpose | Where to get it |
-|----------|---------|-----------------|
-| `VITE_SENTRY_DSN` | Client SDK (build-time) | Sentry → Project → Client Keys (DSN) |
-| `SENTRY_DSN` | Server + tunnel allowlist | Same DSN (optional) |
-| `SENTRY_ORG` | Source map upload | Organization **slug** |
-| `SENTRY_PROJECT` | Source map upload | Project **slug** (not org name) |
-| `SENTRY_AUTH_TOKEN` | CI upload | Auth Tokens (`project:releases`, `org:read`) |
+| Variable            | Purpose                   | Where to get it                              |
+| ------------------- | ------------------------- | -------------------------------------------- |
+| `VITE_SENTRY_DSN`   | Client SDK (build-time)   | Sentry → Project → Client Keys (DSN)         |
+| `SENTRY_DSN`        | Server + tunnel allowlist | Same DSN (optional)                          |
+| `SENTRY_ORG`        | Source map upload         | Organization **slug**                        |
+| `SENTRY_PROJECT`    | Source map upload         | Project **slug** (not org name)              |
+| `SENTRY_AUTH_TOKEN` | CI upload                 | Auth Tokens (`project:releases`, `org:read`) |
 
 Use **`VITE_SENTRY_DSN`**, not `NEXT_PUBLIC_SENTRY_DSN` (that is Next.js-only). On Vercel, set `VITE_SENTRY_DSN` for Production **build**.
 
@@ -350,21 +348,23 @@ npm run preview   # preview the dist/ folder only (still no /api unless proxied)
 
 ## Frontend Components & Hooks
 
-| File | Role | Reuse tip |
-|------|------|-----------|
-| `ChatBotStart.tsx` | Welcome / CTA | Drop into any landing; wire `onStart` |
-| `ChatBotApp.tsx` | Main chat shell | Expects chat list props or lift state like `App.tsx` |
-| `BusinessInsights.tsx` | Analytics dashboard | Point `fetch` URLs at your `/api/dashboard` |
-| `TypingIndicator.tsx` | Animated “AI is typing” | Pure UI — no API |
-| `Tooltip.tsx` | Hover help | Wrap any trigger element |
-| `useTypewriter.ts` | Character-by-character text | Any headline / onboarding copy |
+| File                   | Role                        | Reuse tip                                            |
+| ---------------------- | --------------------------- | ---------------------------------------------------- |
+| `ChatBotStart.tsx`     | Welcome / CTA               | Drop into any landing; wire `onStart`                |
+| `ChatBotApp.tsx`       | Main chat shell             | Expects chat list props or lift state like `App.tsx` |
+| `BusinessInsights.tsx` | Analytics dashboard         | Point `fetch` URLs at your `/api/dashboard`          |
+| `TypingIndicator.tsx`  | Animated “AI is typing”     | Pure UI — no API                                     |
+| `Tooltip.tsx`          | Hover help                  | Wrap any trigger element                             |
+| `useTypewriter.ts`     | Character-by-character text | Any headline / onboarding copy                       |
 
 Each component has a matching `.css` file — keep them together when copying.
 
 **View switching (`App.tsx` concept):**
 
 ```tsx
-const [currentView, setCurrentView] = useState<"start" | "chat" | "insights">("start");
+const [currentView, setCurrentView] = useState<"start" | "chat" | "insights">(
+  "start",
+);
 // render ChatBotStart | ChatBotApp | BusinessInsights
 ```
 
@@ -374,13 +374,14 @@ const [currentView, setCurrentView] = useState<"start" | "chat" | "insights">("s
 
 Located in `shared/ai/` so **browser types** and **server orchestration** share one contract.
 
-| Module | Purpose |
-|--------|---------|
-| `types.ts` | `AIProvider`, `ChatRequest`, `ChatResponse`, `ProviderMeta` |
-| `providers.ts` | `PROVIDER_META` model chains + `FALLBACK_ORDER` |
-| `callers.ts` | HTTP calls to each upstream API |
-| `orchestrate.ts` | Outer provider loop + inner model loop + 429 skip |
-| `schemas.ts` | Zod schemas for request validation |
+| Module           | Purpose                                                     |
+| ---------------- | ----------------------------------------------------------- |
+| `types.ts`       | `AIProvider`, `ChatRequest`, `ChatResponse`, `ProviderMeta` |
+| `providers.ts`   | `PROVIDER_META` model chains + `FALLBACK_ORDER`             |
+| `callers.ts`     | Upstream HTTP + stream* token generators                    |
+| `orchestrate.ts` | Provider/model loops; `orchestrateChatStream` for SSE       |
+| `stream.ts`      | OpenAI-compat / Gemini SSE parsers                          |
+| `schemas.ts`     | Zod schemas for request validation                          |
 
 **Current free-tier model chains** (see `shared/ai/providers.ts`):
 
@@ -398,16 +399,16 @@ Portable free-tier reference: [docs/LLM_MODEL_SELECTION.md](./docs/LLM_MODEL_SEL
 
 All handlers live in `api/` and use `@vercel/node` request/response shapes.
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| `POST` | `/api/chat` | Chat proxy (Zod + rate limit + orchestrate) |
-| `GET` | `/api/chat-providers` | Which providers have keys configured |
-| `POST` | `/api/events` | Write anonymous analytics events |
-| `GET` | `/api/usage` | Usage aggregates |
-| `GET` | `/api/insights` | Provider insight data |
-| `GET` | `/api/providers` | Provider detail stats |
-| `GET` | `/api/dashboard` | Combined dashboard payload |
-| `POST` | `/api/monitoring` | Sentry envelope tunnel (ad-blocker bypass) |
+| Method | Path                  | Purpose                                     |
+| ------ | --------------------- | ------------------------------------------- |
+| `POST` | `/api/chat`           | Chat proxy (Zod + rate limit; JSON or SSE `stream:true`) |
+| `GET`  | `/api/chat-providers` | Which providers have keys configured        |
+| `POST` | `/api/events`         | Write anonymous analytics events            |
+| `GET`  | `/api/usage`          | Usage aggregates                            |
+| `GET`  | `/api/insights`       | Provider insight data                       |
+| `GET`  | `/api/providers`      | Provider detail stats                       |
+| `GET`  | `/api/dashboard`      | Combined dashboard payload                  |
+| `POST` | `/api/monitoring`     | Sentry envelope tunnel (ad-blocker bypass)  |
 
 **Example chat body:**
 
@@ -469,13 +470,13 @@ Production guardrails playbook: [docs/VERCEL_PRODUCTION_GUARDRAILS.md](./docs/VE
 
 ## Scripts Reference
 
-| Script | Command | Purpose |
-|--------|---------|---------|
-| Dev (UI) | `npm run dev` | Vite only |
-| Lint | `npm run lint` | ESLint (max warnings = 0) |
-| Build | `npm run build` | `prisma generate` + `tsc` + `vite build` |
-| Preview | `npm run preview` | Serve `dist/` |
-| Prisma | `npm run prisma:generate` / `prisma:push` / `prisma:studio` | DB tooling |
+| Script   | Command                                                     | Purpose                                  |
+| -------- | ----------------------------------------------------------- | ---------------------------------------- |
+| Dev (UI) | `npm run dev`                                               | Vite only                                |
+| Lint     | `npm run lint`                                              | ESLint (max warnings = 0)                |
+| Build    | `npm run build`                                             | `prisma generate` + `tsc` + `vite build` |
+| Preview  | `npm run preview`                                           | Serve `dist/`                            |
+| Prisma   | `npm run prisma:generate` / `prisma:push` / `prisma:studio` | DB tooling                               |
 
 ---
 

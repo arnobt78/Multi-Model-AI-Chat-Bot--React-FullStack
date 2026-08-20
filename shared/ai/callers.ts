@@ -1,6 +1,8 @@
 /**
  * Upstream provider HTTP callers — secrets + model ID passed as args (never from client env).
+ * Non-stream helpers return full text; stream* helpers yield token deltas for live UI.
  */
+import { readGeminiSse, readOpenAiCompatSse } from "./stream.js";
 import { ProviderRateLimitError } from "./types.js";
 
 export type RateLimitMarker = (provider: string) => void;
@@ -44,6 +46,45 @@ export async function callGeminiAPI(
   return text;
 }
 
+/** Live Gemini tokens via streamGenerateContent SSE. */
+export async function* streamGeminiAPI(
+  message: string,
+  apiKey: string,
+  model: string,
+  markRateLimited?: RateLimitMarker
+): AsyncGenerator<string> {
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: message }] }],
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    if (response.status === 429) {
+      markRateLimited?.("gemini");
+      throw new ProviderRateLimitError(
+        "gemini",
+        `Google Gemini API rate limit exceeded. You've reached your current usage limit. Please select another AI provider (Groq, OpenRouter, or Hugging Face) from the dropdown menu, or try again later.`
+      );
+    }
+    throw new Error(
+      `Gemini stream unavailable (${model}): ${response.status}`
+    );
+  }
+
+  let got = false;
+  for await (const piece of readGeminiSse(response)) {
+    got = true;
+    yield piece;
+  }
+  if (!got) throw new Error(`Gemini (${model}) returned an empty stream`);
+}
+
 export async function callGroqAPI(
   message: string,
   apiKey: string,
@@ -82,6 +123,46 @@ export async function callGroqAPI(
     choices?: { message?: { content?: string } }[];
   };
   return data.choices?.[0]?.message?.content?.trim() || "";
+}
+
+export async function* streamGroqAPI(
+  message: string,
+  apiKey: string,
+  model: string
+): AsyncGenerator<string> {
+  const response = await fetch(
+    "https://api.groq.com/openai/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: "user", content: message }],
+        max_tokens: 500,
+        stream: true,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    if (response.status === 429) {
+      throw new ProviderRateLimitError(
+        "groq",
+        `Groq API rate limit exceeded (${model}).`
+      );
+    }
+    throw new Error(`Groq stream unavailable (${model}): ${response.status}`);
+  }
+
+  let got = false;
+  for await (const piece of readOpenAiCompatSse(response)) {
+    got = true;
+    yield piece;
+  }
+  if (!got) throw new Error(`Groq (${model}) returned an empty stream`);
 }
 
 export async function callOpenRouterAPI(
@@ -134,6 +215,57 @@ export async function callOpenRouterAPI(
   return data.choices?.[0]?.message?.content?.trim() || "";
 }
 
+export async function* streamOpenRouterAPI(
+  message: string,
+  apiKey: string,
+  model: string,
+  referer = "https://multi-ai-chat-hub.vercel.app"
+): AsyncGenerator<string> {
+  if (!model.endsWith(":free")) {
+    throw new Error(
+      `OpenRouter model must use :free suffix for free tier (got ${model})`
+    );
+  }
+
+  const response = await fetch(
+    "https://openrouter.ai/api/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+        "HTTP-Referer": referer,
+        "X-Title": "AI Chat Hub",
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: "user", content: message }],
+        max_tokens: 500,
+        stream: true,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    if (response.status === 429) {
+      throw new ProviderRateLimitError(
+        "openrouter",
+        `OpenRouter API rate limit exceeded (${model}).`
+      );
+    }
+    throw new Error(
+      `OpenRouter stream unavailable (${model}): ${response.status}`
+    );
+  }
+
+  let got = false;
+  for await (const piece of readOpenAiCompatSse(response)) {
+    got = true;
+    yield piece;
+  }
+  if (!got) throw new Error(`OpenRouter (${model}) returned an empty stream`);
+}
+
 export async function callHuggingFaceAPI(
   message: string,
   apiKey: string,
@@ -179,6 +311,54 @@ export async function callHuggingFaceAPI(
     return data.choices[0].message.content.trim();
   }
   throw new Error(`Hugging Face (${model}) returned an empty response`);
+}
+
+export async function* streamHuggingFaceAPI(
+  message: string,
+  apiKey: string,
+  model: string
+): AsyncGenerator<string> {
+  const response = await fetch(
+    "https://router.huggingface.co/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: "You are a helpful AI assistant." },
+          { role: "user", content: message },
+        ],
+        max_tokens: 256,
+        temperature: 0.7,
+        stream: true,
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    if (response.status === 429) {
+      throw new ProviderRateLimitError(
+        "huggingface",
+        `Hugging Face API rate limit exceeded (${model}).`
+      );
+    }
+    throw new Error(
+      `Hugging Face model unavailable (${model}): ${response.status}`
+    );
+  }
+
+  let got = false;
+  for await (const piece of readOpenAiCompatSse(response)) {
+    got = true;
+    yield piece;
+  }
+  if (!got) {
+    throw new Error(`Hugging Face (${model}) returned an empty stream`);
+  }
 }
 
 export async function callOpenAIAPI(
@@ -242,4 +422,47 @@ export async function callOpenAIAPI(
     data.choices?.[0]?.message?.content?.trim() ||
     "I'm sorry, I couldn't process that."
   );
+}
+
+/** Stream via Chat Completions (Responses API kept for non-stream path). */
+export async function* streamOpenAIAPI(
+  message: string,
+  apiKey: string,
+  model: string
+): AsyncGenerator<string> {
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: "user", content: message }],
+      max_tokens: 500,
+      stream: true,
+    }),
+  });
+
+  if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      throw new Error(
+        "OpenAI API key has expired or is invalid. Please renew or regenerate your API key."
+      );
+    }
+    if (response.status === 429) {
+      throw new ProviderRateLimitError(
+        "openai",
+        "OpenAI API quota exceeded. Please check billing or use another provider."
+      );
+    }
+    throw new Error(`OpenAI stream unavailable (${model}): ${response.status}`);
+  }
+
+  let got = false;
+  for await (const piece of readOpenAiCompatSse(response)) {
+    got = true;
+    yield piece;
+  }
+  if (!got) throw new Error(`OpenAI (${model}) returned an empty stream`);
 }

@@ -126,19 +126,28 @@
 
 .chat-list-item {
   width: 100%;
+  min-height: 6rem;
   height: 6rem;
   background-color: rgba(19, 25, 39, 0.8);
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  column-gap: 0.75rem;
   box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   border: 1px solid rgba(123, 142, 188, 0.1);
   position: relative;
   z-index: 2;
   cursor: pointer;
+}
+
+/* Keep title + delete icon on the same vertical center line */
+.chat-list-item .tooltip-wrapper {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .chat-list-item:hover {
@@ -159,9 +168,16 @@
 }
 
 .chat-list-item h4 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
   font-size: 1.6rem;
   font-weight: 300;
+  line-height: 1.2;
   color: #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chat-list-item.active h4 {
@@ -170,15 +186,28 @@
 
 .chat-list-item i,
 .chat-list-item svg {
-  font-size: 2.5rem;
-  color: #f42f5f;
+  width: 2rem;
+  height: 2rem;
+  color: #a8b4d4;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.85;
+}
+
+.chat-list-item.active i,
+.chat-list-item.active svg {
+  color: rgba(255, 255, 255, 0.88);
+  opacity: 1;
 }
 
 .chat-list-item svg:hover {
-  color: #ef4444;
-  transform: scale(1.1);
+  color: #fff;
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.chat-list-item.active svg:hover {
+  color: #fff;
 }
 
 /* Chat List Toggle Button */
@@ -407,9 +436,10 @@
   display: none;
 }
 
+/* Bubble width is capped by .message-row (85%); keep fit-content so short replies stay tight */
 .prompt,
 .response {
-  max-width: 80%;
+  max-width: 100%;
   width: fit-content;
   padding: 2rem;
   font-size: 1.6rem;
@@ -418,6 +448,8 @@
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 1;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .prompt::before,
@@ -434,11 +466,11 @@
   z-index: -1;
 }
 
-/* Message row: bubble + muted meta (time + copy) below */
+/* Message row: bubble + muted meta (time + copy) below — owns the 85% chat-pane cap */
 .message-row {
   display: flex;
   flex-direction: column;
-  max-width: 80%;
+  max-width: 85%;
   gap: 0.45rem;
 }
 
@@ -512,6 +544,30 @@
   border-radius: 0 3rem 3rem 3rem;
   text-align: left;
   animation: slideInLeft 0.3s ease-out;
+}
+
+/* Live token caret while assistant text is streaming in */
+.response.streaming::after {
+  content: "";
+  display: inline-block;
+  width: 0.55rem;
+  height: 1.35em;
+  margin-left: 0.2rem;
+  vertical-align: text-bottom;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 0.1rem;
+  animation: streamCaret 0.9s steps(1) infinite;
+}
+
+@keyframes streamCaret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes slideInLeft {

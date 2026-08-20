@@ -6,3 +6,4 @@ export * from "./types.js";
 export * from "./providers.js";
 export * from "./schemas.js";
 export * from "./formatError.js";
+export type { ChatStreamEvent } from "./stream.js";

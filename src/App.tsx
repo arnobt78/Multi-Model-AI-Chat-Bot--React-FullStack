@@ -8,6 +8,8 @@ interface Message {
   type: "prompt" | "response";
   text: string;
   timestamp: string;
+  /** True while assistant tokens are still streaming in (not persisted). */
+  streaming?: boolean;
 }
 
 interface Chat {

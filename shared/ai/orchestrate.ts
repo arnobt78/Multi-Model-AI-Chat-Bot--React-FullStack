@@ -3,6 +3,7 @@
  * outer loop = providers (FALLBACK_ORDER); inner loop = models[] per provider.
  * On HTTP 429, skip remaining models for that provider and advance.
  * Keys from process.env only — never shipped to the browser.
+ * Streaming path yields SSE-friendly ChatStreamEvent tokens for live UI.
  */
 import {
   callGeminiAPI,
@@ -10,9 +11,15 @@ import {
   callHuggingFaceAPI,
   callOpenAIAPI,
   callOpenRouterAPI,
+  streamGeminiAPI,
+  streamGroqAPI,
+  streamHuggingFaceAPI,
+  streamOpenAIAPI,
+  streamOpenRouterAPI,
 } from "./callers.js";
 import { formatUserFacingError } from "./formatError.js";
 import { FALLBACK_ORDER, getProviderMeta, PROVIDER_META } from "./providers.js";
+import type { ChatStreamEvent } from "./stream.js";
 import type { AIProvider, ChatRequest, ChatResponse } from "./types.js";
 import { ProviderRateLimitError } from "./types.js";
 
@@ -54,6 +61,7 @@ function isRetriableError(error: unknown): boolean {
     msg.includes("503") ||
     msg.includes("504") ||
     msg.includes("empty response") ||
+    msg.includes("empty stream") ||
     msg.includes("unavailable") ||
     msg.includes("rate limit") ||
     msg.includes("API error")
@@ -105,6 +113,59 @@ async function callProviderWithModelChain(
       if (!isRetriableError(error)) {
         throw error;
       }
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error(`${meta.displayName}: all models in chain failed`);
+}
+
+/** Stream tokens from the first working model in a provider chain. */
+async function* streamProviderWithModelChain(
+  provider: AIProvider,
+  message: string,
+  apiKey: string
+): AsyncGenerator<string> {
+  const meta = getProviderMeta(provider);
+  const referer =
+    process.env.APP_URL || "https://multi-ai-chat-hub.vercel.app";
+  let lastError: unknown;
+
+  for (const model of meta.models) {
+    try {
+      const stream =
+        provider === "gemini"
+          ? streamGeminiAPI(message, apiKey, model, markRateLimited)
+          : provider === "groq"
+            ? streamGroqAPI(message, apiKey, model)
+            : provider === "openrouter"
+              ? streamOpenRouterAPI(message, apiKey, model, referer)
+              : provider === "huggingface"
+                ? streamHuggingFaceAPI(message, apiKey, model)
+                : provider === "openai"
+                  ? streamOpenAIAPI(message, apiKey, model)
+                  : null;
+
+      if (!stream) throw new Error(`Unknown provider: ${provider}`);
+
+      let started = false;
+      for await (const piece of stream) {
+        started = true;
+        yield piece;
+      }
+      if (started) return;
+      throw new Error(`${meta.displayName} (${model}) returned an empty stream`);
+    } catch (error) {
+      lastError = error;
+      if (error instanceof ProviderRateLimitError) {
+        markRateLimited(provider);
+        throw error;
+      }
+      if (!isRetriableError(error)) {
+        throw error;
+      }
+      // Try next model before any tokens were committed to the client
     }
   }
 
@@ -198,6 +259,110 @@ export async function orchestrateChat(
     content: "",
     provider: "None",
     success: false,
+    error: formatUserFacingError(
+      "AI providers",
+      "All AI providers failed or are unavailable. Please check your API keys."
+    ),
+  };
+}
+
+/**
+ * Live token stream for ChatGPT-style UI.
+ * Emits start → delta* → done, or a single error event.
+ * Once the first delta is sent, failover to another provider is skipped.
+ */
+export async function* orchestrateChatStream(
+  request: ChatRequest
+): AsyncGenerator<ChatStreamEvent> {
+  const { message, provider } = request;
+
+  const tryProvider = async function* (
+    providerName: AIProvider
+  ): AsyncGenerator<ChatStreamEvent> {
+    const meta = getProviderMeta(providerName);
+    const apiKey = getServerApiKey(providerName);
+    if (!apiKey) {
+      yield {
+        type: "error",
+        provider: meta.displayName,
+        error: `${meta.displayName} is not available`,
+      };
+      return;
+    }
+    if (isRateLimited(providerName)) {
+      yield {
+        type: "error",
+        provider: meta.displayName,
+        error: `${meta.displayName} is currently rate-limited. Please try another provider.`,
+      };
+      return;
+    }
+
+    yield { type: "start", provider: meta.displayName };
+    try {
+      for await (const text of streamProviderWithModelChain(
+        providerName,
+        message,
+        apiKey
+      )) {
+        yield { type: "delta", text };
+      }
+      yield { type: "done", provider: meta.displayName };
+    } catch (error) {
+      const raw = error instanceof Error ? error.message : "Unknown error";
+      yield {
+        type: "error",
+        provider: meta.displayName,
+        error: formatUserFacingError(meta.displayName, raw),
+      };
+    }
+  };
+
+  if (provider) {
+    yield* tryProvider(provider);
+    return;
+  }
+
+  // Auto: walk FALLBACK_ORDER until a provider yields at least one delta
+  for (const providerName of FALLBACK_ORDER) {
+    if (!getServerApiKey(providerName)) continue;
+    if (isRateLimited(providerName)) continue;
+
+    const meta = getProviderMeta(providerName);
+    yield { type: "start", provider: meta.displayName };
+
+    let emittedDelta = false;
+    try {
+      for await (const text of streamProviderWithModelChain(
+        providerName,
+        message,
+        getServerApiKey(providerName)
+      )) {
+        emittedDelta = true;
+        yield { type: "delta", text };
+      }
+      yield { type: "done", provider: meta.displayName };
+      return;
+    } catch (error) {
+      if (emittedDelta) {
+        const raw = error instanceof Error ? error.message : "Unknown error";
+        yield {
+          type: "error",
+          provider: meta.displayName,
+          error: formatUserFacingError(meta.displayName, raw),
+        };
+        return;
+      }
+      if (error instanceof ProviderRateLimitError) {
+        markRateLimited(providerName);
+      }
+      // Try next provider before any tokens reached the client
+    }
+  }
+
+  yield {
+    type: "error",
+    provider: "None",
     error: formatUserFacingError(
       "AI providers",
       "All AI providers failed or are unavailable. Please check your API keys."

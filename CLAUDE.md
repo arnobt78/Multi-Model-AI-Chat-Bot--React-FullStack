@@ -3,12 +3,12 @@
 ## Overview
 Multi-Model AI Chat Hub (`ai-chat-hub` v0.2.1) — Vite CSR + Vercel `api/*`. Chat: localStorage. Insights: Prisma/Neon. Resume: `.agile-v/STATE.md`
 
-**Status:** C1 A+B+C + Sentry + UX polish + HF `:fastest` IDs. Lint/build/audit 0. Gate-0001 A+B approved. Firewall = Human-Action.
+**Status:** C1 done (A+B+C + Sentry + UX + HF `:fastest` + SSE stream). Lint/build/audit 0. Gate-0001 A+B approved. Firewall = Human-Action.
 
 ---
 
 ## Stack
-React 18.3 · TS 5.9 · Vite 7.3 · Node 24 · Prisma 6.19 · Zod 4 · ESLint 9 · optional Sentry tunnel
+React 18.3 · TS 5.9 · Vite 7.3 · Node 24 · Prisma 6.19 · Zod 4 · ESLint 9 · optional Sentry
 
 **Not in arch:** Next/SSR · densify/React Query · Redis · auth/JWT · SHA · Python
 
@@ -16,21 +16,21 @@ React 18.3 · TS 5.9 · Vite 7.3 · Node 24 · Prisma 6.19 · Zod 4 · ESLint 9 
 
 ## Topology
 - Views: `App.tsx` `start|chat|insights`
-- AI: `POST /api/chat` → `shared/ai/orchestrate` (server keys only)
-- Models: `shared/ai/providers.ts` — Groq gpt-oss/qwen · Gemini flash(+lite) · OpenRouter `:free` · HF Hub IDs + `:fastest` · OpenAI last
-- HF: `router.huggingface.co` · free ≈ $0.10/mo · forced HF can fail with friendly 200 body; Auto falls through
-- Errors: `shared/ai/formatError.ts` (sanitize keys; friendly HF/OpenAI copy)
-- Chat UI: meta under bubbles (time + copy); title cursor hides when done; scroll inside `.chat`
-- ESM: relative imports in `api/`/`shared/` use `.js` extensions (Vercel Node)
+- AI: `POST /api/chat` JSON or `{stream:true}` SSE → `orchestrate` / `orchestrateChatStream`
+- Models: Groq gpt-oss/qwen · Gemini flash(+lite) · OpenRouter `:free` · HF `:fastest` · OpenAI last
+- Client: `aiService.streamChatResponse` appends deltas; caret on `.response.streaming`
+- UI: bubbles `.message-row` max 85%; chat-list ✕ muted + centered
+- Errors: `formatError.ts` (sanitize keys)
+- ESM: `api/`/`shared/` relative imports use `.js`
 - Sentry: `VITE_SENTRY_DSN` + `POST /api/monitoring`
 
 ---
 
 ## Rules
-Extend existing shared/ai + Components. CSR only. Plan → approve → implement → validate → `.agile-v/`
+Extend shared/ai + Components. CSR only. Plan → approve → implement → validate → `.agile-v/`
 
 ## Validate
 `npm run lint` · `npm run build` · `npm audit --omit=dev`
 
 ## Docs
-`docs/PROJECT_WALKTHROUGH.md` · LLM_MODEL_SELECTION · Sentry guide §2A/§2B · VERCEL_PRODUCTION_GUARDRAILS
+`docs/PROJECT_WALKTHROUGH.md` · LLM_MODEL_SELECTION · Sentry guide §2B · VERCEL_PRODUCTION_GUARDRAILS

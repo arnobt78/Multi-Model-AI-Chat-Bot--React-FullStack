@@ -23,6 +23,8 @@ export interface ProviderMeta {
 export interface ChatRequest {
   message: string;
   provider?: AIProvider;
+  /** Request SSE token stream from /api/chat when true. */
+  stream?: boolean;
 }
 
 export interface ChatResponse {

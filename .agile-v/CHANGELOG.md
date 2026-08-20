@@ -1,5 +1,10 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — SSE stream + chat UI polish
+- Live `/api/chat` SSE (`stream:true`); client caret + delta append (DEC-0008)
+- Bubble row 85%; chat-list ✕ muted/centered
+- VAL-0009 PASS; densify/Redis/SSR/auth N/A
+
 ## 2026-08-20 — HF `:fastest` + agent doc sync
 - `providers.ts`: Hub chat IDs + `:fastest` (DEC-0007)
 - Docs: CLAUDE · walkthrough · STATE · VAL-0008 · checkpoint

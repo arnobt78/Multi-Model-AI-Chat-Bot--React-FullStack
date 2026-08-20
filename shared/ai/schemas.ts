@@ -8,6 +8,8 @@ export const chatRequestSchema = z.object({
   provider: z
     .enum(["openai", "gemini", "groq", "huggingface", "openrouter"])
     .optional(),
+  /** When true, /api/chat responds with SSE token events instead of one JSON body. */
+  stream: z.boolean().optional(),
 });
 
 export const chatResponseSchema = z.object({

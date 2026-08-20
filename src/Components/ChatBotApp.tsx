@@ -257,75 +257,95 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
       });
       setChats(updatedChats);
       localStorage.setItem("chats", JSON.stringify(updatedChats));
-      setIsTyping(true);
 
       const startTime = Date.now();
 
       try {
-        // Use the new AI service with automatic fallback
-        const aiResponse = await aiService.getChatResponse({
-          message: userMessage,
-          provider: selectedProvider,
-        });
+        // Empty assistant bubble + caret — tokens append live (ChatGPT-style SSE)
+        const streamingResponse: Message = {
+          type: "response",
+          text: "",
+          timestamp: new Date().toLocaleTimeString(),
+          streaming: true,
+        };
+        let liveMessages = [...updatedMessages, streamingResponse];
+        setMessages(liveMessages);
+
+        const persistMessages = (next: Message[]) => {
+          const toStore = next.map(({ type, text, timestamp }) => ({
+            type,
+            text,
+            timestamp,
+          }));
+          setMessages(next.map((m) => ({ ...m, streaming: false })));
+          localStorage.setItem(activeChat, JSON.stringify(toStore));
+          setChats((prev) => {
+            const nextChats = prev.map((chat) =>
+              chat.id === activeChat ? { ...chat, messages: toStore } : chat
+            );
+            localStorage.setItem("chats", JSON.stringify(nextChats));
+            return nextChats;
+          });
+        };
+
+        const streamResult = await aiService.streamChatResponse(
+          {
+            message: userMessage,
+            provider: selectedProvider,
+          },
+          {
+            onEvent: (event) => {
+              if (event.type === "delta" && event.text) {
+                liveMessages = liveMessages.map((msg, i) =>
+                  i === liveMessages.length - 1 && msg.type === "response"
+                    ? { ...msg, text: msg.text + event.text, streaming: true }
+                    : msg
+                );
+                setMessages(liveMessages);
+              }
+            },
+          }
+        );
 
         const duration = Date.now() - startTime;
 
-        if (aiResponse.success) {
-          // Track successful API call
-          await trackEvent("api_call", aiResponse.provider, true, duration);
-          const newResponse: Message = {
-            type: "response",
-            text: aiResponse.content,
-            timestamp: new Date().toLocaleTimeString(),
-          };
-
-          const updatedMessagesWithResponse = [...updatedMessages, newResponse];
-          setMessages(updatedMessagesWithResponse);
-          localStorage.setItem(
-            activeChat,
-            JSON.stringify(updatedMessagesWithResponse)
+        if (streamResult.success) {
+          await trackEvent("api_call", streamResult.provider, true, duration);
+          const finalMessages = liveMessages.map((msg, i) =>
+            i === liveMessages.length - 1
+              ? {
+                  ...msg,
+                  text: streamResult.content || msg.text,
+                  streaming: false,
+                }
+              : msg
           );
-
-          const updatedChatsWithResponse = chats.map((chat) => {
-            if (chat.id === activeChat) {
-              return { ...chat, messages: updatedMessagesWithResponse };
-            }
-            return chat;
-          });
-          setChats(updatedChatsWithResponse);
-          localStorage.setItem(
-            "chats",
-            JSON.stringify(updatedChatsWithResponse)
-          );
+          persistMessages(finalMessages);
         } else {
-          // Track failed API call
           await trackEvent(
             "api_call",
-            aiResponse.provider || "unknown",
+            streamResult.provider || "unknown",
             false,
             duration
           );
 
-          // Sanitize + friendly copy (server already formats; belt-and-suspenders on client)
           const errorDisplayText = formatUserFacingError(
-            aiResponse.provider || "AI",
-            aiResponse.error || "Failed to get response from AI providers"
+            streamResult.provider || "AI",
+            streamResult.error || "Failed to get response from AI providers"
           );
 
           setErrorMessage(errorDisplayText);
 
-          const errorResponse: Message = {
-            type: "response",
-            text: errorDisplayText,
-            timestamp: new Date().toLocaleTimeString(),
-          };
-
-          const updatedMessagesWithError = [...updatedMessages, errorResponse];
-          setMessages(updatedMessagesWithError);
-          localStorage.setItem(
-            activeChat,
-            JSON.stringify(updatedMessagesWithError)
-          );
+          const errorMessages = [
+            ...updatedMessages,
+            {
+              type: "response" as const,
+              text: errorDisplayText,
+              timestamp: new Date().toLocaleTimeString(),
+              streaming: false,
+            },
+          ];
+          persistMessages(errorMessages);
         }
       } catch (error) {
         const duration = Date.now() - startTime;
@@ -571,7 +591,9 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
               }`}
             >
               <div
-                className={msg.type === "prompt" ? "prompt" : "response"}
+                className={`${msg.type === "prompt" ? "prompt" : "response"}${
+                  msg.type === "response" && msg.streaming ? " streaming" : ""
+                }`}
               >
                 {msg.text}
               </div>

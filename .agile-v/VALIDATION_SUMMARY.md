@@ -70,3 +70,16 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | Errors | PASS | forced HF failure → friendly copy; `/api/chat` 200 |
 | Models | PASS | gemma/Qwen/gpt-oss/Llama + `:fastest` (commit `44ccf4d`) |
 | Docs | PASS | CLAUDE · walkthrough · STATE · DEC-0007 |
+
+## VAL-0009 — Chat UX polish + SSE live stream (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| `npm run lint` / `build` | PASS | re-verified pre-commit |
+| `npm audit --omit=dev` | PASS | 0 vulns |
+| Bubbles | PASS | row 85%; nested max-width fixed |
+| Chat list | PASS | title/✕ centered; muted light icon |
+| Stream | PASS | `stream: true` SSE; client deltas + caret |
+| JSON path | PASS | non-stream `/api/chat` unchanged |
+| Secrets | PASS | keys server-only; formatError sanitize |
+| N/A prompt noise | N/A | densify/Redis/SSR/auth/SHA not in arch |
