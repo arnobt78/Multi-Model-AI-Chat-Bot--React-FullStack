@@ -1,0 +1,122 @@
+/* Confirm dialog — matches ChatBotApp dark navy + pink/purple accents */
+
+.confirm-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(8, 12, 22, 0.72);
+  backdrop-filter: blur(6px);
+  animation: confirmOverlayIn 0.18s ease-out;
+}
+
+.confirm-dialog {
+  width: min(42rem, 100%);
+  background: #161c2c;
+  border: 1px solid rgba(123, 142, 188, 0.25);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.45);
+  animation: confirmPanelIn 0.2s ease-out;
+}
+
+.confirm-dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.confirm-dialog-icon {
+  flex-shrink: 0;
+  color: #f42f5f;
+}
+
+.confirm-dialog-header h2 {
+  margin: 0;
+  font-family: "Exo 2", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+  word-break: break-word;
+}
+
+.confirm-dialog-message {
+  margin: 0 0 2rem;
+  font-family: "Exo 2", sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: #a8b4d4;
+  word-break: break-word;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.confirm-dialog-btn {
+  font-family: "Exo 2", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1;
+  padding: 0.9rem 1.6rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.confirm-dialog-btn:hover {
+  transform: scale(1.03);
+}
+
+.confirm-dialog-btn:active {
+  transform: scale(0.97);
+}
+
+.confirm-dialog-btn-cancel {
+  background: rgba(123, 142, 188, 0.15);
+  color: #c8d0e0;
+  border: 1px solid rgba(123, 142, 188, 0.35);
+}
+
+.confirm-dialog-btn-cancel:hover {
+  background: rgba(123, 142, 188, 0.25);
+}
+
+.confirm-dialog-btn-confirm.danger {
+  background: linear-gradient(135deg, #f42f5f, #8e25bf);
+  color: #fff;
+  box-shadow: 0 0.4rem 1rem rgba(244, 47, 95, 0.35);
+}
+
+.confirm-dialog-btn-confirm.danger:hover {
+  box-shadow: 0 0.6rem 1.4rem rgba(244, 47, 95, 0.5);
+}
+
+@keyframes confirmOverlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes confirmPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.8rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

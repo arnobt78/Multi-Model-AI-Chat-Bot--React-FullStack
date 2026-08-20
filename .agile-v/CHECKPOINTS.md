@@ -2,6 +2,7 @@
 
 | Timestamp (UTC) | Type | Status | resume_token | Reason | Next action |
 |-----------------|------|--------|--------------|--------|-------------|
+| 2026-08-20T17:25:00Z | Agent | DONE | `DELETE-CONFIRM` | Dynamic delete confirm + Coolify docs; VAL-0012 | Human test · Gate 2 |
 | 2026-08-20T16:45:00Z | Agent | DONE | `LUCIDE-PROVIDER` | Lucide Select AI Model icons; VAL-0011 | Human test on deploy · Gate 2 |
 | 2026-08-20T16:40:00Z | Agent | DONE | `UX-MICROFIX` | Thinking/caret/provider/send; VAL-0010 | Human test on deploy · Gate 2 |
 | 2026-08-20T16:10:00Z | Agent | DONE | `SSE-UI-POLISH` | SSE live chat + bubble/list polish; VAL-0009 | Human test on deploy · Gate 2 |

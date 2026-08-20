@@ -6,7 +6,7 @@
 [![Vite](https://img.shields.io/badge/Vite-7.3.6-blue)](https://vitejs.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-24.x-green)](https://nodejs.org/)
 [![Prisma ORM](https://img.shields.io/badge/Prisma_ORM-6.19-blue)](https://www.prisma.io/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-blue)](https://www.postgresql.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Coolify_VPS-blue)](https://www.postgresql.org/)
 [![Vercel](https://img.shields.io/badge/Vercel_Serverless-Functions-black)](https://vercel.com/)
 [![Zod](https://img.shields.io/badge/Zod-4.x-blue)](https://zod.dev/)
 [![Sentry](https://img.shields.io/badge/Sentry-optional-purple)](https://sentry.io/)
@@ -73,7 +73,7 @@ You can:
 
 ## Keywords
 
-`AI Chat Hub` · `multi-provider chatbot` · `Gemini` · `Groq` · `OpenRouter` · `Hugging Face` · `OpenAI` · `React 18` · `Vite` · `TypeScript` · `Prisma` · `PostgreSQL` · `Neon` · `Vercel Serverless` · `Zod` · `Sentry tunnel` · `localStorage` · `auto fallback` · `Business Insights` · `OpenAI-compatible API`
+`AI Chat Hub` · `multi-provider chatbot` · `Gemini` · `Groq` · `OpenRouter` · `Hugging Face` · `OpenAI` · `React 18` · `Vite` · `TypeScript` · `Prisma` · `PostgreSQL` · `Coolify VPS` · `Vercel Serverless` · `Zod` · `Sentry tunnel` · `localStorage` · `auto fallback` · `Business Insights` · `OpenAI-compatible API`
 
 ---
 
@@ -136,7 +136,7 @@ Upstream AI APIs (Groq / Gemini / OpenRouter / HF / OpenAI)
 | **Vite**              | 7.3               | Fast dev server + production bundler for SPAs         |
 | **Node.js**           | 24.x              | Runtime pinned in `package.json` `engines` + `.nvmrc` |
 | **Prisma**            | 6.19              | Type-safe ORM for PostgreSQL analytics                |
-| **PostgreSQL (Neon)** | —                 | Serverless DB for Insights                            |
+| **PostgreSQL (Coolify VPS)** | —                 | Insights analytics DB (not chat history)              |
 | **Zod**               | 4.x               | Runtime validation of API request bodies              |
 | **Vercel Functions**  | `api/*.ts`        | Backend without a separate Express server             |
 | **Recharts**          | 2.x               | Charts on the Insights dashboard                      |
@@ -221,7 +221,7 @@ multi-ai-chatbot/
 - **Node.js 24.x** (see `.nvmrc`)
 - **npm** (comes with Node)
 - Optional: **Vercel CLI** (`npm i -g vercel`) for `vercel dev`
-- Optional: free accounts for AI providers + Neon (Insights) + Sentry
+- Optional: free accounts for AI providers + Coolify Postgres (Insights) + Sentry
 
 ```bash
 # Clone
@@ -283,7 +283,7 @@ APP_URL=https://multi-ai-chat-hub.vercel.app
 
 | Variable       | Purpose                      | Where to get it                                                          |
 | -------------- | ---------------------------- | ------------------------------------------------------------------------ |
-| `DATABASE_URL` | PostgreSQL connection string | [Neon Console](https://console.neon.tech/) → project → connection string |
+| `DATABASE_URL` | PostgreSQL connection string | Coolify VPS Postgres (or any Postgres) connection string |
 
 ```bash
 npx prisma generate

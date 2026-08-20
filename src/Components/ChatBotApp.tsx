@@ -11,6 +11,7 @@ import {
 } from "../services/aiProviders";
 import TypingIndicator from "./TypingIndicator";
 import Tooltip from "./Tooltip";
+import ConfirmDialog from "./ConfirmDialog";
 import { useTypewriter } from "../hooks/useTypewriter";
 import {
   MessageCircleMore,
@@ -70,6 +71,10 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
   const [sendRipples, setSendRipples] = useState<
     { id: number; x: number; y: number }[]
   >([]);
+  /** Chat id awaiting confirm-delete (localStorage only — not Insights DB). */
+  const [chatPendingDelete, setChatPendingDelete] = useState<string | null>(
+    null
+  );
   const chatEndRef = useRef<HTMLDivElement>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
@@ -416,6 +421,7 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
     setActiveChat(id);
   };
 
+  /** Removes chat from React state + localStorage only (Coolify Insights DB untouched). */
   const handleDeleteChat = (id: string) => {
     const updatedChats = chats.filter((chat) => chat.id !== id);
     setChats(updatedChats);
@@ -427,6 +433,25 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
       setActiveChat(newActiveChat);
     }
   };
+
+  const requestDeleteChat = (id: string) => {
+    setChatPendingDelete(id);
+  };
+
+  const confirmDeleteChat = () => {
+    if (chatPendingDelete) {
+      handleDeleteChat(chatPendingDelete);
+      setChatPendingDelete(null);
+    }
+  };
+
+  const cancelDeleteChat = () => {
+    setChatPendingDelete(null);
+  };
+
+  const pendingDeleteChat = chatPendingDelete
+    ? chats.find((c) => c.id === chatPendingDelete)
+    : undefined;
 
   // Scroll only the chat pane (avoids jumpy window-level smooth scroll)
   useEffect(() => {
@@ -495,7 +520,7 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                   size={20}
                   onClick={(e: React.MouseEvent) => {
                     e.stopPropagation();
-                    handleDeleteChat(chat.id);
+                    requestDeleteChat(chat.id);
                   }}
                 />
               </Tooltip>
@@ -735,6 +760,30 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           </Tooltip>
         </form>
       </div>
+
+      {/* Delete confirm — title/message include the specific chat displayId */}
+      <ConfirmDialog
+        open={Boolean(chatPendingDelete)}
+        title={
+          pendingDeleteChat
+            ? `Delete “${pendingDeleteChat.displayId}”?`
+            : "Delete this chat?"
+        }
+        message={
+          pendingDeleteChat
+            ? `“${pendingDeleteChat.displayId}” will be removed from this browser’s chat list and localStorage only. Insights analytics on your Coolify Postgres stay unchanged. This cannot be undone.`
+            : "This chat will be removed from localStorage on this device only."
+        }
+        confirmLabel={
+          pendingDeleteChat
+            ? `Delete “${pendingDeleteChat.displayId}”`
+            : "Delete chat"
+        }
+        cancelLabel="Keep chat"
+        danger
+        onConfirm={confirmDeleteChat}
+        onCancel={cancelDeleteChat}
+      />
     </div>
   );
 };

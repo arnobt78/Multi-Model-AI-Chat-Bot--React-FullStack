@@ -8,7 +8,7 @@ See `.agile-v/TASKS.md` Tracks A–D. Implementation blocked on Gate 1.
 
 ## Context
 - SPA chat + localStorage history
-- Prisma analytics on Neon via `/api/*`
+- Prisma analytics on Coolify VPS Postgres via `/api/*`
 - Critical: `VITE_*` AI keys in client
 
 ## Summary

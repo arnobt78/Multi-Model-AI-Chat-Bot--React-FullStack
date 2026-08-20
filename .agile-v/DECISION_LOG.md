@@ -67,3 +67,10 @@ Append-only. Never rewrite prior entries.
 - **Decision:** Client map `src/lib/providerIcons.ts` (Sparkles/Zap/Waypoints/Boxes/BrainCircuit + Auto BotMessageSquare). `PROVIDER_META.icon` = lucide key strings (no emoji). UI renders via `getProviderIcon(name)`.
 - **Rationale:** Professional consistent Lucide look; shared stays React-free.
 - **Linked REQs:** REQ-0009 (UX)
+
+## DEC-0011 — Delete confirm + Coolify Postgres truth
+- **Timestamp:** 2026-08-20T17:25:00Z
+- **Agent:** Build
+- **Decision:** Custom `ConfirmDialog` before sidebar delete; title/message/confirm button include chat `displayId`. Delete remains localStorage-only (Insights Coolify VPS Postgres untouched). Docs: Neon → Coolify VPS Postgres.
+- **Rationale:** Accidental deletes; correct DB hosting for agents.
+- **Linked REQs:** REQ-0009 (UX), REQ-0014 (doc truth)

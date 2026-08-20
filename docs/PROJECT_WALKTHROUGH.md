@@ -19,7 +19,7 @@ Sentry → POST /api/monitoring (tunnel)
 ## Key paths
 | Path | Role |
 |------|------|
-| `src/lib/providerIcons.ts` | Lucide map for Select AI Model |
+| `src/Components/ConfirmDialog.*` | Delete confirm modal (dynamic item text) |
 | `src/Components/ChatBotApp.*` | Chat UI; Lucide providers; Thinking; send ripple |
 | `src/services/aiService.ts` | JSON + SSE client |
 | `shared/ai/` | providers, callers, orchestrate, stream, formatError, Zod |
@@ -29,7 +29,7 @@ Sentry → POST /api/monitoring (tunnel)
 ---
 
 ## Env
-Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights: `DATABASE_URL`. Sentry optional: `VITE_SENTRY_DSN` + org/project/token.
+Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights: `DATABASE_URL` (Coolify VPS Postgres). Sentry optional: `VITE_SENTRY_DSN` + org/project/token.
 
 ---
 
@@ -45,10 +45,10 @@ Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights
 ---
 
 ## Done
-A+B proxy · C models · Sentry · ESM · UX · HF `:fastest` · SSE · Thinking · Lucide Select AI Model · send ripple · bubble 85%
+A+B proxy · C models · Sentry · SSE · Thinking · Lucide providers · delete confirm (dynamic) · Coolify Postgres Insights · bubble 85%
 
 ## Open
 Firewall Human-Action · Track D tests · HF free credits flaky
 
 ## N/A
-densify · Redis · auth · SHA · Python · SSR · React Query
+densify · Redis · auth · SHA · Python · SSR · React Query · Neon

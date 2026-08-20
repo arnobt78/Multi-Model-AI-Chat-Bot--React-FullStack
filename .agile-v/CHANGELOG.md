@@ -1,5 +1,9 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — Delete confirm + Coolify docs
+- ConfirmDialog with dynamic chat `displayId` (DEC-0011); VAL-0012 PASS
+- Docs: Insights DB = Coolify VPS Postgres (not Neon)
+
 ## 2026-08-20 — Lucide Select AI Model icons
 - `providerIcons.ts` + PROVIDER_META lucide keys (DEC-0010); VAL-0011 PASS
 

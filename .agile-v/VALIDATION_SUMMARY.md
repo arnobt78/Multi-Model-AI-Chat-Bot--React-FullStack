@@ -101,3 +101,12 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | Icons | PASS | Sparkles/Zap/Waypoints/Boxes/BrainCircuit + Auto BotMessageSquare |
 | No emoji | PASS | PROVIDER_META.icon = lucide keys; UI via `getProviderIcon` |
 | lint/build | PASS | |
+
+## VAL-0012 — Delete confirm + Coolify docs (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| ConfirmDialog | PASS | dynamic title/message/confirm use chat `displayId` |
+| Delete scope | PASS | localStorage only; Insights DB untouched |
+| Docs | PASS | Coolify VPS Postgres (not Neon) in CLAUDE/README/.env.example |
+| lint/build | PASS | |

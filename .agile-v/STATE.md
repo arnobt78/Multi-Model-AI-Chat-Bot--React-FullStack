@@ -2,18 +2,17 @@
 
 Updated: 2026-08-20 · Cycle **C1** · Gate-0001 **APPROVED** (A+B)
 
-**Status:** C1 + Lucide provider icons (DEC-0010). Lint/build/audit 0. Ready for human test → Gate 2.
+**Status:** C1 + delete confirm (DEC-0011) + Coolify docs. Lint/build/audit 0. Ready for human test → Gate 2.
 
 ## Resume
-Human test Select AI Model Lucide icons · Thinking/stream · firewall Human-Action · optional Track D
+Human test delete confirm · Lucide providers · stream · firewall Human-Action · optional Track D
 
-Done: `/api/chat` SSE · free-tier models · Sentry · HF `:fastest` · Thinking · send ripple · Lucide providers
+Done: `/api/chat` SSE · HF `:fastest` · Thinking · Lucide providers · dynamic delete confirm · Coolify Postgres truth
 
 ## Snapshot
 | Area | Fact |
 |------|------|
-| Stack | Vite CSR · Node 24 · Prisma · Zod |
-| Chat | Lucide provider icons; Thinking until first SSE delta; live text (no caret) |
-| Bubbles | row 85%; nested max-width fixed |
-| List | h4/✕ centered; muted light icon |
-| N/A | densify · Redis · auth · SHA · SSR |
+| Stack | Vite CSR · Node 24 · Prisma · Coolify VPS Postgres (Insights only) |
+| Chat | localStorage; delete confirm uses `displayId`; Insights DB not touched |
+| UI | Lucide providers; Thinking; no caret; send ripple; bubble 85% |
+| N/A | densify · Redis · auth · SHA · SSR · Neon |
