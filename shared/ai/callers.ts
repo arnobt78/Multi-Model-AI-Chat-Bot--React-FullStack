@@ -5,17 +5,6 @@ import { ProviderRateLimitError } from "./types.js";
 
 export type RateLimitMarker = (provider: string) => void;
 
-function isRetriableStatus(status: number): boolean {
-  return (
-    status === 408 ||
-    status === 429 ||
-    status === 500 ||
-    status === 502 ||
-    status === 503 ||
-    status === 504
-  );
-}
-
 export async function callGeminiAPI(
   message: string,
   apiKey: string,
@@ -177,14 +166,9 @@ export async function callHuggingFaceAPI(
         `Hugging Face API rate limit exceeded (${model}).`
       );
     }
-    // Non-retriable for empty body; orchestrator treats other 4xx/5xx as try-next-model
-    if (!isRetriableStatus(response.status) && response.status < 500) {
-      throw new Error(
-        `Hugging Face model unavailable (${model}): ${response.status}`
-      );
-    }
+    // Always retriable within HF model chain (include "unavailable" for orchestrator)
     throw new Error(
-      `Hugging Face API error (${model}): ${response.status} ${response.statusText}`
+      `Hugging Face model unavailable (${model}): ${response.status}`
     );
   }
 
@@ -219,21 +203,23 @@ export async function callOpenAIAPI(
     const errorData = (await response.json().catch(() => ({}))) as {
       error?: { message?: string };
     };
-    const errorMessage = errorData.error?.message || response.statusText;
-
+    // Never append raw upstream message (may contain sk-proj-… key material)
     if (response.status === 401 || response.status === 403) {
       throw new Error(
-        `OpenAI API key has expired or is invalid. Please renew or regenerate your API key at https://platform.openai.com/api-keys. Otherwise, use another AI provider (Gemini, Groq, or OpenRouter) from the dropdown menu. Error: ${errorMessage}`
+        "OpenAI API key has expired or is invalid. Please renew or regenerate your API key."
       );
     }
     if (response.status === 429) {
       throw new ProviderRateLimitError(
         "openai",
-        `OpenAI API quota exceeded. Please check billing or use another provider. Error: ${errorMessage}`
+        "OpenAI API quota exceeded. Please check billing or use another provider."
       );
     }
+    const safeHint = errorData.error?.message
+      ? " (upstream rejected the request)"
+      : "";
     throw new Error(
-      `OpenAI API error (${model}): ${response.status} ${response.statusText} - ${errorMessage}`
+      `OpenAI API error (${model}): ${response.status}${safeHint}`
     );
   }
 

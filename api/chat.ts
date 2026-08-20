@@ -9,19 +9,6 @@ import { captureApiException } from "../shared/sentry/server.js";
 import { allowRequest, clientIp } from "./_lib/rateLimit.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // #region agent log
-  console.log(
-    JSON.stringify({
-      sessionId: "d6348e",
-      hypothesisId: "A",
-      location: "api/chat.ts:handler",
-      message: "chat handler entered (ESM resolve OK)",
-      data: { method: req.method },
-      timestamp: Date.now(),
-      runId: "post-fix",
-    })
-  );
-  // #endregion
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }

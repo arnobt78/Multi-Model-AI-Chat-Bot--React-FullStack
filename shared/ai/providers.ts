@@ -33,16 +33,15 @@ export const PROVIDER_META: Record<AIProvider, ProviderMeta> = {
     icon: "💬",
     envKey: "OPENROUTER_API_KEY",
   },
-  // Hugging Face Inference Providers router — short rotating list
+  // Hugging Face Inference Providers router — router-friendly IDs (no known-dead Phi rung)
   huggingface: {
     name: "huggingface",
     displayName: "Hugging Face",
     models: [
       "mistralai/Mistral-7B-Instruct-v0.3",
-      "HuggingFaceH4/zephyr-7b-beta",
-      "google/gemma-2-2b-it",
       "Qwen/Qwen2.5-7B-Instruct",
-      "microsoft/Phi-3.5-mini-instruct",
+      "google/gemma-2-2b-it",
+      "HuggingFaceH4/zephyr-7b-beta",
     ],
     icon: "🔍",
     envKey: "HUGGINGFACE_API_KEY",

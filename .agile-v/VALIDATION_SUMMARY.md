@@ -49,3 +49,13 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | README + SECURITY.md + walkthrough | PASS | Educational README; private vuln reporting |
 | index.html SEO | PASS | canonical demo URL + JSON-LD |
 | Densify/SSR/Redis/auth/SHA | N/A | Not in Vite architecture |
+
+## VAL-0007 — Chat UX + error polish (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| `npm run lint` / `build` | PASS | |
+| formatError | PASS | no sk-proj leak; friendly OpenAI/HF |
+| HF models | PASS | Phi removed; chain retries on 400 |
+| Message meta | PASS | time + copy below bubbles |
+| Scroll/cursor | PASS | cursor hides; scroll `.chat` only |

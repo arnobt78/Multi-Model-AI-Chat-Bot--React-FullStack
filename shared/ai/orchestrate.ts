@@ -11,6 +11,7 @@ import {
   callOpenAIAPI,
   callOpenRouterAPI,
 } from "./callers.js";
+import { formatUserFacingError } from "./formatError.js";
 import { FALLBACK_ORDER, getProviderMeta, PROVIDER_META } from "./providers.js";
 import type { AIProvider, ChatRequest, ChatResponse } from "./types.js";
 import { ProviderRateLimitError } from "./types.js";
@@ -152,11 +153,13 @@ export async function orchestrateChat(
       );
       return { content, provider: meta.displayName, success: true };
     } catch (error) {
+      const raw =
+        error instanceof Error ? error.message : "Unknown error";
       return {
         content: "",
         provider: meta.displayName,
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: formatUserFacingError(meta.displayName, raw),
       };
     }
   }
@@ -195,7 +198,9 @@ export async function orchestrateChat(
     content: "",
     provider: "None",
     success: false,
-    error:
-      "All AI providers failed or are unavailable. Please check your API keys.",
+    error: formatUserFacingError(
+      "AI providers",
+      "All AI providers failed or are unavailable. Please check your API keys."
+    ),
   };
 }

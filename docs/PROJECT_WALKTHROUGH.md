@@ -1,64 +1,40 @@
 # Project Walkthrough — Multi-Model AI Chat Hub
 
-Short agent/human map of this **Vite + Vercel Functions** repo (not Next.js).
+Vite CSR + Vercel Functions (not Next.js). Live: https://multi-ai-chat-hub.vercel.app/
 
 ---
 
-## What it is
-SPA chat hub for Gemini / Groq / OpenRouter / Hugging Face / OpenAI. History in **localStorage**. Optional **Business Insights** via Prisma + PostgreSQL. Live: https://multi-ai-chat-hub.vercel.app/
-
----
-
-## Request flow
+## Flow
 ```text
-UI → POST /api/chat → shared/ai/orchestrate → upstream APIs
-UI → GET /api/chat-providers → availability only
-UI → POST /api/events → Prisma (analytics)
-UI → GET /api/dashboard (+ usage/insights/providers)
-Browser Sentry → POST /api/monitoring → ingest (tunnel)
+UI → POST /api/chat → shared/ai/orchestrate → upstream
+UI → GET /api/chat-providers → availability
+UI → POST /api/events → Prisma
+UI → GET /api/dashboard
+Sentry → POST /api/monitoring (tunnel)
 ```
 
 ---
 
-## Key folders
+## Key paths
 | Path | Role |
 |------|------|
-| `src/Components/` | ChatBotStart, ChatBotApp, BusinessInsights, Tooltip, TypingIndicator |
-| `src/services/` | Thin client → `/api/chat`, `/api/chat-providers` |
-| `src/hooks/useTypewriter.ts` | Typewriter effect |
-| `shared/ai/` | Types, model registry, callers, orchestrate, Zod |
-| `shared/sentry/` | DSN helpers, filters, server capture |
-| `api/` | Serverless handlers + `_lib/prisma`, `_lib/rateLimit` |
-| `prisma/schema.prisma` | Event, Session, ProviderStats |
+| `src/Components/ChatBotApp.*` | Chat + message-meta (time/copy) |
+| `shared/ai/` | providers, callers, orchestrate, formatError, Zod |
+| `shared/sentry/` | client/server Sentry helpers |
+| `api/` | chat, chat-providers, events, monitoring, analytics |
 
 ---
 
-## Env (see `.env.example`)
-- **Chat:** `GEMINI_API_KEY`, `GROQ_API_KEY`, `OPENROUTER_API_KEY`, `HUGGINGFACE_API_KEY`, `OPENAI_API_KEY` (server-only)
-- **Insights:** `DATABASE_URL`
-- **Sentry optional:** `VITE_SENTRY_DSN`, `SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`
-- UI alone needs no `.env`; chat needs keys + `vercel dev`
+## Env
+Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights: `DATABASE_URL`. Sentry optional: `VITE_SENTRY_DSN` + org/project/token.
 
 ---
 
-## Run
-```bash
-nvm use          # Node 24
-npm install
-cp .env.example .env
-vercel dev       # full stack (Vite alone has no /api)
-npm run lint && npm run build
-```
-
----
-
-## Done (C1)
-A+B secure chat proxy + headers/robots · C free-tier model chains · Sentry tunnel · README/SECURITY/SEO
+## Done
+A+B proxy · C model chains · Sentry tunnel · ESM `.js` fix · UX polish (errors/meta/scroll) · README/SECURITY
 
 ## Open
-Vercel firewall Human-Action · optional Track D tests · fix `DATABASE_URL` “Needs Attention” if shown
+Firewall Human-Action · Track D tests · HF free router still flaky (Auto falls through)
 
----
-
-## N/A here
-densify / React Query / SSR cache / Redis / JWT cookies / SHA crypto theater / Python
+## N/A
+densify · Redis · auth · SHA · Python · SSR

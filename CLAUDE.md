@@ -1,41 +1,35 @@
 # CLAUDE.md
 
 ## Overview
-Multi-Model AI Chat Hub (`ai-chat-hub` v0.2.1) — Vite CSR SPA + Vercel `api/*`. Chat: localStorage. Insights: Prisma/Neon. Resume: `.agile-v/STATE.md`
+Multi-Model AI Chat Hub (`ai-chat-hub` v0.2.1) — Vite CSR + Vercel `api/*`. Chat: localStorage. Insights: Prisma/Neon. Resume: `.agile-v/STATE.md`
 
-**Status:** C1 A+B+C + Sentry tunnel + README/SEO done. Lint/build/audit 0. Gate-0001 A+B approved. Firewall = Human-Action.
+**Status:** C1 A+B+C + Sentry + chat UX polish done. Lint/build 0. Gate-0001 A+B approved. Firewall = Human-Action.
 
 ---
 
 ## Stack
-React 18.3 · TS 5.9 · Vite 7.3 · Node 24.x · Prisma 6.19 · Zod 4 · ESLint 9 · optional Sentry (`@sentry/react` + tunnel)
+React 18.3 · TS 5.9 · Vite 7.3 · Node 24 · Prisma 6.19 · Zod 4 · ESLint 9 · optional Sentry tunnel
 
-**Not in arch:** Next/SSR · React Query/densify · Redis · auth/JWT/cookies · SHA · Python
+**Not in arch:** Next/SSR · densify/React Query · Redis · auth/JWT · SHA · Python
 
 ---
 
 ## Topology
-- Views: `App.tsx` `start|chat|insights` (no router)
-- AI: browser → `POST /api/chat` → `shared/ai/orchestrate` (keys server-only, never `VITE_*` AI)
-- Models: `shared/ai/providers.ts` `models[]` — Groq gpt-oss/qwen · Gemini flash(+lite) · OpenRouter `:free` · HF short · OpenAI last
-- Fallback providers: Groq → Gemini → OpenRouter → HF → OpenAI; 429 skips rest of provider
-- Analytics: `POST /api/events` · dashboard `GET /api/dashboard`
-- Sentry: `VITE_SENTRY_DSN` + `POST /api/monitoring` tunnel; off if DSN empty
+- Views: `App.tsx` `start|chat|insights`
+- AI: `POST /api/chat` → `shared/ai/orchestrate` (server keys only)
+- Models: `shared/ai/providers.ts` — Groq gpt-oss/qwen · Gemini flash(+lite) · OpenRouter `:free` · HF short chain · OpenAI last
+- Errors: `shared/ai/formatError.ts` (sanitize keys; friendly HF/OpenAI copy)
+- Chat UI: meta under bubbles (time + copy); title cursor hides when done; scroll inside `.chat`
+- ESM: relative imports in `api/`/`shared/` use `.js` extensions (Vercel Node)
+- Sentry: `VITE_SENTRY_DSN` + `POST /api/monitoring`
 
 ---
 
 ## Rules
-- Prefer extend existing (`shared/ai`, `api/_lib`, Components/hooks)
-- CSR only — no Next patterns unless approved
-- Plan → wait approval → implement → validate → update `.agile-v/`
-- Docs match code; update only affected files
-
----
+Extend existing shared/ai + Components. CSR only. Plan → approve → implement → validate → `.agile-v/`
 
 ## Validate
-`npm run lint` · `npm run build` · record `.agile-v/VALIDATION_SUMMARY.md`
+`npm run lint` · `npm run build`
 
----
-
-## Portable docs
-`docs/LLM_MODEL_SELECTION.md` · `docs/Redis_Sentry_PostHog_INTEGRATION_GUIDE.md` (§2A Next / §2B Vite) · `docs/VERCEL_PRODUCTION_GUARDRAILS.md` · `docs/PROJECT_WALKTHROUGH.md`
+## Docs
+`docs/PROJECT_WALKTHROUGH.md` · LLM_MODEL_SELECTION · Sentry guide §2A/§2B · VERCEL_PRODUCTION_GUARDRAILS

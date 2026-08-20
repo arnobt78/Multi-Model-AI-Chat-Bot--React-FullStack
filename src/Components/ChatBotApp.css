@@ -255,6 +255,7 @@
 
 .chat-title {
   width: 100%;
+  min-height: 7.5rem;
   height: 7.5rem;
   background-color: rgba(13, 17, 26, 0.9);
   backdrop-filter: blur(10px);
@@ -409,6 +410,7 @@
 .prompt,
 .response {
   max-width: 80%;
+  width: fit-content;
   padding: 2rem;
   font-size: 1.6rem;
   color: #fff;
@@ -432,9 +434,63 @@
   z-index: -1;
 }
 
+/* Message row: bubble + muted meta (time + copy) below */
+.message-row {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  gap: 0.45rem;
+}
+
+.message-row-prompt {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.message-row-response {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.message-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 0.4rem;
+}
+
+.message-row-prompt .message-meta {
+  flex-direction: row-reverse;
+}
+
+.message-time {
+  font-family: "Exo 2", sans-serif;
+  font-size: 1.2rem;
+  color: #7b8ebc;
+  opacity: 0.75;
+}
+
+.message-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border: none;
+  background: transparent;
+  color: #7b8ebc;
+  opacity: 0.7;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.message-copy:hover {
+  opacity: 1;
+  color: #00ff99;
+}
+
 .prompt {
   background: linear-gradient(135deg, #f42f5f, #8e25bf);
-  align-self: flex-end;
   border-radius: 3rem 0 3rem 3rem;
   text-align: right;
   animation: slideInRight 0.3s ease-out;
@@ -454,7 +510,6 @@
 .response {
   background: linear-gradient(135deg, #fe8d5c, #fe4d57);
   border-radius: 0 3rem 3rem 3rem;
-  align-self: flex-start;
   text-align: left;
   animation: slideInLeft 0.3s ease-out;
 }
@@ -468,14 +523,6 @@
     opacity: 1;
     transform: translateX(0);
   }
-}
-
-.prompt span,
-.response span {
-  font-family: "Exo 2", sans-serif;
-  font-size: 1.4rem;
-  display: block;
-  margin-top: 0.5rem;
 }
 
 .typing {

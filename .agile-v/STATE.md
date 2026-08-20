@@ -2,20 +2,18 @@
 
 Updated: 2026-08-20 · Cycle **C1** · Gate-0001 **APPROVED** (A+B)
 
-**Status:** A+B+C + Sentry + docs/SEO complete. Lint/build/audit 0.
+**Status:** A+B+C + Sentry + ESM fix + chat UX/error polish. Lint/build 0.
 
 ## Resume
-Next: Gate 2 when ready · Human-Action firewall · optional Track D (tests)
+Gate 2 when ready · firewall Human-Action · optional Track D
 
-Done: server `/api/chat` · free-tier `models[]` · `/api/monitoring` · README/SECURITY · `docs/PROJECT_WALKTHROUGH.md`
-
-Human-Action: Bot Protection=Challenge · AI Bots=Deny · `VITE_SENTRY_DSN` at build · fix `DATABASE_URL` if flagged
+Done: `/api/chat` · free-tier models · `/api/monitoring` · formatError + message meta · README/SECURITY
 
 ## Snapshot
 | Area | Fact |
 |------|------|
 | Stack | Vite CSR · Node 24 · Prisma · Zod |
-| Chat | `/api/chat` · keys non-VITE |
-| Models | `shared/ai/providers.ts` |
-| Sentry | tunnel `/api/monitoring` |
-| N/A | densify · Redis · auth · SHA · Next SSR |
+| Chat UX | time+copy under bubbles; no perpetual title cursor |
+| Errors | sanitized; no sk-proj in UI |
+| HF | shorter chain; free tier may still 400 — Auto falls through |
+| N/A | densify · Redis · auth · SHA |

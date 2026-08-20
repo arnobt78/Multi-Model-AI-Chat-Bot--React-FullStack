@@ -20,7 +20,10 @@ import {
   Menu,
   X,
   BarChart3,
+  Copy,
+  Check,
 } from "lucide-react";
+import { formatUserFacingError } from "../../shared/ai/formatError";
 
 interface ChatBotAppProps {
   chats: Chat[];
@@ -58,16 +61,21 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
   const [showProviderDropdown, setShowProviderDropdown] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [copiedMessageIndex, setCopiedMessageIndex] = useState<number | null>(
+    null
+  );
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const providerDropdownRef = useRef<HTMLDivElement>(null);
   const errorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { displayText: chatTitleText } = useTypewriter({
-    text: "Chat with AI",
-    speed: 100,
-    delay: 500,
-  });
+  const { displayText: chatTitleText, isComplete: chatTitleComplete } =
+    useTypewriter({
+      text: "Chat with AI",
+      speed: 100,
+      delay: 500,
+    });
 
   // Load server-configured providers (no client API keys)
   useEffect(() => {
@@ -298,18 +306,13 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             duration
           );
 
-          // Handle error - check if it's a rate limit error
-          const isRateLimitError = aiResponse.error?.includes("rate limit") || 
-                                  aiResponse.error?.includes("rate limit exceeded");
-          
-          let errorDisplayText = aiResponse.error || "Failed to get response from AI providers";
-          
-          // Format rate limit errors more user-friendly
-          if (isRateLimitError) {
-            errorDisplayText = `Sorry, ${aiResponse.provider} is currently rate-limited. Please select another AI provider (Groq, OpenRouter, or Hugging Face) from the dropdown menu, or try again later.`;
-          }
+          // Sanitize + friendly copy (server already formats; belt-and-suspenders on client)
+          const errorDisplayText = formatUserFacingError(
+            aiResponse.provider || "AI",
+            aiResponse.error || "Failed to get response from AI providers"
+          );
 
-          setErrorMessage(`Error: ${errorDisplayText}`);
+          setErrorMessage(errorDisplayText);
 
           const errorResponse: Message = {
             type: "response",
@@ -374,9 +377,23 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
     }
   };
 
+  // Scroll only the chat pane (avoids jumpy window-level smooth scroll)
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const el = chatScrollRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [messages, isTyping]);
+
+  const copyMessage = async (text: string, index: number) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedMessageIndex(index);
+      window.setTimeout(() => setCopiedMessageIndex(null), 1500);
+    } catch {
+      // Clipboard unavailable — ignore silently
+    }
+  };
 
   return (
     <div className="chat-app">
@@ -447,8 +464,10 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           <div className="chat-title-left">
             <h3>
               <span className="chat-title-text">{chatTitleText}</span>
-              {chatTitleText === "Chat with AI" && (
-                <span className="typewriter-cursor">_</span>
+              {!chatTitleComplete && (
+                <span className="typewriter-cursor" aria-hidden="true">
+                  _
+                </span>
               )}
             </h3>
           </div>
@@ -541,17 +560,47 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             </button>
           </div>
         )}
-        <div className="chat">
+        <div className="chat" ref={chatScrollRef}>
           {messages.map((msg, index) => (
             <div
-              key={index}
-              className={msg.type === "prompt" ? "prompt" : "response"}
+              key={`${msg.timestamp}-${index}`}
+              className={`message-row ${
+                msg.type === "prompt"
+                  ? "message-row-prompt"
+                  : "message-row-response"
+              }`}
             >
-              {msg.text} <span>{msg.timestamp}</span>
+              <div
+                className={msg.type === "prompt" ? "prompt" : "response"}
+              >
+                {msg.text}
+              </div>
+              <div className="message-meta">
+                <time className="message-time">{msg.timestamp}</time>
+                <Tooltip
+                  text={
+                    copiedMessageIndex === index ? "Copied" : "Copy message"
+                  }
+                  position="top"
+                >
+                  <button
+                    type="button"
+                    className="message-copy"
+                    aria-label="Copy message"
+                    onClick={() => copyMessage(msg.text, index)}
+                  >
+                    {copiedMessageIndex === index ? (
+                      <Check size={14} />
+                    ) : (
+                      <Copy size={14} />
+                    )}
+                  </button>
+                </Tooltip>
+              </div>
             </div>
           ))}
           {isTyping && <TypingIndicator />}
-          <div ref={chatEndRef}></div>
+          <div ref={chatEndRef} />
         </div>
 
         {/* Message Form */}
