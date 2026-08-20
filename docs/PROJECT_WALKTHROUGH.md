@@ -46,7 +46,7 @@ Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights
 ---
 
 ## Done
-A+B proxy · C models · Sentry · SSE · Thinking · Lucide · delete UX · Coolify Insights · Insights 3-tab polish (no x-scroll; hourly labels/tooltips) · bubble 85%
+A+B proxy · C models · Sentry · SSE · Thinking · Lucide · delete UX · Coolify Insights · Insights 3-tab polish · toast bottom-right · single-scroll shell (no double Y / page X) · bubble 85%
 
 ## Open
 Firewall Human-Action · Track D tests · HF free credits flaky

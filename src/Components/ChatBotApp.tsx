@@ -750,24 +750,7 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             ></i>
           </Tooltip>
           {showEmojiPicker && (
-            <div
-              className="picker"
-              ref={emojiPickerRef}
-              style={{
-                maxWidth:
-                  window.innerWidth <= 640
-                    ? "calc(100vw - 1rem)"
-                    : window.innerWidth <= 900
-                    ? "calc(100vw - 2rem)"
-                    : "none",
-                width:
-                  window.innerWidth <= 640
-                    ? "calc(100vw - 1rem)"
-                    : window.innerWidth <= 900
-                    ? "calc(100vw - 2rem)"
-                    : "auto",
-              }}
-            >
+            <div className="picker" ref={emojiPickerRef}>
               <Picker data={data} onEmojiSelect={handleEmojiSelect} />
             </div>
           )}

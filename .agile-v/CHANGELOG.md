@@ -1,5 +1,8 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — Toast BR + scroll lock
+- AppToast bottom-right; html/body/#root/.container overflow hidden; chat/insights height 100%; VAL-0015 PASS
+
 ## 2026-08-20 — Insights dashboard polish
 - 3 tabs · no page x-scroll · hourly labels/tooltips · pink header line removed; VAL-0014 PASS
 

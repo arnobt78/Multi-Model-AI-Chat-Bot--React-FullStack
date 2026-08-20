@@ -129,3 +129,13 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | Chart | PASS | value above bar; hour under; hover tooltip + title |
 | Pink line | PASS | `.insights-header` border-bottom removed |
 | lint/build | PASS | eslint 0 · vite build ok |
+
+## VAL-0015 — Toast BR + scroll lock (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| Toast | PASS | AppToast `bottom/right`; slide-up animation |
+| Shell | PASS | html/body/#root/.container overflow:hidden; height 100% |
+| Chat | PASS | `.chat-app` height 100%; `.chat` sole Y; overflow-x hidden |
+| Insights | PASS | container height 100%; overflow-x hidden |
+| lint/build | PASS | |
