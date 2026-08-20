@@ -33,15 +33,17 @@ export const PROVIDER_META: Record<AIProvider, ProviderMeta> = {
     icon: "💬",
     envKey: "OPENROUTER_API_KEY",
   },
-  // Hugging Face Inference Providers router — router-friendly IDs (no known-dead Phi rung)
+  // Hugging Face Inference Providers — router.huggingface.co (free ≈ $0.10/mo credits).
+  // Prefer Hub chat models HF documents for the OpenAI-compatible router; `:fastest` picks a live host.
+  // See https://huggingface.co/docs/inference-providers/tasks/chat-completion
   huggingface: {
     name: "huggingface",
     displayName: "Hugging Face",
     models: [
-      "mistralai/Mistral-7B-Instruct-v0.3",
-      "Qwen/Qwen2.5-7B-Instruct",
-      "google/gemma-2-2b-it",
-      "HuggingFaceH4/zephyr-7b-beta",
+      "google/gemma-2-2b-it:fastest",
+      "Qwen/Qwen2.5-7B-Instruct:fastest",
+      "openai/gpt-oss-20b:fastest",
+      "meta-llama/Llama-3.2-3B-Instruct:fastest",
     ],
     icon: "🔍",
     envKey: "HUGGINGFACE_API_KEY",
