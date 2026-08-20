@@ -9,7 +9,7 @@ import {
   SENTRY_IGNORE_ERRORS,
   SENTRY_TUNNEL_ROUTE,
   sentryBeforeSend,
-} from "../shared/sentry";
+} from "../shared/sentry/index.js";
 
 const dsn = getClientSentryDsn();
 

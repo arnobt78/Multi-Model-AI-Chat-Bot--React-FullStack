@@ -2,7 +2,7 @@
  * Provider registry (metadata + free-tier model chains) — no secrets.
  * Model IDs aligned with docs/LLM_MODEL_SELECTION.md (verified 2026-08-20).
  */
-import type { AIProvider, ProviderMeta } from "./types";
+import type { AIProvider, ProviderMeta } from "./types.js";
 
 export const PROVIDER_META: Record<AIProvider, ProviderMeta> = {
   // Google Gemini — free AI Studio Flash family

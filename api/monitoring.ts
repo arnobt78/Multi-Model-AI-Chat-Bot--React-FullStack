@@ -7,8 +7,8 @@
  */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { handleTunnelRequest } from "@sentry/core";
-import { getAllowedSentryDsns } from "../shared/sentry/env";
-import { allowRequest, clientIp } from "./_lib/rateLimit";
+import { getAllowedSentryDsns } from "../shared/sentry/env.js";
+import { allowRequest, clientIp } from "./_lib/rateLimit.js";
 
 /** Normalize Vercel body to envelope string (SDK sends text/plain or raw bytes). */
 function envelopeFromBody(body: unknown): string | null {

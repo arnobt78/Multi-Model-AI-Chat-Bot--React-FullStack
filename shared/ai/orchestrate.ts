@@ -10,10 +10,10 @@ import {
   callHuggingFaceAPI,
   callOpenAIAPI,
   callOpenRouterAPI,
-} from "./callers";
-import { FALLBACK_ORDER, getProviderMeta, PROVIDER_META } from "./providers";
-import type { AIProvider, ChatRequest, ChatResponse } from "./types";
-import { ProviderRateLimitError } from "./types";
+} from "./callers.js";
+import { FALLBACK_ORDER, getProviderMeta, PROVIDER_META } from "./providers.js";
+import type { AIProvider, ChatRequest, ChatResponse } from "./types.js";
+import { ProviderRateLimitError } from "./types.js";
 
 const RATE_LIMIT_COOLDOWN_MS = 5 * 60 * 1000;
 const rateLimitedProviders = new Map<string, number>();

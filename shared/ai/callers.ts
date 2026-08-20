@@ -1,7 +1,7 @@
 /**
  * Upstream provider HTTP callers — secrets + model ID passed as args (never from client env).
  */
-import { ProviderRateLimitError } from "./types";
+import { ProviderRateLimitError } from "./types.js";
 
 export type RateLimitMarker = (provider: string) => void;
 

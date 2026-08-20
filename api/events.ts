@@ -2,10 +2,10 @@
  * POST /api/events — anonymous analytics write (Zod + soft IP rate limit).
  */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { eventBodySchema } from "../shared/ai/schemas";
-import { captureApiException } from "../shared/sentry/server";
-import { prisma } from "./_lib/prisma";
-import { allowRequest, clientIp } from "./_lib/rateLimit";
+import { eventBodySchema } from "../shared/ai/schemas.js";
+import { captureApiException } from "../shared/sentry/server.js";
+import { prisma } from "./_lib/prisma.js";
+import { allowRequest, clientIp } from "./_lib/rateLimit.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {

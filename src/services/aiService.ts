@@ -2,7 +2,7 @@
  * Client AI service — proxies chat to POST /api/chat (secrets never leave the server).
  * Local: use `vercel dev` so /api/* is available; plain `vite` alone cannot reach serverless routes.
  */
-import type { AIProvider, ChatRequest, ChatResponse } from "../../shared/ai/types";
+import type { AIProvider, ChatRequest, ChatResponse } from "../../shared/ai/types.js";
 
 export type AIChatRequest = ChatRequest;
 export type AIChatResponse = ChatResponse;

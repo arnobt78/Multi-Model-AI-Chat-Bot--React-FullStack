@@ -3,8 +3,8 @@
  * No-op when SENTRY_DSN / VITE_SENTRY_DSN is unset.
  */
 import * as Sentry from "@sentry/node";
-import { getServerSentryDsn, getTracesSampleRate } from "./env";
-import { SENTRY_IGNORE_ERRORS, sentryBeforeSend } from "./filters";
+import { getServerSentryDsn, getTracesSampleRate } from "./env.js";
+import { SENTRY_IGNORE_ERRORS, sentryBeforeSend } from "./filters.js";
 
 let initialized = false;
 

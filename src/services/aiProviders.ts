@@ -1,11 +1,11 @@
 /**
  * Client provider metadata + availability from GET /api/chat-providers (no API keys).
  */
-import { PROVIDER_META, FALLBACK_ORDER } from "../../shared/ai/providers";
+import { PROVIDER_META, FALLBACK_ORDER } from "../../shared/ai/providers.js";
 import type {
   AIProvider,
   ProviderAvailability,
-} from "../../shared/ai/types";
+} from "../../shared/ai/types.js";
 
 export type { AIProvider, ProviderAvailability };
 

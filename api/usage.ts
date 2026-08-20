@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { prisma } from "./_lib/prisma";
-import { allowRequest, clientIp } from "./_lib/rateLimit";
+import { prisma } from "./_lib/prisma.js";
+import { allowRequest, clientIp } from "./_lib/rateLimit.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") {
