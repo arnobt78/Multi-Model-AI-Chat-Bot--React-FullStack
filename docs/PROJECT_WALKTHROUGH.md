@@ -46,7 +46,7 @@ Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights
 ---
 
 ## Done
-A+B proxy · C models · Sentry · SSE · Thinking · Lucide providers · delete confirm (dynamic) · Coolify Postgres Insights · bubble 85%
+A+B proxy · C models · Sentry · SSE · Thinking · Lucide · delete confirm + spinner + toast · Coolify Postgres Insights · bubble 85%
 
 ## Open
 Firewall Human-Action · Track D tests · HF free credits flaky
