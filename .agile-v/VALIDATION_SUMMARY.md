@@ -119,3 +119,13 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | Busy | PASS | Loader2 + Deleting… until list updates |
 | Toast | PASS | AppToast success/error with dynamic subtitle |
 | lint/build | PASS | |
+
+## VAL-0014 — Insights dashboard polish (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| Tabs | PASS | 3 tabs: app-overview · provider-usage · system-health |
+| X-scroll | PASS | overflow-x hidden; wrap tabs; minmax(min(100%,…),1fr) |
+| Chart | PASS | value above bar; hour under; hover tooltip + title |
+| Pink line | PASS | `.insights-header` border-bottom removed |
+| lint/build | PASS | eslint 0 · vite build ok |

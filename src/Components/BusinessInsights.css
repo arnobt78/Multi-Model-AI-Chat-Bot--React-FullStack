@@ -1,9 +1,37 @@
 .business-insights-container {
   width: 100%;
+  max-width: 100%;
   height: 100vh;
   padding: 2rem;
   background: linear-gradient(135deg, #0f1419 0%, #1a1f35 100%);
+  overflow-x: hidden;
   overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.business-insights-container *,
+.business-insights-container *::before,
+.business-insights-container *::after {
+  box-sizing: border-box;
+}
+
+.tab-content,
+.insights-panel {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.insights-section-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 2.4rem 0 1.2rem;
+  letter-spacing: 0.02em;
+}
+
+.insights-panel > .insights-section-title:first-child {
+  margin-top: 0;
 }
 
 .start-page-bg {
@@ -35,16 +63,19 @@
   }
 }
 
-/* Header */
+/* Header — no pink bottom border (was sitting above tabs) */
 .insights-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid rgba(244, 47, 95, 0.3);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0;
+  border-bottom: none;
   flex-wrap: wrap;
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .header-content {
@@ -122,25 +153,32 @@
 /* Tabs */
 .tabs-container {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  width: 100%;
+  max-width: 100%;
   margin-bottom: 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   padding-bottom: 0.5rem;
+  min-width: 0;
 }
 
 .tab-btn {
-  padding: 1rem 2rem;
+  padding: 0.9rem 1.4rem;
   background: transparent;
   border: none;
   color: #888;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.6rem;
   transition: all 0.3s;
   border-bottom: 2px solid transparent;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 .tab-btn:hover {
@@ -183,8 +221,10 @@
 /* Overview Grid */
 .overview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
   gap: 2rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .stat-card {
@@ -207,6 +247,13 @@
 
 .stat-card.wide {
   grid-column: span 2;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .stat-card.wide {
+    grid-column: span 1;
+  }
 }
 
 .stat-icon-wrapper {
@@ -242,8 +289,10 @@
 /* Providers Grid */
 .providers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 2rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .provider-card {
@@ -325,8 +374,10 @@
 /* Storage Grid */
 .storage-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
   gap: 2rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .storage-card {
@@ -391,8 +442,10 @@
 /* Usage Grid */
 .usage-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 2rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .usage-card {
@@ -452,8 +505,10 @@
 /* Time & Trends Grid */
 .time-trends-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 2rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .trend-card {
@@ -462,9 +517,12 @@
   border-radius: 1.2rem;
   padding: 2rem;
   backdrop-filter: blur(10px);
+  min-width: 0;
+  overflow: hidden;
 }
 
-.trend-card:has(.hourly-chart) {
+.trend-card:has(.hourly-chart),
+.trend-card-chart {
   grid-column: 1 / -1;
 }
 
@@ -487,53 +545,108 @@
   color: #ffffff;
 }
 
-/* Hourly Chart */
+/* Hourly Chart — shrink bars to fit; no page-level x-scroll */
 .hourly-chart {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 0.2rem;
+  gap: 0.15rem;
   margin-top: 1.5rem;
-  padding-bottom: 3rem;
-  min-height: 250px;
+  padding: 1.75rem 0 0.5rem;
+  min-height: 260px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .hour-bar-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.5rem;
-  flex: 1;
-  max-width: 40px;
+  gap: 0.35rem;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
+  outline: none;
+  cursor: default;
+}
+
+.hour-bar-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fe8d5c;
+  line-height: 1;
+  min-height: 1em;
+  text-align: center;
+  pointer-events: none;
+}
+
+.hour-bar-value.is-zero {
+  color: rgba(136, 136, 136, 0.55);
+  font-weight: 500;
 }
 
 .hour-bar {
   width: 100%;
+  max-width: 28px;
   min-height: 3px;
   background: linear-gradient(180deg, #f42f5f 0%, #fe8d5c 100%);
   border-radius: 0.3rem;
-  transition: all 0.3s ease-out;
+  transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
   box-shadow: 0 2px 8px rgba(244, 47, 95, 0.3);
 }
 
-.hour-bar:hover {
-  box-shadow: 0 4px 12px rgba(244, 47, 95, 0.5);
+.hour-bar-container:hover .hour-bar,
+.hour-bar-container:focus-within .hour-bar {
+  box-shadow: 0 4px 12px rgba(244, 47, 95, 0.55);
   transform: translateY(-2px);
 }
 
 .hour-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #888;
   white-space: nowrap;
   text-align: center;
+  line-height: 1;
+}
+
+.hour-tooltip {
+  position: absolute;
+  bottom: calc(100% + 0.4rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  z-index: 5;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.55rem;
+  background: #0f1419;
+  border: 1px solid rgba(244, 47, 95, 0.45);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.hour-bar-container:hover .hour-tooltip,
+.hour-bar-container:focus-within .hour-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* User Engagement Grid */
 .engagement-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 2rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .engagement-card {
@@ -571,8 +684,10 @@
 /* Error Monitoring Grid */
 .errors-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 2rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .error-card {
@@ -614,8 +729,10 @@
 /* Performance Grid */
 .performance-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 2rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .performance-card {
@@ -670,7 +787,7 @@
 
   .insights-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 1rem;
   }
 
@@ -678,24 +795,23 @@
     font-size: 2.2rem;
   }
 
+  .refresh-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
   .tabs-container {
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .tab-btn {
-    font-size: 1.2rem;
-    padding: 0.8rem 1.2rem;
+    font-size: 1.15rem;
+    padding: 0.75rem 1rem;
+    flex: 1 1 auto;
   }
 
-  .overview-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .stat-card.wide {
-    grid-column: span 1;
-  }
-
+  .overview-grid,
   .providers-grid,
   .storage-grid,
   .usage-grid,
@@ -704,5 +820,65 @@
   .errors-grid,
   .performance-grid {
     grid-template-columns: 1fr;
+  }
+
+  .stat-card.wide {
+    grid-column: span 1;
+  }
+
+  .hour-bar-value {
+    font-size: 0.7rem;
+  }
+
+  .hour-label {
+    font-size: 0.6rem;
+  }
+
+  .hour-tooltip {
+    font-size: 1rem;
+    white-space: normal;
+    max-width: 12rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .business-insights-container {
+    padding: 0.75rem;
+  }
+
+  .insights-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .header-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .tab-btn {
+    font-size: 1.05rem;
+    padding: 0.65rem 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .stat-card,
+  .provider-card,
+  .storage-card,
+  .usage-card,
+  .trend-card,
+  .engagement-card,
+  .error-card,
+  .performance-card {
+    padding: 1.4rem;
+  }
+
+  .hourly-chart {
+    min-height: 220px;
+    gap: 0.1rem;
+  }
+
+  .hour-bar {
+    max-width: 18px;
   }
 }

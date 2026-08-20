@@ -1,5 +1,8 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — Insights dashboard polish
+- 3 tabs · no page x-scroll · hourly labels/tooltips · pink header line removed; VAL-0014 PASS
+
 ## 2026-08-20 — Delete UX polish
 - Confirm icons + Deleting… spinner + AppToast (DEC-0012); VAL-0013 PASS
 
