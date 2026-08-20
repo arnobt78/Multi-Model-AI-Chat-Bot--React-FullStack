@@ -30,11 +30,24 @@ Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights
 
 ---
 
+## Providers (code truth)
+| Provider | Chain notes |
+|----------|-------------|
+| Groq | gpt-oss-20b → gpt-oss-120b → qwen3.6-27b |
+| Gemini | 2.5-flash → 2.5-flash-lite |
+| OpenRouter | `:free` IDs only |
+| HF | gemma-2-2b-it / Qwen2.5-7B / gpt-oss-20b / Llama-3.2-3B — all `:fastest` |
+| OpenAI | gpt-4o-mini last |
+
+Forced HF may still return friendly “could not serve…” (HTTP 200). Prefer Auto/Groq/Gemini/OpenRouter.
+
+---
+
 ## Done
-A+B proxy · C model chains · Sentry tunnel · ESM `.js` fix · UX polish (errors/meta/scroll) · README/SECURITY
+A+B proxy · C model chains · Sentry tunnel · ESM `.js` · UX polish · HF `:fastest` · README/SECURITY
 
 ## Open
-Firewall Human-Action · Track D tests · HF free router still flaky (Auto falls through)
+Firewall Human-Action · Track D tests · HF free credits tiny/flaky
 
 ## N/A
 densify · Redis · auth · SHA · Python · SSR

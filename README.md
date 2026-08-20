@@ -387,7 +387,7 @@ Located in `shared/ai/` so **browser types** and **server orchestration** share 
 1. **Groq** — `openai/gpt-oss-20b` → `openai/gpt-oss-120b` → `qwen/qwen3.6-27b`
 2. **Gemini** — `gemini-2.5-flash` → `gemini-2.5-flash-lite`
 3. **OpenRouter** — `openai/gpt-oss-20b:free` → `openai/gpt-oss-120b:free`
-4. **Hugging Face** — short rotating router list
+4. **Hugging Face** — Hub chat IDs + `:fastest` (gemma / Qwen2.5 / gpt-oss / Llama-3.2); free credits tiny — may fail when forced
 5. **OpenAI** — `gpt-4o-mini` (last resort)
 
 Portable free-tier reference: [docs/LLM_MODEL_SELECTION.md](./docs/LLM_MODEL_SELECTION.md).

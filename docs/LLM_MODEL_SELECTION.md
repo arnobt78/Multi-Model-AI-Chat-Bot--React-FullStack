@@ -249,7 +249,7 @@ When a provider returns 429, don't waste time trying its remaining models in the
 
 **multi-ai-chatbot (this Vite + Vercel project)** wires the free-tier model chains in:
 
-- `shared/ai/providers.ts` — `models[]` per provider (Groq gpt-oss / qwen; Gemini 2.5 flash(+lite); OpenRouter `:free` IDs)
+- `shared/ai/providers.ts` — `models[]` per provider (Groq gpt-oss / qwen; Gemini 2.5 flash(+lite); OpenRouter `:free` IDs; HF Hub chat + `:fastest`)
 - `shared/ai/callers.ts` + `shared/ai/orchestrate.ts` — within-provider model loop, then cross-provider fallback via `POST /api/chat`
 
 ---

@@ -39,3 +39,10 @@ Append-only. Never rewrite prior entries.
 - **Decision:** Integrate `@sentry/react` + `@sentry/node` + `@sentry/vite-plugin`; same-origin tunnel `POST /api/monitoring` via `@sentry/core` `handleTunnelRequest`; client DSN = `VITE_SENTRY_DSN` (compat: `VITE_PUBLIC_SENTRY_DSN`); never `@sentry/nextjs` / `NEXT_PUBLIC_*`.
 - **Rationale:** Ad blockers drop `*.ingest.sentry.io`; DSN was in env with zero code (RISK-0006).
 - **Linked REQs:** REQ-0015
+
+## DEC-0007 — HF Hub models with `:fastest` routing
+- **Timestamp:** 2026-08-20T15:45:00Z
+- **Agent:** Build
+- **Decision:** Replace legacy HF IDs (Mistral/Zephyr-style) with documented Hub chat models + `:fastest` (`gemma-2-2b-it`, `Qwen2.5-7B-Instruct`, `gpt-oss-20b`, `Llama-3.2-3B-Instruct`). Keep HF late in `FALLBACK_ORDER`. Treat forced-HF empty credit / host miss as expected UX (friendly error), not a security defect.
+- **Rationale:** Inference Providers free pool is tiny (~$0.10/mo); hosts rotate; `:fastest` picks a live upstream. Prefer Groq/Gemini/OpenRouter for daily use.
+- **Linked REQs:** REQ-0012

@@ -1,5 +1,10 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — HF `:fastest` + agent doc sync
+- `providers.ts`: Hub chat IDs + `:fastest` (DEC-0007)
+- Docs: CLAUDE · walkthrough · STATE · VAL-0008 · checkpoint
+- Validated: lint/build/audit 0; keys still server-only
+
 ## 2026-08-20 — C1 bootstrap
 - Created `.agile-v/` workspace (did not previously exist)
 - Documented baseline REQs 0001–0008 from code

@@ -59,3 +59,14 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | HF models | PASS | Phi removed; chain retries on 400 |
 | Message meta | PASS | time + copy below bubbles |
 | Scroll/cursor | PASS | cursor hides; scroll `.chat` only |
+
+## VAL-0008 — HF Inference Providers `:fastest` IDs (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| `npm run lint` / `build` | PASS | |
+| `npm audit --omit=dev` | PASS | 0 vulns |
+| Secrets | PASS | no keys in `providers.ts`; server-only callers |
+| Errors | PASS | forced HF failure → friendly copy; `/api/chat` 200 |
+| Models | PASS | gemma/Qwen/gpt-oss/Llama + `:fastest` (commit `44ccf4d`) |
+| Docs | PASS | CLAUDE · walkthrough · STATE · DEC-0007 |
