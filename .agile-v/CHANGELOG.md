@@ -1,7 +1,11 @@
 # CHANGELOG.md — Agile V project memory
 
+## 2026-08-20 — Chat UX microfixes
+- Thinking pulse + dots until first delta; no stream caret (DEC-0009)
+- Provider icon/label centered; send ripple; VAL-0010 PASS
+
 ## 2026-08-20 — SSE stream + chat UI polish
-- Live `/api/chat` SSE (`stream:true`); client caret + delta append (DEC-0008)
+- Live `/api/chat` SSE (`stream:true`); client delta append (DEC-0008)
 - Bubble row 85%; chat-list ✕ muted/centered
 - VAL-0009 PASS; densify/Redis/SSR/auth N/A
 

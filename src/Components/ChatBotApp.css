@@ -546,30 +546,6 @@
   animation: slideInLeft 0.3s ease-out;
 }
 
-/* Live token caret while assistant text is streaming in */
-.response.streaming::after {
-  content: "";
-  display: inline-block;
-  width: 0.55rem;
-  height: 1.35em;
-  margin-left: 0.2rem;
-  vertical-align: text-bottom;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 0.1rem;
-  animation: streamCaret 0.9s steps(1) infinite;
-}
-
-@keyframes streamCaret {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
-
 @keyframes slideInLeft {
   from {
     opacity: 0;
@@ -609,6 +585,58 @@
   cursor: pointer;
   position: relative;
   z-index: 2;
+}
+
+/* Send control — click ripple for tactile feedback */
+.send-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #7b8ebc;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 2;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.send-btn:hover {
+  color: #f42f5f;
+}
+
+.send-btn:active {
+  transform: scale(0.92);
+}
+
+.send-btn i {
+  font-size: 2rem;
+  color: inherit;
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+}
+
+.send-btn .send-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(244, 47, 95, 0.35);
+  transform: scale(0);
+  animation: sendRipple 0.55s ease-out forwards;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes sendRipple {
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+  }
 }
 
 .emoji {
@@ -712,9 +740,11 @@
   cursor: pointer;
   font-weight: 500;
   transition: all 0.3s ease;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.55rem;
+  line-height: 1;
   box-shadow: 0 0.4rem 1rem rgba(244, 47, 95, 0.3);
   position: relative;
   z-index: 9999;
@@ -727,6 +757,25 @@
 
 .provider-btn:active {
   transform: scale(0.98);
+}
+
+.provider-option-icon,
+.provider-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
+  font-size: 1.5rem;
+}
+
+.provider-option-label,
+.provider-btn-label {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .provider-dropdown {
@@ -764,9 +813,10 @@
   border-radius: 0.5rem;
   text-align: left;
   transition: all 0.2s ease;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
+  line-height: 1;
 }
 
 .provider-option:hover {

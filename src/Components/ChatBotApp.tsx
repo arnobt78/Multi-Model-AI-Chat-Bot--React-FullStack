@@ -64,6 +64,9 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
   const [copiedMessageIndex, setCopiedMessageIndex] = useState<number | null>(
     null
   );
+  const [sendRipples, setSendRipples] = useState<
+    { id: number; x: number; y: number }[]
+  >([]);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
@@ -257,19 +260,14 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
       });
       setChats(updatedChats);
       localStorage.setItem("chats", JSON.stringify(updatedChats));
+      setIsTyping(true);
 
       const startTime = Date.now();
 
       try {
-        // Empty assistant bubble + caret — tokens append live (ChatGPT-style SSE)
-        const streamingResponse: Message = {
-          type: "response",
-          text: "",
-          timestamp: new Date().toLocaleTimeString(),
-          streaming: true,
-        };
-        let liveMessages = [...updatedMessages, streamingResponse];
-        setMessages(liveMessages);
+        // No empty bubble yet — show Thinking until the first stream delta
+        let liveMessages = updatedMessages;
+        let streamStarted = false;
 
         const persistMessages = (next: Message[]) => {
           const toStore = next.map(({ type, text, timestamp }) => ({
@@ -296,11 +294,29 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
           {
             onEvent: (event) => {
               if (event.type === "delta" && event.text) {
-                liveMessages = liveMessages.map((msg, i) =>
-                  i === liveMessages.length - 1 && msg.type === "response"
-                    ? { ...msg, text: msg.text + event.text, streaming: true }
-                    : msg
-                );
+                if (!streamStarted) {
+                  streamStarted = true;
+                  setIsTyping(false);
+                  liveMessages = [
+                    ...updatedMessages,
+                    {
+                      type: "response",
+                      text: event.text,
+                      timestamp: new Date().toLocaleTimeString(),
+                      streaming: true,
+                    },
+                  ];
+                } else {
+                  liveMessages = liveMessages.map((msg, i) =>
+                    i === liveMessages.length - 1 && msg.type === "response"
+                      ? {
+                          ...msg,
+                          text: msg.text + event.text,
+                          streaming: true,
+                        }
+                      : msg
+                  );
+                }
                 setMessages(liveMessages);
               }
             },
@@ -311,8 +327,20 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
 
         if (streamResult.success) {
           await trackEvent("api_call", streamResult.provider, true, duration);
+          // Ensure a response row exists even if deltas arrived only via aggregate content
+          if (!streamStarted && streamResult.content) {
+            liveMessages = [
+              ...updatedMessages,
+              {
+                type: "response",
+                text: streamResult.content,
+                timestamp: new Date().toLocaleTimeString(),
+                streaming: false,
+              },
+            ];
+          }
           const finalMessages = liveMessages.map((msg, i) =>
-            i === liveMessages.length - 1
+            i === liveMessages.length - 1 && msg.type === "response"
               ? {
                   ...msg,
                   text: streamResult.content || msg.text,
@@ -415,6 +443,23 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
     }
   };
 
+  /** Spawn a short-lived ripple under the send icon, then send. */
+  const handleSendClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const id = Date.now();
+    const ripple = {
+      id,
+      x: e.clientX - rect.left - size / 2,
+      y: e.clientY - rect.top - size / 2,
+    };
+    setSendRipples((prev) => [...prev, ripple]);
+    window.setTimeout(() => {
+      setSendRipples((prev) => prev.filter((r) => r.id !== id));
+    }, 550);
+    void sendMessage();
+  };
+
   return (
     <div className="chat-app">
       {/* Chat List */}
@@ -503,26 +548,25 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                     }
                   >
                     {selectedProvider ? (
-                      `${
-                        availableProviders.find(
-                          (p) => p.name === selectedProvider
-                        )?.icon || ""
-                      } ${
-                        availableProviders.find(
-                          (p) => p.name === selectedProvider
-                        )?.displayName || selectedProvider
-                      }`
+                      <>
+                        <span className="provider-btn-icon">
+                          {availableProviders.find(
+                            (p) => p.name === selectedProvider
+                          )?.icon || ""}
+                        </span>
+                        <span className="provider-btn-label">
+                          {availableProviders.find(
+                            (p) => p.name === selectedProvider
+                          )?.displayName || selectedProvider}
+                        </span>
+                      </>
                     ) : (
-                      <span
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                        }}
-                      >
-                        <BotMessageSquare size={20} />
-                        Auto
-                      </span>
+                      <>
+                        <span className="provider-btn-icon">
+                          <BotMessageSquare size={18} />
+                        </span>
+                        <span className="provider-btn-label">Auto</span>
+                      </>
                     )}
                   </button>
                 </Tooltip>
@@ -537,14 +581,10 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                         setShowProviderDropdown(false);
                       }}
                     >
-                      <span
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                        }}
-                      >
+                      <span className="provider-option-icon">
                         <BotMessageSquare size={18} />
+                      </span>
+                      <span className="provider-option-label">
                         Auto (Fallback)
                       </span>
                     </button>
@@ -559,7 +599,12 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
                           setShowProviderDropdown(false);
                         }}
                       >
-                        {provider.icon} {provider.displayName}
+                        <span className="provider-option-icon">
+                          {provider.icon}
+                        </span>
+                        <span className="provider-option-label">
+                          {provider.displayName}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -665,7 +710,26 @@ const ChatBotApp: React.FC<ChatBotAppProps> = ({
             onFocus={() => setShowEmojiPicker(false)}
           />
           <Tooltip text="Send Message" position="top">
-            <i className="fa-solid fa-paper-plane" onClick={sendMessage}></i>
+            <button
+              type="button"
+              className="send-btn"
+              aria-label="Send message"
+              onClick={handleSendClick}
+            >
+              {sendRipples.map((r) => (
+                <span
+                  key={r.id}
+                  className="send-ripple"
+                  style={{
+                    width: "4.4rem",
+                    height: "4.4rem",
+                    left: r.x,
+                    top: r.y,
+                  }}
+                />
+              ))}
+              <i className="fa-solid fa-paper-plane" aria-hidden="true"></i>
+            </button>
           </Tooltip>
         </form>
       </div>

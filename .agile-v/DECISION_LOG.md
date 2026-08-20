@@ -50,6 +50,13 @@ Append-only. Never rewrite prior entries.
 ## DEC-0008 — SSE live chat tokens (ChatGPT-style)
 - **Timestamp:** 2026-08-20T16:10:00Z
 - **Agent:** Build
-- **Decision:** Add optional `stream: true` on `/api/chat` returning SSE (`start`/`delta`/`done`/`error`); keep JSON path. Client opens empty assistant bubble + caret and appends deltas. Nested bubble `max-width` fixed via row-only 85% cap.
+- **Decision:** Add optional `stream: true` on `/api/chat` returning SSE (`start`/`delta`/`done`/`error`); keep JSON path. Client appends deltas. Nested bubble `max-width` fixed via row-only 85% cap.
 - **Rationale:** Full-response-then-dump felt dead; true upstream streaming improves TTFT UX without densify/React Query.
 - **Linked REQs:** REQ-0009, REQ-0012 (UX)
+
+## DEC-0009 — Chat UX microfixes (Thinking / no caret / provider align / send ripple)
+- **Timestamp:** 2026-08-20T16:40:00Z
+- **Agent:** Build
+- **Decision:** Show pulsing Thinking + cycling dots until first SSE delta (no empty bubble); remove stream caret; icon/label spans for provider btn/rows; `.send-btn` click ripple.
+- **Rationale:** Screenshots showed missing wait feedback, caret noise, emoji baseline misalignment, and no send press feedback.
+- **Linked REQs:** REQ-0009 (UX)

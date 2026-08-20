@@ -79,7 +79,17 @@ Firewall Bot Protection / AI Bots: Human-Action (dashboard), not code-verifiable
 | `npm audit --omit=dev` | PASS | 0 vulns |
 | Bubbles | PASS | row 85%; nested max-width fixed |
 | Chat list | PASS | title/✕ centered; muted light icon |
-| Stream | PASS | `stream: true` SSE; client deltas + caret |
+| Stream | PASS | `stream: true` SSE; Thinking then live text (no caret) |
 | JSON path | PASS | non-stream `/api/chat` unchanged |
 | Secrets | PASS | keys server-only; formatError sanitize |
 | N/A prompt noise | N/A | densify/Redis/SSR/auth/SHA not in arch |
+
+## VAL-0010 — Chat UX microfixes (2026-08-20)
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| Thinking | PASS | pulse + `.`/`..`/`...` until first delta |
+| Caret | PASS | stream caret CSS removed |
+| Provider UI | PASS | icon/label spans vertically centered |
+| Send ripple | PASS | `.send-btn` click ripple |
+| lint/build | PASS | |

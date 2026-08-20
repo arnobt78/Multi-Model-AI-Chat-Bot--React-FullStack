@@ -19,7 +19,7 @@ Sentry → POST /api/monitoring (tunnel)
 ## Key paths
 | Path | Role |
 |------|------|
-| `src/Components/ChatBotApp.*` | Chat UI; 85% bubbles; live stream caret |
+| `src/Components/ChatBotApp.*` | Chat UI; Thinking pulse; 85% bubbles; send ripple |
 | `src/services/aiService.ts` | JSON + SSE client |
 | `shared/ai/` | providers, callers, orchestrate, stream, formatError, Zod |
 | `shared/sentry/` | client/server Sentry helpers |
@@ -44,7 +44,7 @@ Server AI keys (no `VITE_`): GEMINI/GROQ/OPENROUTER/HUGGINGFACE/OPENAI. Insights
 ---
 
 ## Done
-A+B proxy · C models · Sentry · ESM · UX · HF `:fastest` · SSE live tokens · bubble 85% · chat-list align
+A+B proxy · C models · Sentry · ESM · UX · HF `:fastest` · SSE · Thinking pulse · no caret · provider align · send ripple · bubble 85%
 
 ## Open
 Firewall Human-Action · Track D tests · HF free credits flaky

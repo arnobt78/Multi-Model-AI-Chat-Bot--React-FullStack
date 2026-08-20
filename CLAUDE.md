@@ -3,7 +3,7 @@
 ## Overview
 Multi-Model AI Chat Hub (`ai-chat-hub` v0.2.1) — Vite CSR + Vercel `api/*`. Chat: localStorage. Insights: Prisma/Neon. Resume: `.agile-v/STATE.md`
 
-**Status:** C1 done (A+B+C + Sentry + UX + HF `:fastest` + SSE stream). Lint/build/audit 0. Gate-0001 A+B approved. Firewall = Human-Action.
+**Status:** C1 done (A+B+C + Sentry + UX microfixes + HF `:fastest` + SSE). Lint/build/audit 0. Gate-0001 A+B approved. Firewall = Human-Action.
 
 ---
 
@@ -18,8 +18,8 @@ React 18.3 · TS 5.9 · Vite 7.3 · Node 24 · Prisma 6.19 · Zod 4 · ESLint 9 
 - Views: `App.tsx` `start|chat|insights`
 - AI: `POST /api/chat` JSON or `{stream:true}` SSE → `orchestrate` / `orchestrateChatStream`
 - Models: Groq gpt-oss/qwen · Gemini flash(+lite) · OpenRouter `:free` · HF `:fastest` · OpenAI last
-- Client: `aiService.streamChatResponse` appends deltas; caret on `.response.streaming`
-- UI: bubbles `.message-row` max 85%; chat-list ✕ muted + centered
+- Client: `aiService.streamChatResponse`; Thinking pulse until first delta; no stream caret
+- UI: bubbles `.message-row` max 85%; provider icon/label centered; send ripple; chat-list ✕ muted
 - Errors: `formatError.ts` (sanitize keys)
 - ESM: `api/`/`shared/` relative imports use `.js`
 - Sentry: `VITE_SENTRY_DSN` + `POST /api/monitoring`
